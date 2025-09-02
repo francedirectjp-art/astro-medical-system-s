@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRO-BODY TYPE REPORT - 基本鑑定</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .archetype-name {
+            background: linear-gradient(45deg, #e74c3c, #f39c12);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .birth-info {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .report-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            white-space: pre-line;
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .system-info {
+            margin-top: 40px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #ecf0f1;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ASTRO-BODY TYPE REPORT</h1>
+            <div class="archetype-name">{{ archetype_name }}</div>
+            <div class="birth-info">
+                出生情報: {{ birth_info.birth_date }} {{ birth_info.birth_time }} | {{ birth_info.prefecture }}<br>
+                太陽: {{ sun_element }}元素 | 月: {{ moon_element }}元素
+            </div>
+        </div>
+
+        <div class="report-content">{{ report_content }}</div>
+
+        <div class="actions">
+            <form action="/detailed_report" method="POST" style="display: inline;">
+                <input type="hidden" name="birth_date" value="{{ birth_info.birth_date }}">
+                <input type="hidden" name="birth_time" value="{{ birth_info.birth_time }}">
+                <input type="hidden" name="prefecture" value="{{ birth_info.prefecture }}">
+                <input type="hidden" name="sun_element" value="{{ sun_element }}">
+                <input type="hidden" name="moon_element" value="{{ moon_element }}">
+                <button type="submit" class="btn btn-primary">詳細レポート（12,000文字完全版）を表示</button>
+            </form>
+
+            <a href="/" class="btn btn-secondary">新しい鑑定を開始</a>
+        </div>
+
+        <div class="system-info">
+            次世代占星医学体質鑑定システム<br>
+            Swiss Ephemeris精密計算 | 16原型理論 | 検収システム品質保証
+        </div>
+    </div>
+</body>
+</html>

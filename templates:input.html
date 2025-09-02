@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>次世代占星医学体質鑑定システム</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .features {
+            margin-top: 40px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .features h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .features ul {
+            list-style: none;
+        }
+
+        .features li {
+            margin-bottom: 8px;
+            color: #7f8c8d;
+        }
+
+        .features li:before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>次世代占星医学体質鑑定システム</h1>
+        <p class="subtitle">Swiss Ephemeris精密計算 | 16原型理論 | 47都道府県対応</p>
+
+        <form action="/basic_report" method="POST">
+            <div class="form-group">
+                <label for="birth_date">出生年月日</label>
+                <input type="date" id="birth_date" name="birth_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="birth_time">出生時刻</label>
+                <input type="time" id="birth_time" name="birth_time" required>
+            </div>
+
+            <div class="form-group">
+                <label for="prefecture">出生地（都道府県）</label>
+                <select id="prefecture" name="prefecture" required>
+                    <option value="">選択してください</option>
+                    {% for prefecture in prefectures %}
+                    <option value="{{ prefecture }}">{{ prefecture }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">ASTRO-BODY TYPE REPORT 開始</button>
+        </form>
+
+        <div class="features">
+            <h3>システムの特徴</h3>
+            <ul>
+                <li>Swiss Ephemerisによる高精度天体計算（1600-2200年対応）</li>
+                <li>太陽×月の四元素組み合わせによる16原型理論</li>
+                <li>47都道府県完全対応の地理座標データベース</li>
+                <li>基本レポート（約3,000文字）+ 詳細レポート（約12,000文字）</li>
+                <li>体質的特徴から生活習慣まで包括的分析</li>
+                <li>検収ループシステムによる品質保証</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
