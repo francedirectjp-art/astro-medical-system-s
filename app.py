@@ -1,11 +1,470 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify, session
 import ephem
-import datetime
 import math
+from datetime import datetime, timedelta
+import json
 
 app = Flask(__name__)
+app.secret_key = 'astro_body_type_system_2024'  # セッション管理用
 
-# 47都道府県の座標データ（高精度版）
+# 47都道府県の座標データ
+PREFECTURE_COORDINATES = {
+    "北海道": {"lat": 43.0642, "lon": 141.3469},
+    "青森県": {"lat": 40.8244, "lon": 140.74},
+    "岩手県": {"lat": 39.7036, "lon": 141.1527},
+    "宮城県": {"lat": 38.2688, "lon": 140.8721},
+    "秋田県": {"lat": 39.7186, "lon": 140.1024},
+    "山形県": {"lat": 38.2404, "lon": 140.3633},
+    "福島県": {"lat": 37.7503, "lon": 140.4676},
+    "茨城県": {"lat": 36.3414, "lon": 140.4467},
+    "栃木県": {"lat": 36.5658, "lon": 139.8836},
+    "群馬県": {"lat": 36.3911, "lon": 139.0608},
+    "埼玉県": {"lat": 35.8617, "lon": 139.6455},
+    "千葉県": {"lat": 35.6074, "lon": 140.1233},
+    "東京都": {"lat": 35.6762, "lon": 139.6503},
+    "神奈川県": {"lat": 35.4478, "lon": 139.6425},
+    "新潟県": {"lat": 37.9026, "lon": 139.0234},
+    "富山県": {"lat": 36.6953, "lon": 137.2113},
+    "石川県": {"lat": 36.5946, "lon": 136.6256},
+    "福井県": {"lat": 36.0652, "lon": 136.2217},
+    "山梨県": {"lat": 35.6638, "lon": 138.5683},
+    "長野県": {"lat": 36.6513, "lon": 138.1811},
+    "岐阜県": {"lat": 35.3911, "lon": 136.7221},
+    "静岡県": {"lat": 34.9769, "lon": 138.3831},
+    "愛知県": {"lat": 35.1802, "lon": 136.9066},
+    "三重県": {"lat": 34.7303, "lon": 136.5086},
+    "滋賀県": {"lat": 35.0045, "lon": 135.8687},
+    "京都府": {"lat": 35.0211, "lon": 135.7556},
+    "大阪府": {"lat": 34.6862, "lon": 135.5200},
+    "兵庫県": {"lat": 34.6913, "lon": 135.1830},
+    "奈良県": {"lat": 34.6851, "lon": 135.8332},
+    "和歌山県": {"lat": 34.2261, "lon": 135.1675},
+    "鳥取県": {"lat": 35.5038, "lon": 134.2382},
+    "島根県": {"lat": 35.4721, "lon": 133.0506},
+    "岡山県": {"lat": 34.6617, "lon": 133.9349},
+    "広島県": {"lat": 34.3965, "lon": 132.4596},
+    "山口県": {"lat": 34.1858, "lon": 131.4707},
+    "徳島県": {"lat": 34.0658, "lon": 134.5593},
+    "香川県": {"lat": 34.3401, "lon": 134.0435},
+    "愛媛県": {"lat": 33.8416, "lon": 132.7660},
+    "高知県": {"lat": 33.5597, "lon": 133.5311},
+    "福岡県": {"lat": 33.6064, "lon": 130.4181},
+    "佐賀県": {"lat": 33.2494, "lon": 130.2989},
+    "長崎県": {"lat": 32.7503, "lon": 129.8677},
+    "熊本県": {"lat": 32.7898, "lon": 130.7417},
+    "大分県": {"lat": 33.2382, "lon": 131.6126},
+    "宮崎県": {"lat": 31.9077, "lon": 131.4202},
+    "鹿児島県": {"lat": 31.5601, "lon": 130.5581},
+    "沖縄県": {"lat": 26.2124, "lon": 127.6792}
+}
+
+# 星座名の定義（黄経0度から30度区切り）
+ZODIAC_SIGNS = [
+    '牡羊座', '牡牛座', '双子座', '蟹座', '獅子座', '乙女座',
+    '天秤座', '蠍座', '射手座', '山羊座', '水瓶座', '魚座'
+]
+
+# 拡張された16原型データ（temperament、body_type、key_traits追加）
+SIXTEEN_ARCHETYPES = {
+    ("火", "火"): {
+        "name": "激烈なる戦士", 
+        "element_combination": "火×火",
+        "temperament": "激情的で行動的",
+        "body_type": "筋肉質で活動的な体質",
+        "key_traits": ["強烈な意志力", "瞬発的行動力", "リーダーシップ", "直感的判断", "情熱的表現"]
+    },
+    ("火", "地"): {
+        "name": "実践的指導者", 
+        "element_combination": "火×地",
+        "temperament": "情熱的でありながら現実的",
+        "body_type": "がっしりとした安定感のある体質",
+        "key_traits": ["実現力", "持続的努力", "組織運営能力", "責任感", "堅実な判断力"]
+    },
+    ("火", "風"): {
+        "name": "革新的冒険家", 
+        "element_combination": "火×風",
+        "temperament": "創造的で自由奔放",
+        "body_type": "軽やかで機敏な体質",
+        "key_traits": ["革新性", "多様な興味", "コミュニケーション能力", "適応力", "先駆的思考"]
+    },
+    ("火", "水"): {
+        "name": "情熱的創造者", 
+        "element_combination": "火×水",
+        "temperament": "情熱的でありながら感受性豊か",
+        "body_type": "感受性の高い繊細な体質",
+        "key_traits": ["創造的才能", "深い共感力", "直観的洞察", "癒しの力", "芸術的感性"]
+    },
+    ("地", "火"): {
+        "name": "堅実なる開拓者", 
+        "element_combination": "地×火",
+        "temperament": "安定性と行動力を併せ持つ",
+        "body_type": "持久力のある強靭な体質",
+        "key_traits": ["開拓精神", "長期的視野", "実践的知恵", "継続力", "建設的思考"]
+    },
+    ("地", "地"): {
+        "name": "不動の守護者", 
+        "element_combination": "地×地",
+        "temperament": "極めて安定的で信頼性が高い",
+        "body_type": "安定した堅牢な体質",
+        "key_traits": ["不動の信念", "専門的知識", "献身性", "保護本能", "伝統的価値観"]
+    },
+    ("地", "風"): {
+        "name": "知的建築家", 
+        "element_combination": "地×風",
+        "temperament": "論理的でシステマチック",
+        "body_type": "バランスの取れた機能的な体質",
+        "key_traits": ["分析能力", "システム構築力", "効率性", "合理的思考", "調整能力"]
+    },
+    ("地", "水"): {
+        "name": "慈愛なる育成者", 
+        "element_combination": "地×水",
+        "temperament": "慈愛深く献身的",
+        "body_type": "母性的で包容力のある体質",
+        "key_traits": ["養育能力", "深い愛情", "忍耐力", "支援力", "癒しの存在感"]
+    },
+    ("風", "火"): {
+        "name": "理想的革命家", 
+        "element_combination": "風×火",
+        "temperament": "理想主義的で革新的",
+        "body_type": "知的で活動的な体質",
+        "key_traits": ["理想実現力", "変革への情熱", "影響力", "啓発能力", "先見性"]
+    },
+    ("風", "地"): {
+        "name": "合理的組織者", 
+        "element_combination": "風×地",
+        "temperament": "合理的で組織的",
+        "body_type": "機能的で効率的な体質",
+        "key_traits": ["組織運営力", "論理的分析", "効率化能力", "調整力", "実用的知恵"]
+    },
+    ("風", "風"): {
+        "name": "自由なる思想家", 
+        "element_combination": "風×風",
+        "temperament": "純粋に知的で自由",
+        "body_type": "軽やかで柔軟な体質",
+        "key_traits": ["純粋な知性", "多様な視点", "自由な発想", "コミュニケーション力", "適応性"]
+    },
+    ("風", "水"): {
+        "name": "共感的仲介者", 
+        "element_combination": "風×水",
+        "temperament": "感受性豊かで適応的",
+        "body_type": "流動的で敏感な体質",
+        "key_traits": ["仲介能力", "芸術的感性", "共感力", "表現力", "調和性"]
+    },
+    ("水", "火"): {
+        "name": "直感的変革者", 
+        "element_combination": "水×火",
+        "temperament": "直感的で変革的",
+        "body_type": "感情豊かで情熱的な体質",
+        "key_traits": ["直感的洞察", "変容力", "癒しの情熱", "深い理解力", "魂の導き手"]
+    },
+    ("水", "地"): {
+        "name": "感性的職人", 
+        "element_combination": "水×地",
+        "temperament": "感性的でありながら実用的",
+        "body_type": "感受性と持久力を併せ持つ体質",
+        "key_traits": ["職人気質", "美的センス", "献身的努力", "細やかな配慮", "持続的創造力"]
+    },
+    ("水", "風"): {
+        "name": "芸術的伝達者", 
+        "element_combination": "水×風",
+        "temperament": "芸術的で表現豊か",
+        "body_type": "繊細で表現力豊かな体質",
+        "key_traits": ["芸術的才能", "表現力", "感情の橋渡し", "美的創造力", "心の翻訳者"]
+    },
+    ("水", "水"): {
+        "name": "深淵なる神秘家", 
+        "element_combination": "水×水",
+        "temperament": "深遠で神秘的",
+        "body_type": "深い感受性を持つ霊的な体質",
+        "key_traits": ["神秘的洞察", "深い共感性", "精神的導き", "無条件の愛", "魂の理解者"]
+    }
+}
+
+def rad_to_deg(rad):
+    """ラジアンを度に変換"""
+    return rad * 180.0 / math.pi
+
+def deg_to_dms(degrees):
+    """度を度・分・秒に変換"""
+    deg = int(degrees)
+    minutes_float = (degrees - deg) * 60
+    min_val = int(minutes_float)
+    sec = (minutes_float - min_val) * 60
+    return deg, min_val, sec
+
+def get_zodiac_info(longitude_deg):
+    """黄経度数から星座と星座内度数を取得"""
+    # 黄経度数を0-360度に正規化
+    longitude_deg = longitude_deg % 360
+
+    # 星座番号（0-11）
+    zodiac_index = int(longitude_deg / 30)
+
+    # 星座内での度数
+    degree_in_sign = longitude_deg - (zodiac_index * 30)
+
+    return ZODIAC_SIGNS[zodiac_index], degree_in_sign, zodiac_index
+
+def get_element(zodiac_name):
+    """星座から四元素を取得"""
+    elements = {
+        '牡羊座': '火', '獅子座': '火', '射手座': '火',
+        '牡牛座': '地', '乙女座': '地', '山羊座': '地', 
+        '双子座': '風', '天秤座': '風', '水瓶座': '風',
+        '蟹座': '水', '蠍座': '水', '魚座': '水'
+    }
+    return elements.get(zodiac_name, '不明')
+
+def calculate_celestial_positions(birth_year, birth_month, birth_day, birth_hour, birth_minute, prefecture):
+    """
+    天体位置を計算（地球中心黄道座標系を使用）
+
+    Args:
+        birth_year: 出生年
+        birth_month: 出生月
+        birth_day: 出生日
+        birth_hour: 出生時
+        birth_minute: 出生分
+        prefecture: 都道府県名
+
+    Returns:
+        dict: 7天体の黄経度数、星座、度・分・秒データ
+    """
+    try:
+        # 都道府県座標を取得
+        coords = PREFECTURE_COORDINATES.get(prefecture)
+        if not coords:
+            raise ValueError(f"都道府県 '{prefecture}' の座標データが見つかりません")
+
+        lat = coords['lat']
+        lon = coords['lon']
+
+        # 観測地点の設定
+        observer = ephem.Observer()
+        observer.lat = str(lat)
+        observer.lon = str(lon)
+        observer.elevation = 0
+
+        # JST時刻をUTCに変換（JST = UTC + 9時間）
+        jst = datetime(birth_year, birth_month, birth_day, birth_hour, birth_minute, 0)
+        utc = jst - timedelta(hours=9)
+        observer.date = utc.strftime('%Y/%m/%d %H:%M:%S')
+
+        # 7天体の定義
+        planets = {
+            'sun': ephem.Sun(),
+            'moon': ephem.Moon(),
+            'mercury': ephem.Mercury(),
+            'venus': ephem.Venus(),
+            'mars': ephem.Mars(),
+            'jupiter': ephem.Jupiter(),
+            'saturn': ephem.Saturn()
+        }
+
+        results = {}
+
+        for name, planet in planets.items():
+            # 天体位置を計算
+            planet.compute(observer)
+
+            # 地球中心黄道座標を取得（占星術で使用する正しい座標系）
+            ecliptic = ephem.Ecliptic(planet)
+            longitude_deg = rad_to_deg(ecliptic.lon)
+
+            # 星座情報を取得
+            zodiac_name, degree_in_sign, zodiac_index = get_zodiac_info(longitude_deg)
+
+            # 度・分・秒に変換
+            deg, min_val, sec = deg_to_dms(degree_in_sign)
+
+            # 四元素を取得
+            element = get_element(zodiac_name)
+
+            # 結果を保存（テンプレート変数に対応した構造）
+            results[name] = {
+                'longitude_deg': round(longitude_deg, 6),
+                'sign': zodiac_name,
+                'zodiac_index': zodiac_index,
+                'degree': round(degree_in_sign, 2),
+                'degrees': deg,
+                'minutes': min_val,
+                'seconds': round(sec, 1),
+                'element': element,
+                'formatted': f"{zodiac_name}{deg}度{min_val}分{sec:.1f}秒"
+            }
+
+        # 16原型判定用の太陽・月データを準備
+        sun_element = results['sun']['element']
+        moon_element = results['moon']['element']
+        archetype_key = (sun_element, moon_element)
+        archetype = SIXTEEN_ARCHETYPES.get(archetype_key, {
+            "name": "未分類", 
+            "element_combination": f"{sun_element}×{moon_element}",
+            "temperament": "複合的な特質",
+            "body_type": "バランス型の体質",
+            "key_traits": ["多面性", "適応力", "柔軟性", "統合能力", "独自性"]
+        })
+
+        # 計算情報を追加
+        calculation_info = {
+            'jst_datetime': jst.strftime('%Y年%m月%d日 %H時%M分'),
+            'utc_datetime': utc.strftime('%Y/%m/%d %H:%M:%S'),
+            'location': prefecture,
+            'coordinates': {'lat': lat, 'lon': lon},
+            'coordinate_system': '地球中心黄道座標系 (Geocentric Ecliptic)',
+            'archetype': archetype
+        }
+
+        return {
+            'success': True,
+            'celestial_positions': results,
+            'calculation_info': calculation_info
+        }
+
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+def prepare_report_data(celestial_positions, birth_info, name="お客"):
+    """
+    レポート用のデータ構造を準備
+
+    Args:
+        celestial_positions: 天体位置データ
+        birth_info: 出生情報
+        name: 顧客名
+
+    Returns:
+        dict: テンプレート用データ構造
+    """
+    # 16原型情報を取得
+    sun_element = celestial_positions['sun']['element']
+    moon_element = celestial_positions['moon']['element']
+    archetype_key = (sun_element, moon_element)
+    archetype = SIXTEEN_ARCHETYPES.get(archetype_key, {
+        "name": "未分類",
+        "element_combination": f"{sun_element}×{moon_element}",
+        "temperament": "複合的な特質",
+        "body_type": "バランス型の体質",
+        "key_traits": ["多面性", "適応力", "柔軟性", "統合能力", "独自性"]
+    })
+
+    return {
+        'name': name,
+        'birth_info': birth_info,
+        'celestial_data': celestial_positions,
+        'archetype': archetype
+    }
+
+def translate_to_japanese(text):
+    """英語の占星術用語を日本語に変換"""
+    translations = {
+        # 星座名
+        'Aries': '牡羊座', 'Taurus': '牡牛座', 'Gemini': '双子座', 'Cancer': '蟹座',
+        'Leo': '獅子座', 'Virgo': '乙女座', 'Libra': '天秤座', 'Scorpio': '蠍座',
+        'Sagittarius': '射手座', 'Capricorn': '山羊座', 'Aquarius': '水瓶座', 'Pisces': '魚座',
+
+        # 四元素
+        'Fire': '火', 'Earth': '地', 'Air': '風', 'Water': '水',
+
+        # 天体名
+        'Sun': '太陽', 'Moon': '月', 'Mercury': '水星', 'Venus': '金星',
+        'Mars': '火星', 'Jupiter': '木星', 'Saturn': '土星'
+    }
+
+    result = text
+    for eng, jpn in translations.items():
+        result = result.replace(eng, jpn)
+    return result
+
+@app.route('/')
+def index():
+    """入力ページ"""
+    return render_template('input.html', prefectures=list(PREFECTURE_COORDINATES.keys()))
+
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    """天体計算API"""
+    try:
+        data = request.json
+
+        # 入力データの検証
+        required_fields = ['birth_year', 'birth_month', 'birth_day', 'birth_hour', 'birth_minute', 'prefecture']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'success': False, 'error': f'必須フィールド {field} が不足しています'})
+
+        # 天体位置計算
+        result = calculate_celestial_positions(
+            int(data['birth_year']),
+            int(data['birth_month']),
+            int(data['birth_day']),
+            int(data['birth_hour']),
+            int(data['birth_minute']),
+            data['prefecture']
+        )
+
+        if result['success']:
+            # セッションに結果を保存（レポート表示用）
+            session['calculation_result'] = result
+            session['birth_info'] = {
+                'year': int(data['birth_year']),
+                'month': int(data['birth_month']),
+                'day': int(data['birth_day']),
+                'hour': int(data['birth_hour']),
+                'minute': int(data['birth_minute']),
+                'prefecture': data['prefecture']
+            }
+            if 'name' in data:
+                session['name'] = data['name']
+
+        return jsonify(result)
+
+    except ValueError as e:
+        return jsonify({'success': False, 'error': f'入力値エラー: {str(e)}'})
+    except Exception as e:
+        return jsonify({'success': False, 'error': f'計算エラー: {str(e)}'})
+
+@app.route('/basic_report')
+def basic_report():
+    """基本レポートページ（2000文字レベル）"""
+    try:
+        # セッションから計算結果を取得
+        if 'calculation_result' not in session or 'birth_info' not in session:
+            return "計算結果が見つかりません。まず天体計算を実行してください。", 400
+
+        calculation_result = session['calculation_result']
+        birth_info = session['birth_info']
+        name = session.get('name', 'お客様')
+
+        if not calculation_result['success']:
+            return f"計算エラー: {calculation_result.get('error', '不明なエラー')}", 400
+
+        # レポート用データを準備
+        report_data = prepare_report_data(
+            calculation_result['celestial_positions'],
+            birth_info,
+            name
+        )
+
+        return render_template('basic_report.html', **report_data)
+
+    except Exception as e:
+        return f"レポート生成エラー: {str(e)}", 500
+
+@app.route('/detailed_report') 
+def detailed_report():
+    """詳細レポートページ（12,000文字）"""
+    return render_template('detailed_report.html')
+
+if __name__ == '__main__':
+    # Railway環境では環境変数PORTを使用
+    import os
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
+
 PREFECTURE_COORDS = {
     '北海道': (43.0640, 141.3469),
     '青森県': (40.8244, 140.7400),
