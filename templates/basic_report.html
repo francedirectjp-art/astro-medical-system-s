@@ -3,114 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTRO-BODY TYPE REPORT - 基本鑑定</title>
+    <title>占星医学体質鑑定結果 - {{ name }}様</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d30 100%);
+            color: #d4af37;
+            font-family: 'Times New Roman', serif;
+            margin: 0;
             padding: 20px;
-            line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #d4af37;
             border-radius: 15px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
         }
 
         .header {
             text-align: center;
             margin-bottom: 40px;
-            border-bottom: 3px solid #3498db;
+            border-bottom: 2px solid #d4af37;
             padding-bottom: 20px;
         }
 
-        h1 {
-            color: #2c3e50;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
+        .header h1 {
+            color: #d4af37;
+            font-size: 32px;
+            margin: 0 0 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
-        .archetype-name {
-            background: linear-gradient(45deg, #e74c3c, #f39c12);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            display: inline-block;
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 20px;
+        .header .subtitle {
+            color: #b8860b;
+            font-size: 18px;
+            font-style: italic;
         }
 
         .birth-info {
-            background: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid #d4af37;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .birth-info h2 {
+            color: #d4af37;
+            font-size: 20px;
+            margin: 0 0 15px 0;
+            text-align: center;
+        }
+
+        .birth-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: center;
+        }
+
+        .birth-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .birth-label {
+            color: #b8860b;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .birth-value {
+            color: #d4af37;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .report-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #d4af37;
+            font-size: 24px;
+            font-weight: bold;
             margin-bottom: 20px;
             text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }
 
         .report-content {
-            background: white;
-            padding: 30px;
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
             border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            white-space: pre-line;
+            padding: 25px;
+            line-height: 1.8;
             font-size: 16px;
-            color: #2c3e50;
+            text-align: justify;
         }
 
-        .actions {
+        .archetype-info {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
             text-align: center;
-            margin-top: 30px;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 10px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: transform 0.3s ease;
+        .archetype-title {
+            color: #ffd700;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
+        .archetype-subtitle {
+            color: #b8860b;
+            font-size: 18px;
+            font-style: italic;
+            margin-bottom: 15px;
         }
 
-        .btn-primary {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
-            color: white;
+        .elements {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
         }
 
-        .btn-secondary {
-            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
-            color: white;
+        .element {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
         }
 
-        .system-info {
-            margin-top: 40px;
-            text-align: center;
-            color: #7f8c8d;
+        .element-label {
+            color: #b8860b;
             font-size: 14px;
-            border-top: 1px solid #ecf0f1;
-            padding-top: 20px;
+            margin-bottom: 5px;
+        }
+
+        .element-value {
+            color: #d4af37;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto 0 auto;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            width: 200px;
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .birth-details {
+                grid-template-columns: 1fr;
+            }
+
+            .elements {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -118,32 +202,54 @@
     <div class="container">
         <div class="header">
             <h1>ASTRO-BODY TYPE REPORT</h1>
-            <div class="archetype-name">{{ archetype_name }}</div>
-            <div class="birth-info">
-                出生情報: {{ birth_info.birth_date }} {{ birth_info.birth_time }} | {{ birth_info.prefecture }}<br>
-                太陽: {{ sun_element }}元素 | 月: {{ moon_element }}元素
+            <div class="subtitle">次世代占星医学体質鑑定システム</div>
+        </div>
+
+        <div class="birth-info">
+            <h2>{{ name }}様の出生情報</h2>
+            <div class="birth-details">
+                <div class="birth-item">
+                    <div class="birth-label">生年月日</div>
+                    <div class="birth-value">{{ birth_year }}年{{ birth_month }}月{{ birth_day }}日</div>
+                </div>
+                <div class="birth-item">
+                    <div class="birth-label">出生時刻</div>
+                    <div class="birth-value">{{ birth_hour }}:{{ "%02d"|format(birth_minute) }}</div>
+                </div>
+                <div class="birth-item">
+                    <div class="birth-label">出生地</div>
+                    <div class="birth-value">{{ prefecture }}</div>
+                </div>
+                <div class="birth-item">
+                    <div class="birth-label">体質アーキタイプ</div>
+                    <div class="birth-value">{{ archetype_name }}</div>
+                </div>
             </div>
         </div>
 
-        <div class="report-content">{{ report_content }}</div>
-
-        <div class="actions">
-            <form action="/detailed_report" method="POST" style="display: inline;">
-                <input type="hidden" name="birth_date" value="{{ birth_info.birth_date }}">
-                <input type="hidden" name="birth_time" value="{{ birth_info.birth_time }}">
-                <input type="hidden" name="prefecture" value="{{ birth_info.prefecture }}">
-                <input type="hidden" name="sun_element" value="{{ sun_element }}">
-                <input type="hidden" name="moon_element" value="{{ moon_element }}">
-                <button type="submit" class="btn btn-primary">詳細レポート（12,000文字完全版）を表示</button>
-            </form>
-
-            <a href="/" class="btn btn-secondary">新しい鑑定を開始</a>
+        <div class="archetype-info">
+            <div class="archetype-title">{{ archetype_name }}</div>
+            <div class="archetype-subtitle">{{ archetype_english }}</div>
+            <div class="elements">
+                <div class="element">
+                    <div class="element-label">太陽エレメント</div>
+                    <div class="element-value">{{ sun_element }}</div>
+                </div>
+                <div class="element">
+                    <div class="element-label">月エレメント</div>
+                    <div class="element-value">{{ moon_element }}</div>
+                </div>
+            </div>
         </div>
 
-        <div class="system-info">
-            次世代占星医学体質鑑定システム<br>
-            Swiss Ephemeris精密計算 | 16原型理論 | 検収システム品質保証
+        <div class="report-section">
+            <div class="section-title">体質診断レポート</div>
+            <div class="report-content">
+                {{ report_content|safe }}
+            </div>
         </div>
+
+        <a href="/" class="back-btn">新しい鑑定を行う</a>
     </div>
 </body>
 </html>
