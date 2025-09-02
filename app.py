@@ -913,13 +913,12 @@ Swiss Ephemeris精密計算 | 16原型理論 | 47都道府県対応
 def input_form():
     return render_template('input.html', prefectures=list(PREFECTURE_COORDINATES.keys()))
 
-@app.route('/basic_report', methods=['POST'])
+@app.route('/basic_report', methods=['GET', 'POST'])
 def basic_report():
-    # Get form data
-    birth_date = request.form['birth_date']
-    birth_time = request.form['birth_time']  
-    prefecture = request.form['prefecture']
-
+    # URLパラメータから情報を取得
+    birth_date = request.args.get('birth_date') or request.form.get('birth_date')
+    birth_time = request.args.get('birth_time', '12:00') or request.form.get('birth_time', '12:00')
+    prefecture = request.args.get('prefecture') or request.form.get('prefecture')
     # Get coordinates
     coords = PREFECTURE_COORDINATES[prefecture]
 
