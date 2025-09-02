@@ -5,41 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>次世代占星医学体質鑑定システム</title>
     <style>
-        * {
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d30 100%);
+            color: #d4af37;
+            font-family: 'Times New Roman', serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #d4af37;
             border-radius: 15px;
             padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
         }
 
         h1 {
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-size: 2.2em;
-            font-weight: 300;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #7f8c8d;
-            margin-bottom: 40px;
-            font-size: 1.1em;
+            color: #d4af37;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
         .form-group {
@@ -48,111 +43,191 @@
 
         label {
             display: block;
+            color: #d4af37;
+            font-size: 16px;
+            font-weight: bold;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #34495e;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }
 
         input, select {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ecf0f1;
+            padding: 12px;
+            background: #2d2d30;
+            border: 2px solid #d4af37;
             border-radius: 8px;
+            color: #d4af37;
             font-size: 16px;
-            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
         }
 
         input:focus, select:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+
+        select option {
+            background: #2d2d30;
+            color: #d4af37;
+        }
+
+        .time-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
 
         .submit-btn {
-            width: 100%;
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            color: white;
-            padding: 15px;
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+            color: #000;
             border: none;
-            border-radius: 8px;
+            padding: 15px 40px;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: bold;
+            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .submit-btn:hover {
+            background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
             transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
         }
 
-        .features {
-            margin-top: 40px;
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 10px;
+        .description {
+            text-align: center;
+            color: #b8860b;
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-style: italic;
         }
 
-        .features h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-
-        .features ul {
-            list-style: none;
-        }
-
-        .features li {
-            margin-bottom: 8px;
-            color: #7f8c8d;
-        }
-
-        .features li:before {
-            content: "✓";
-            color: #27ae60;
-            font-weight: bold;
-            margin-right: 10px;
+        .required {
+            color: #ff6b6b;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>次世代占星医学体質鑑定システム</h1>
-        <p class="subtitle">Swiss Ephemeris精密計算 | 16原型理論 | 47都道府県対応</p>
+        <p class="description">
+            あなたの出生時の天体配置から、体質と健康傾向を科学的に分析いたします。<br>
+            正確な鑑定のため、出生情報を詳しくご入力ください。
+        </p>
 
-        <form action="/basic_report" method="POST">
+        <form method="POST" action="/">
             <div class="form-group">
-                <label for="birth_date">出生年月日</label>
-                <input type="date" id="birth_date" name="birth_date" required>
+                <label for="name">お名前 <span class="required">*</span></label>
+                <input type="text" id="name" name="name" required placeholder="山田太郎">
             </div>
 
             <div class="form-group">
-                <label for="birth_time">出生時刻</label>
-                <input type="time" id="birth_time" name="birth_time" required>
+                <label for="birth_year">生年 <span class="required">*</span></label>
+                <input type="number" id="birth_year" name="birth_year" min="1900" max="2030" required placeholder="1990">
             </div>
 
             <div class="form-group">
-                <label for="prefecture">出生地（都道府県）</label>
-                <select id="prefecture" name="prefecture" required>
-                    <option value="">選択してください</option>
-                    {% for prefecture in prefectures %}
-                    <option value="{{ prefecture }}">{{ prefecture }}</option>
-                    {% endfor %}
+                <label for="birth_month">生月 <span class="required">*</span></label>
+                <select id="birth_month" name="birth_month" required>
+                    <option value="">月を選択してください</option>
+                    <option value="1">1月</option>
+                    <option value="2">2月</option>
+                    <option value="3">3月</option>
+                    <option value="4">4月</option>
+                    <option value="5">5月</option>
+                    <option value="6">6月</option>
+                    <option value="7">7月</option>
+                    <option value="8">8月</option>
+                    <option value="9">9月</option>
+                    <option value="10">10月</option>
+                    <option value="11">11月</option>
+                    <option value="12">12月</option>
                 </select>
             </div>
 
-            <button type="submit" class="submit-btn">ASTRO-BODY TYPE REPORT 開始</button>
-        </form>
+            <div class="form-group">
+                <label for="birth_day">生日 <span class="required">*</span></label>
+                <input type="number" id="birth_day" name="birth_day" min="1" max="31" required placeholder="15">
+            </div>
 
-        <div class="features">
-            <h3>システムの特徴</h3>
-            <ul>
-                <li>Swiss Ephemerisによる高精度天体計算（1600-2200年対応）</li>
-                <li>太陽×月の四元素組み合わせによる16原型理論</li>
-                <li>47都道府県完全対応の地理座標データベース</li>
-                <li>基本レポート（約3,000文字）+ 詳細レポート（約12,000文字）</li>
-                <li>体質的特徴から生活習慣まで包括的分析</li>
-                <li>検収ループシステムによる品質保証</li>
-            </ul>
-        </div>
+            <div class="form-group">
+                <div class="time-group">
+                    <div>
+                        <label for="birth_hour">時間 <span class="required">*</span></label>
+                        <input type="number" id="birth_hour" name="birth_hour" min="0" max="23" required placeholder="14">
+                    </div>
+                    <div>
+                        <label for="birth_minute">分 <span class="required">*</span></label>
+                        <input type="number" id="birth_minute" name="birth_minute" min="0" max="59" required placeholder="30">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="prefecture">出生地（都道府県） <span class="required">*</span></label>
+                <select id="prefecture" name="prefecture" required>
+                    <option value="">都道府県を選択してください</option>
+                    <option value="北海道">北海道</option>
+                    <option value="青森県">青森県</option>
+                    <option value="岩手県">岩手県</option>
+                    <option value="宮城県">宮城県</option>
+                    <option value="秋田県">秋田県</option>
+                    <option value="山形県">山形県</option>
+                    <option value="福島県">福島県</option>
+                    <option value="茨城県">茨城県</option>
+                    <option value="栃木県">栃木県</option>
+                    <option value="群馬県">群馬県</option>
+                    <option value="埼玉県">埼玉県</option>
+                    <option value="千葉県">千葉県</option>
+                    <option value="東京都">東京都</option>
+                    <option value="神奈川県">神奈川県</option>
+                    <option value="新潟県">新潟県</option>
+                    <option value="富山県">富山県</option>
+                    <option value="石川県">石川県</option>
+                    <option value="福井県">福井県</option>
+                    <option value="山梨県">山梨県</option>
+                    <option value="長野県">長野県</option>
+                    <option value="岐阜県">岐阜県</option>
+                    <option value="静岡県">静岡県</option>
+                    <option value="愛知県">愛知県</option>
+                    <option value="三重県">三重県</option>
+                    <option value="滋賀県">滋賀県</option>
+                    <option value="京都府">京都府</option>
+                    <option value="大阪府">大阪府</option>
+                    <option value="兵庫県">兵庫県</option>
+                    <option value="奈良県">奈良県</option>
+                    <option value="和歌山県">和歌山県</option>
+                    <option value="鳥取県">鳥取県</option>
+                    <option value="島根県">島根県</option>
+                    <option value="岡山県">岡山県</option>
+                    <option value="広島県">広島県</option>
+                    <option value="山口県">山口県</option>
+                    <option value="徳島県">徳島県</option>
+                    <option value="香川県">香川県</option>
+                    <option value="愛媛県">愛媛県</option>
+                    <option value="高知県">高知県</option>
+                    <option value="福岡県">福岡県</option>
+                    <option value="佐賀県">佐賀県</option>
+                    <option value="長崎県">長崎県</option>
+                    <option value="熊本県">熊本県</option>
+                    <option value="大分県">大分県</option>
+                    <option value="宮崎県">宮崎県</option>
+                    <option value="鹿児島県">鹿児島県</option>
+                    <option value="沖縄県">沖縄県</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">鑑定開始</button>
+        </form>
     </div>
 </body>
 </html>
