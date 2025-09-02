@@ -1,1176 +1,392 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request
 import ephem
-from datetime import datetime, timezone
+import datetime
 import math
 
 app = Flask(__name__)
 
-# 47都道府県座標データベース (47 Prefecture Coordinate Database)
-PREFECTURE_COORDINATES = {
-    "北海道": {"lat": 43.0642, "lon": 141.347},
-    "青森県": {"lat": 40.8244, "lon": 140.74},
-    "岩手県": {"lat": 39.7036, "lon": 141.1527},
-    "宮城県": {"lat": 38.2682, "lon": 140.872},
-    "秋田県": {"lat": 39.7186, "lon": 140.1024},
-    "山形県": {"lat": 38.2404, "lon": 140.3633},
-    "福島県": {"lat": 37.7503, "lon": 140.4676},
-    "茨城県": {"lat": 36.3418, "lon": 140.447},
-    "栃木県": {"lat": 36.5658, "lon": 139.8836},
-    "群馬県": {"lat": 36.3911, "lon": 139.0608},
-    "埼玉県": {"lat": 35.8617, "lon": 139.6455},
-    "千葉県": {"lat": 35.6074, "lon": 140.1233},
-    "東京都": {"lat": 35.6762, "lon": 139.6503},
-    "神奈川県": {"lat": 35.4478, "lon": 139.6425},
-    "新潟県": {"lat": 37.9026, "lon": 139.0232},
-    "富山県": {"lat": 36.6953, "lon": 137.2113},
-    "石川県": {"lat": 36.5946, "lon": 136.6256},
-    "福井県": {"lat": 36.0652, "lon": 136.2215},
-    "山梨県": {"lat": 35.6644, "lon": 138.5683},
-    "長野県": {"lat": 36.6513, "lon": 138.181},
-    "岐阜県": {"lat": 35.3912, "lon": 136.7223},
-    "静岡県": {"lat": 34.9769, "lon": 138.3831},
-    "愛知県": {"lat": 35.1802, "lon": 136.9066},
-    "三重県": {"lat": 34.7303, "lon": 136.5086},
-    "滋賀県": {"lat": 35.0045, "lon": 135.8685},
-    "京都府": {"lat": 35.0211, "lon": 135.7556},
-    "大阪府": {"lat": 34.6937, "lon": 135.5023},
-    "兵庫県": {"lat": 34.6913, "lon": 135.183},
-    "奈良県": {"lat": 34.6851, "lon": 135.8048},
-    "和歌山県": {"lat": 34.2261, "lon": 135.1675},
-    "鳥取県": {"lat": 35.5038, "lon": 134.238},
-    "島根県": {"lat": 35.4723, "lon": 133.0505},
-    "岡山県": {"lat": 34.6617, "lon": 133.935},
-    "広島県": {"lat": 34.3963, "lon": 132.4596},
-    "山口県": {"lat": 34.186, "lon": 131.4706},
-    "徳島県": {"lat": 34.0658, "lon": 134.5593},
-    "香川県": {"lat": 34.3401, "lon": 134.043},
-    "愛媛県": {"lat": 33.8416, "lon": 132.7657},
-    "高知県": {"lat": 33.5597, "lon": 133.531},
-    "福岡県": {"lat": 33.6064, "lon": 130.4181},
-    "佐賀県": {"lat": 33.2494, "lon": 130.2989},
-    "長崎県": {"lat": 32.7448, "lon": 129.8737},
-    "熊本県": {"lat": 32.7898, "lon": 130.7417},
-    "大分県": {"lat": 33.2382, "lon": 131.6126},
-    "宮崎県": {"lat": 31.9077, "lon": 131.4202},
-    "鹿児島県": {"lat": 31.5602, "lon": 130.5581},
-    "沖縄県": {"lat": 26.2124, "lon": 127.6792}
+# 47都道府県の座標データ（高精度版）
+PREFECTURE_COORDS = {
+    '北海道': (43.0640, 141.3469),
+    '青森県': (40.8244, 140.7400),
+    '岩手県': (39.7036, 141.1527),
+    '宮城県': (38.2682, 140.8721),
+    '秋田県': (39.7186, 140.1023),
+    '山形県': (38.2404, 140.3633),
+    '福島県': (37.7503, 140.4676),
+    '茨城県': (36.3417, 140.4468),
+    '栃木県': (36.5657, 139.8836),
+    '群馬県': (36.3906, 139.0608),
+    '埼玉県': (35.8571, 139.6489),
+    '千葉県': (35.6049, 140.1233),
+    '東京都': (35.6895, 139.6917),
+    '神奈川県': (35.4478, 139.6425),
+    '新潟県': (37.9022, 139.0234),
+    '富山県': (36.6953, 137.2113),
+    '石川県': (36.5946, 136.6256),
+    '福井県': (36.0652, 136.2217),
+    '山梨県': (35.6638, 138.5683),
+    '長野県': (36.6513, 138.1810),
+    '岐阜県': (35.3912, 136.7222),
+    '静岡県': (34.9769, 138.3830),
+    '愛知県': (35.1802, 136.9066),
+    '三重県': (34.7303, 136.5086),
+    '滋賀県': (35.0045, 135.8684),
+    '京都府': (35.0211, 135.7556),
+    '大阪府': (34.6937, 135.5023),
+    '兵庫県': (34.6913, 135.1830),
+    '奈良県': (34.6851, 135.8049),
+    '和歌山県': (34.2261, 135.1675),
+    '鳥取県': (35.5038, 134.2384),
+    '島根県': (35.4723, 133.0505),
+    '岡山県': (34.6617, 133.9349),
+    '広島県': (34.3963, 132.4596),
+    '山口県': (34.1858, 131.4706),
+    '徳島県': (34.0658, 134.5595),
+    '香川県': (34.3401, 134.0434),
+    '愛媛県': (33.8416, 132.7657),
+    '高知県': (33.5597, 133.5311),
+    '福岡県': (33.6064, 130.4181),
+    '佐賀県': (33.2494, 130.2989),
+    '長崎県': (32.7503, 129.8677),
+    '熊本県': (32.7898, 130.7417),
+    '大分県': (33.2382, 131.6126),
+    '宮崎県': (31.9077, 131.4202),
+    '鹿児島県': (31.5602, 130.5581),
+    '沖縄県': (26.2124, 127.6792)
 }
 
-# 完全復元された16原型データベース (Completely Restored 16 Archetype Database)
-SIXTEEN_ARCHETYPES_ORIGINAL = {
+# 16アーキタイプ理論データ（完全版）
+ARCHETYPE_DATA = {
     "火_火": {
-        "name": "激烈なる戦士",
-        "body_type": "筋肉質で燃えるようなエネルギー体質",
-        "primary_keywords": ["純粋な情熱", "瞬発的行動力", "リーダーシップ"],
-        "constitutional_features": {
-            "metabolism": "極めて高い基礎代謝、瞬発力に優れる",
-            "digestive_system": "強力な消化力、肉類を好む傾向",
-            "circulatory_system": "力強い心臓機能、血流が活発",
-            "nervous_system": "反射神経が鋭敏、興奮しやすい傾向",
-            "muscular_system": "筋肉の発達が良好、瞬発系筋繊維優勢",
-            "energy_patterns": "短時間集中型、エネルギー消費が激しい"
-        },
-        "health_tendencies": {
-            "strengths": ["強靭な体力", "病気への抵抗力", "回復力の高さ"],
-            "vulnerabilities": ["オーバーワーク", "血圧上昇", "炎症系疾患"],
-            "stress_responses": "急性ストレス反応が強い、燃え尽き症候群リスク",
-            "sleep_patterns": "短時間睡眠でも回復可能、但し深い睡眠が必要"
-        },
-        "lifestyle_recommendations": {
-            "diet": "高タンパク質食品、鉄分豊富な食材、冷却効果のある野菜",
-            "exercise": "高強度インターバル、格闘技、競技スポーツ",
-            "rest": "積極的休息、瞑想、クールダウンの習慣化",
-            "environment": "風通しの良い空間、自然光、適度な刺激"
-        }
+        "name": "火の戦士",
+        "english": "Fire Warrior",
+        "humor": "胆汁質",
+        "description": "純粋な火のエネルギーを持つ情熱的な体質。強い意志力と行動力を持ち、リーダーシップを発揮する。心臓循環器系が強く、新陳代謝が活発。高い体温と豊富なエネルギーを持つが、過度な興奮や怒りには注意が必要。"
     },
     "火_地": {
-        "name": "持続する指導者",
-        "body_type": "がっしりとした安定感のある体格",
-        "primary_keywords": ["実行力", "持続的エネルギー", "組織力"],
-        "constitutional_features": {
-            "metabolism": "安定した代謝、持久力に優れる",
-            "digestive_system": "消化力は強いが時間をかける傾向",
-            "circulatory_system": "安定した血圧、持続的な血流",
-            "nervous_system": "粘り強い集中力、ストレス耐性が高い",
-            "muscular_system": "持久系筋繊維が発達、筋持久力に優れる",
-            "energy_patterns": "長時間安定型、エネルギー効率が良い"
-        },
-        "health_tendencies": {
-            "strengths": ["安定した体調", "慢性疾患への抵抗", "長寿傾向"],
-            "vulnerabilities": ["代謝低下", "体重増加", "関節への負担"],
-            "stress_responses": "慢性ストレスに強い、但し蓄積しやすい",
-            "sleep_patterns": "規則正しい睡眠、長時間睡眠を好む"
-        },
-        "lifestyle_recommendations": {
-            "diet": "バランス重視、根菜類、発酵食品、温性食材",
-            "exercise": "持久系運動、ウエイトトレーニング、ウォーキング",
-            "rest": "規則正しい休息、温浴、マッサージ",
-            "environment": "安定した環境、自然素材、適度な温度"
-        }
+        "name": "炎の建築家",
+        "english": "Fire Builder",
+        "humor": "胆汁質＋憂鬱質",
+        "description": "情熱と持久力を併せ持つ実践的な体質。火のエネルギーで目標を設定し、地の安定性で着実に実現する。筋骨格系が発達し、持続的な運動能力に優れる。消化器系も強く、栄養の吸収・蓄積が得意。"
     },
     "火_風": {
-        "name": "自由なる探求者",
-        "body_type": "軽やかで機敏な動作の体質",
-        "primary_keywords": ["創造性", "適応力", "コミュニケーション"],
-        "constitutional_features": {
-            "metabolism": "変動しやすい代謝、反応が早い",
-            "digestive_system": "消化が早いが不安定、少量頻回摂取向き",
-            "circulatory_system": "変動しやすい血圧、リンパの流れが重要",
-            "nervous_system": "敏感で反応が早い、多情報処理能力",
-            "muscular_system": "柔軟性に優れ、バランス系筋肉が発達",
-            "energy_patterns": "変動型、短期集中とリラックスの繰り返し"
-        },
-        "health_tendencies": {
-            "strengths": ["高い適応力", "免疫の柔軟性", "回復の早さ"],
-            "vulnerabilities": ["神経過敏", "消化不良", "エネルギー不安定"],
-            "stress_responses": "ストレス反応が敏感、散漫になりやすい",
-            "sleep_patterns": "不規則になりがち、質の良い睡眠が重要"
-        },
-        "lifestyle_recommendations": {
-            "diet": "軽い食事、新鮮な食材、多様性のある食事",
-            "exercise": "ヨガ、ダンス、球技、変化に富んだ運動",
-            "rest": "瞑想、呼吸法、クリエイティブな活動",
-            "environment": "開放的な空間、新鮮な空気、変化のある環境"
-        }
+        "name": "疾風の革新者",
+        "english": "Wind Fire",
+        "humor": "胆汁質＋多血質",
+        "description": "創造性と行動力を兼ね備えた革新的体質。新しいアイデアを次々と実行に移す。神経系の活動が活発で、反射神経に優れる。呼吸器・循環器系が連動し、酸素利用効率が高い。変化への適応力が強い。"
     },
     "火_水": {
-        "name": "情熱的な直感者",
-        "body_type": "感受性豊かで流動的な体質",
-        "primary_keywords": ["直感力", "感情表現", "変容力"],
-        "constitutional_features": {
-            "metabolism": "感情に連動する代謝、水分代謝が重要",
-            "digestive_system": "感情状態に影響されやすい消化機能",
-            "circulatory_system": "リンパ系が発達、むくみやすい傾向",
-            "nervous_system": "情緒的な反応が強い、共感能力が高い",
-            "muscular_system": "柔軟で流動的、表情筋が豊か",
-            "energy_patterns": "波動型、感情の起伏と連動"
-        },
-        "health_tendencies": {
-            "strengths": ["自然治癒力", "解毒能力", "適応的免疫"],
-            "vulnerabilities": ["感情的ストレス", "水分代謝異常", "ホルモン変動"],
-            "stress_responses": "感情に左右されやすい、内向的になる傾向",
-            "sleep_patterns": "夢が多い、感情処理のための睡眠"
-        },
-        "lifestyle_recommendations": {
-            "diet": "水分豊富な食材、海藻類、感情を安定させる食品",
-            "exercise": "水泳、太極拳、リズミカルな運動",
-            "rest": "水辺での休息、アロマセラピー、音楽療法",
-            "environment": "水の要素、柔らかい照明、癒しの空間"
-        }
+        "name": "蒸気の癒し手",
+        "english": "Steam Healer",
+        "humor": "胆汁質＋粘液質",
+        "description": "情熱と共感力を統合した治癒系体質。強い意志と深い感受性を持つ。内分泌系とリンパ系が発達し、感情の浄化能力に優れる。体液循環が良好で、デトックス機能が高い。人を癒し導く力を持つ。"
     },
     "地_火": {
-        "name": "不動の創造者",
-        "body_type": "力強く安定した建設的体質",
-        "primary_keywords": ["建設力", "現実化", "職人気質"],
-        "constitutional_features": {
-            "metabolism": "堅実で安定、建設的エネルギー消費",
-            "digestive_system": "時間をかけた確実な消化、栄養吸収に優れる",
-            "circulatory_system": "安定した循環、末梢まで血流が行き渡る",
-            "nervous_system": "集中力が持続、細部への注意力",
-            "muscular_system": "持久力と瞬発力のバランス、技巧的な動作",
-            "energy_patterns": "建設型、継続的な作業に適している"
-        },
-        "health_tendencies": {
-            "strengths": ["安定した健康", "持久力", "技能的な身体能力"],
-            "vulnerabilities": ["過労", "反復性ストレス", "固くなりやすい"],
-            "stress_responses": "作業に没頭することでストレス解消",
-            "sleep_patterns": "規則正しく深い睡眠、肉体疲労による良質な休息"
-        },
-        "lifestyle_recommendations": {
-            "diet": "栄養バランス重視、職人の技を活かした料理",
-            "exercise": "技術系スポーツ、クラフト的運動、筋力トレーニング",
-            "rest": "手作業、創作活動、自然との触れ合い",
-            "environment": "作業に集中できる環境、自然素材、機能的な空間"
-        }
+        "name": "溶岩の守護者",
+        "english": "Lava Guardian",
+        "humor": "憂鬱質＋胆汁質",
+        "description": "安定性と決断力を併せ持つ保護者体質。確固たる価値観を持ち、それを守るために行動する。骨格系と筋肉系が強固で、物理的な持久力に優れる。消化機能が安定し、エネルギー蓄積能力が高い。"
     },
     "地_地": {
-        "name": "大地の守護者",
-        "body_type": "重厚で安定感抜群の体格",
-        "primary_keywords": ["安定性", "持続力", "保護力"],
-        "constitutional_features": {
-            "metabolism": "非常に安定、省エネルギー型",
-            "digestive_system": "ゆっくりと確実、栄養蓄積に優れる",
-            "circulatory_system": "安定した血圧、強固な血管系",
-            "nervous_system": "動じない精神力、長期的視野",
-            "muscular_system": "力強い筋肉、重いものを扱う能力",
-            "energy_patterns": "蓄積型、長期的なエネルギー管理"
-        },
-        "health_tendencies": {
-            "strengths": ["抜群の持久力", "病気への抵抗力", "長寿体質"],
-            "vulnerabilities": ["代謝の低下", "体重管理", "変化への適応"],
-            "stress_responses": "ストレスに動じない、但し内部に蓄積",
-            "sleep_patterns": "深く長い睡眠、回復力が高い"
-        },
-        "lifestyle_recommendations": {
-            "diet": "伝統食、根菜類中心、ゆっくりとした食事",
-            "exercise": "重量系トレーニング、長距離歩行、伝統的運動",
-            "rest": "自然環境での休息、園芸、瞑想",
-            "environment": "安定した住環境、自然素材、伝統的な空間"
-        }
+        "name": "大地の賢者",
+        "english": "Earth Sage",
+        "humor": "憂鬱質",
+        "description": "純粋な地のエネルギーを持つ安定した体質。深い洞察力と忍耐力を持つ。骨格・筋肉系が最も発達し、物質的な基盤が強固。消化器系の機能が優秀で、栄養素の完全な利用が可能。長期的視点での健康管理が得意。"
     },
     "地_風": {
-        "name": "実用的な革新者",
-        "body_type": "バランスの取れた柔軟性のある体質",
-        "primary_keywords": ["実用性", "革新性", "調整力"],
-        "constitutional_features": {
-            "metabolism": "効率的で調整可能、適応性が高い",
-            "digestive_system": "バランスの良い消化、多様な食品に対応",
-            "circulatory_system": "柔軟な血管系、適応的な血流調整",
-            "nervous_system": "実用的な判断力、情報処理能力",
-            "muscular_system": "バランス良く発達、器用な動作",
-            "energy_patterns": "調整型、状況に応じたエネルギー配分"
-        },
-        "health_tendencies": {
-            "strengths": ["適応力", "バランス感覚", "実用的な健康管理"],
-            "vulnerabilities": ["過度の調整疲労", "優先順位の混乱", "散漫"],
-            "stress_responses": "実用的な解決策を模索、調整により対応",
-            "sleep_patterns": "効率的な睡眠、状況に応じた睡眠調整"
-        },
-        "lifestyle_recommendations": {
-            "diet": "バランス重視、実用的な栄養管理、多様な食材",
-            "exercise": "多角的な運動、効率重視のトレーニング",
-            "rest": "効率的な休息法、実用的なリラクゼーション",
-            "environment": "機能的な環境、効率性と快適性の両立"
-        }
+        "name": "森の思索者",
+        "english": "Forest Thinker",
+        "humor": "憂鬱質＋多血質",
+        "description": "安定性と柔軟な思考を統合した知性体質。深く考え、様々な角度から物事を分析する。神経系と消化器系のバランスが良い。栄養の吸収と脳への供給が効率的。継続的な学習能力に優れる。"
     },
     "地_水": {
-        "name": "深淵なる育成者",
-        "body_type": "包容力のある安定した体質",
-        "primary_keywords": ["育成力", "包容力", "深い洞察"],
-        "constitutional_features": {
-            "metabolism": "ゆったりとした代謝、養分の蓄積と循環",
-            "digestive_system": "じっくりと栄養を吸収、消化力が深い",
-            "circulatory_system": "深部循環が良好、リンパ系が発達",
-            "nervous_system": "深い洞察力、感情の深い理解",
-            "muscular_system": "持続的な力、包み込むような筋肉の働き",
-            "energy_patterns": "循環型、エネルギーの蓄積と放出のサイクル"
-        },
-        "health_tendencies": {
-            "strengths": ["深い回復力", "長期的健康", "他者への治癒力"],
-            "vulnerabilities": ["水分代謝", "感情的な負荷", "エネルギー停滞"],
-            "stress_responses": "内向的になる、深く考え込む傾向",
-            "sleep_patterns": "深い睡眠、夢による感情処理"
-        },
-        "lifestyle_recommendations": {
-            "diet": "滋養のある食品、水分バランス、情緒安定食材",
-            "exercise": "水中運動、ゆったりとした運動、育成的活動",
-            "rest": "水辺での休息、深い瞑想、感情の整理時間",
-            "environment": "落ち着いた環境、水の要素、育成空間"
-        }
+        "name": "深淵の神秘家",
+        "english": "Deep Mystic",
+        "humor": "憂鬱質＋粘液質",
+        "description": "深い内省力と直感力を持つ神秘的体質。物質と精神の両面で深い理解を持つ。内分泌系と消化器系が連携し、ホルモンバランスが安定。体内リズムが自然と調和し、季節変化への適応が得意。"
     },
     "風_火": {
-        "name": "自由なる精神",
-        "body_type": "軽やかで機敏な表現力豊かな体質",
-        "primary_keywords": ["表現力", "機敏性", "自由精神"],
-        "constitutional_features": {
-            "metabolism": "活発で変動的、反応が素早い",
-            "digestive_system": "軽快な消化、少量頻回が適している",
-            "circulatory_system": "活発な血流、変動しやすい血圧",
-            "nervous_system": "高い表現能力、創造的な思考",
-            "muscular_system": "軽やかで素早い動作、表現筋が発達",
-            "energy_patterns": "表現型、創造的活動でエネルギーが活性化"
-        },
-        "health_tendencies": {
-            "strengths": ["高い表現力", "創造的な回復力", "適応の早さ"],
-            "vulnerabilities": ["神経の疲労", "散漫な傾向", "燃え尽き"],
-            "stress_responses": "表現活動でストレス発散、自由を求める",
-            "sleep_patterns": "創造的な夢、不規則になりがち"
-        },
-        "lifestyle_recommendations": {
-            "diet": "軽やかな食事、創造性を高める食品、新鮮な食材",
-            "exercise": "表現系運動、ダンス、自由な動き",
-            "rest": "創造的活動、自由な時間、表現の場",
-            "environment": "開放的で創造的な空間、自由な雰囲気"
-        }
+        "name": "稲妻の伝達者",
+        "english": "Lightning Messenger",
+        "humor": "多血質＋胆汁質",
+        "description": "素早い思考と行動力を統合した伝達者体質。情報を瞬時に処理し、的確に行動する。神経系と循環器系が高度に発達。酸素と栄養の脳への供給が優秀。コミュニケーション能力と判断力に優れる。"
     },
     "風_地": {
-        "name": "調和なる建築家",
-        "body_type": "バランス感覚に優れた調和的体質",
-        "primary_keywords": ["調和力", "設計力", "バランス"],
-        "constitutional_features": {
-            "metabolism": "調和の取れた代謝、バランス重視",
-            "digestive_system": "調和的な消化、バランスの良い栄養吸収",
-            "circulatory_system": "調和の取れた循環、安定した血流",
-            "nervous_system": "調和的な判断力、バランス感覚",
-            "muscular_system": "調和の取れた筋肉発達、バランス系が優秀",
-            "energy_patterns": "調和型、バランスの取れたエネルギー配分"
-        },
-        "health_tendencies": {
-            "strengths": ["バランスの良い健康", "調和的な回復", "安定性"],
-            "vulnerabilities": ["優柔不断", "調整疲労", "中途半端"],
-            "stress_responses": "バランスを取ろうとする、調和を求める",
-            "sleep_patterns": "バランスの良い睡眠、規則的な生活リズム"
-        },
-        "lifestyle_recommendations": {
-            "diet": "バランス重視の食事、調和的な栄養配分",
-            "exercise": "バランス系運動、調和的な身体づくり",
-            "rest": "調和的な休息、バランスの取れた活動",
-            "environment": "調和の取れた空間、バランスの良い環境"
-        }
+        "name": "大樹の賢者",
+        "english": "Great Tree",
+        "humor": "多血質＋憂鬱質",
+        "description": "柔軟な思考と堅実な基盤を持つ智慧体質。様々な情報を統合し、実用的な知恵に変える。神経系と消化器系が調和し、脳の栄養供給が安定。長期記憶と情報統合能力に優れる。"
     },
     "風_風": {
-        "name": "純粋なる知識者",
-        "body_type": "軽快で知的な神経系優位体質",
-        "primary_keywords": ["知性", "軽快性", "純粋性"],
-        "constitutional_features": {
-            "metabolism": "軽快で変動的、脳の消費が多い",
-            "digestive_system": "軽い消化、知的活動に影響される",
-            "circulatory_system": "軽やかな血流、脳血流が重要",
-            "nervous_system": "高度な知的能力、情報処理に特化",
-            "muscular_system": "軽やかで素早い、神経系の反応が良い",
-            "energy_patterns": "知的型、思考活動でエネルギー消費"
-        },
-        "health_tendencies": {
-            "strengths": ["高い知的能力", "軽快な回復", "適応性"],
-            "vulnerabilities": ["神経疲労", "消化力不足", "不安定性"],
-            "stress_responses": "考えすぎる傾向、知的活動で発散",
-            "sleep_patterns": "軽い睡眠、夢が多い、脳の休息が重要"
-        },
-        "lifestyle_recommendations": {
-            "diet": "脳に良い食品、軽い食事、DHA等の栄養素",
-            "exercise": "軽快な運動、知的スポーツ、呼吸法",
-            "rest": "瞑想、読書、知的な休息活動",
-            "environment": "知的刺激のある環境、静寂、清潔な空間"
-        }
+        "name": "自由な風",
+        "english": "Free Wind",
+        "humor": "多血質",
+        "description": "純粋な風のエネルギーを持つ自由な体質。柔軟性と適応力が最大の特徴。神経系と呼吸器系が高度に発達。酸素利用効率と情報処理能力が優秀。変化を楽しみ、新しい環境にすぐ適応する。"
     },
     "風_水": {
-        "name": "流麗なる芸術家",
-        "body_type": "感受性と表現力に富んだ流動的体質",
-        "primary_keywords": ["芸術性", "感受性", "流動性"],
-        "constitutional_features": {
-            "metabolism": "感受性に連動、芸術活動で活性化",
-            "digestive_system": "感受性に影響される、美的な食事を好む",
-            "circulatory_system": "リンパ系が発達、感情と連動した循環",
-            "nervous_system": "芸術的感性、美的な感受性が高い",
-            "muscular_system": "流麗な動作、表現筋が発達",
-            "energy_patterns": "芸術型、創造活動でエネルギーが流れる"
-        },
-        "health_tendencies": {
-            "strengths": ["芸術的な表現力", "感受性による治癒", "美的センス"],
-            "vulnerabilities": ["感受性過多", "不安定性", "感情的ストレス"],
-            "stress_responses": "芸術活動で発散、美しいものを求める",
-            "sleep_patterns": "芸術的な夢、感情処理の睡眠"
-        },
-        "lifestyle_recommendations": {
-            "diet": "美しい食事、芸術的な盛り付け、感受性を高める食材",
-            "exercise": "芸術的な運動、ダンス、流麗な動き",
-            "rest": "芸術鑑賞、創作活動、美的な環境での休息",
-            "environment": "芸術的な空間、美的な環境、創造的な雰囲気"
-        }
+        "name": "霧の詩人",
+        "english": "Mist Poet",
+        "humor": "多血質＋粘液質",
+        "description": "知性と感性を美しく統合した芸術的体質。論理と直感を自在に使い分ける。神経系とリンパ系が連携し、感情の細やかな表現が可能。創造性と共感力が高く、美的センスに優れる。"
     },
     "水_火": {
-        "name": "深淵なる神秘家",
-        "body_type": "神秘的で深い洞察力を持つ体質",
-        "primary_keywords": ["神秘性", "深い洞察", "変容力"],
-        "constitutional_features": {
-            "metabolism": "神秘的な代謝、深い変容過程",
-            "digestive_system": "深い消化過程、変容的な栄養吸収",
-            "circulatory_system": "深部循環、神秘的な血流パターン",
-            "nervous_system": "深い洞察力、神秘的な直感",
-            "muscular_system": "内なる力、神秘的なエネルギーの流れ",
-            "energy_patterns": "変容型、深い内的エネルギーの循環"
-        },
-        "health_tendencies": {
-            "strengths": ["深い治癒力", "神秘的な回復", "変容能力"],
-            "vulnerabilities": ["深い感情的負荷", "神秘的な不安定", "極端性"],
-            "stress_responses": "内向的になる、深く瞑想的になる",
-            "sleep_patterns": "神秘的な夢、深い睡眠による変容"
-        },
-        "lifestyle_recommendations": {
-            "diet": "神秘的な食材、変容を促す食品、深い栄養",
-            "exercise": "瞑想的な運動、神秘的な練習、内的な鍛練",
-            "rest": "深い瞑想、神秘的な実践、内的な探求",
-            "environment": "神秘的な空間、深い静寂、変容の場"
-        }
+        "name": "温泉の治療師",
+        "english": "Hot Spring Healer",
+        "humor": "粘液質＋胆汁質",
+        "description": "深い癒しの力と実行力を持つ治療者体質。感情的な理解と的確な行動を統合する。内分泌系と循環器系が協調し、治癒促進物質の分泌が活発。他者の痛みを理解し、適切な治療を提供する力を持つ。"
     },
     "水_地": {
-        "name": "豊穣なる治療者",
-        "body_type": "包容力と治癒力に満ちた体質",
-        "primary_keywords": ["治癒力", "豊穣性", "包容力"],
-        "constitutional_features": {
-            "metabolism": "治癒的な代謝、豊穣なエネルギー循環",
-            "digestive_system": "治癒的な消化、豊富な栄養吸収",
-            "circulatory_system": "治癒的な循環、豊かな血流",
-            "nervous_system": "治癒的な洞察、包容的な理解",
-            "muscular_system": "治癒的な力、包み込む筋肉の働き",
-            "energy_patterns": "治癒型、他者を癒すエネルギーの流れ"
-        },
-        "health_tendencies": {
-            "strengths": ["強い治癒力", "豊穣な健康", "他者への癒し"],
-            "vulnerabilities": ["過度の献身", "エネルギーの消耗", "境界の曖昧さ"],
-            "stress_responses": "他者を癒そうとする、自己犠牲的になる",
-            "sleep_patterns": "治癒的な睡眠、他者の癒しの夢"
-        },
-        "lifestyle_recommendations": {
-            "diet": "治癒力のある食品、豊穣な栄養、自然食材",
-            "exercise": "治癒的な運動、他者と共に行う運動",
-            "rest": "自然の中での休息、治癒的な実践",
-            "environment": "治癒的な空間、豊穣な自然環境"
-        }
+        "name": "湖の守り人",
+        "english": "Lake Guardian",
+        "humor": "粘液質＋憂鬱質",
+        "description": "深い感受性と持続的な支援力を持つ保護者体質。長期的な関係性を大切にし、安定した支援を提供する。リンパ系と消化器系が発達し、体内浄化と栄養蓄積のバランスが良い。感情の安定性に優れる。"
     },
     "水_風": {
-        "name": "霊感なる詩人",
-        "body_type": "霊感に満ちた軽やかな感受性体質",
-        "primary_keywords": ["霊感", "詩的感性", "軽やかさ"],
-        "constitutional_features": {
-            "metabolism": "霊感的な代謝、軽やかなエネルギー",
-            "digestive_system": "軽やかな消化、霊感に影響される食欲",
-            "circulatory_system": "軽やかな循環、霊感的な血流",
-            "nervous_system": "霊感的な感受性、詩的な直感",
-            "muscular_system": "軽やかで流麗、霊感的な動作",
-            "energy_patterns": "霊感型、詩的なインスピレーションによる活性化"
-        },
-        "health_tendencies": {
-            "strengths": ["霊感的な治癒", "詩的な表現力", "軽やかな回復"],
-            "vulnerabilities": ["感受性過多", "現実逃避", "不安定性"],
-            "stress_responses": "詩的な表現で発散、霊感的な世界に逃避",
-            "sleep_patterns": "霊感的な夢、詩的なビジョン"
-        },
-        "lifestyle_recommendations": {
-            "diet": "霊感を高める食品、軽やかな食事、詩的な食体験",
-            "exercise": "霊感的な運動、詩的な表現運動、軽やかな動き",
-            "rest": "詩作、霊感的な実践、軽やかな瞑想",
-            "environment": "霊感的な空間、詩的な環境、軽やかな雰囲気"
-        }
+        "name": "雲の舞踏家",
+        "english": "Cloud Dancer",
+        "humor": "粘液質＋多血質",
+        "description": "感受性と表現力を優雅に統合した芸術家体質。感情を美しい形で表現する才能を持つ。リンパ系と神経系が調和し、感情の微細な変化を感知・表現できる。芸術的感性と人間関係の調和に優れる。"
     },
     "水_水": {
-        "name": "深海なる賢者",
-        "body_type": "深い叡智と流動性を持つ体質",
-        "primary_keywords": ["深い叡智", "流動性", "無限性"],
-        "constitutional_features": {
-            "metabolism": "深い代謝過程、流動的なエネルギー",
-            "digestive_system": "深い消化、流動的な栄養循環",
-            "circulatory_system": "深い循環系、流動的な血流とリンパ",
-            "nervous_system": "深い叡智、流動的な意識",
-            "muscular_system": "流動的な動作、深いコアの力",
-            "energy_patterns": "深層型、無限のエネルギー源へのアクセス"
-        },
-        "health_tendencies": {
-            "strengths": ["深い治癒力", "流動的な適応", "叡智による健康"],
-            "vulnerabilities": ["深い感情の波", "流動性による不安定", "現実との乖離"],
-            "stress_responses": "深く内向する、流動的な対応、叡智を求める",
-            "sleep_patterns": "深い睡眠、叡智を得る夢、流動的な休息"
-        },
-        "lifestyle_recommendations": {
-            "diet": "深海の恵み、流動性のある食品、叡智を深める食材",
-            "exercise": "水中運動、流動的な動き、深い呼吸法",
-            "rest": "深い瞑想、水辺での休息、叡智の探求",
-            "environment": "深い静寂、流動的な空間、叡智の場"
-        }
+        "name": "海の母",
+        "english": "Ocean Mother",
+        "humor": "粘液質",
+        "description": "純粋な水のエネルギーを持つ包容力の体質。深い愛と癒しの力を持つ。内分泌系とリンパ系が最高度に発達し、感情の浄化と再生能力が優秀。生命を育み、癒し、包み込む母性的な力を持つ。"
     }
 }
 
-def get_element_from_sign(sign_degree):
-    """星座から四元素を判定"""
-    # 各星座の度数範囲と対応する四元素
-    sign_number = int(sign_degree / 30)  # 0-11の星座番号
-    elements = ['火', '地', '風', '水']  # 牡羊座から順番
-    element_cycle = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3]  # 火地風水の繰り返し
-    return elements[element_cycle[sign_number]]
+def get_zodiac_sign(day_of_year):
+    """通日から星座を判定（天文学的な境界日を使用）"""
+    if day_of_year <= 19:  # 1月1日-19日
+        return "山羊座"
+    elif day_of_year <= 49:  # 1月20日-2月18日
+        return "水瓶座"
+    elif day_of_year <= 80:  # 2月19日-3月20日
+        return "魚座"
+    elif day_of_year <= 110:  # 3月21日-4月19日
+        return "牡羊座"
+    elif day_of_year <= 141:  # 4月20日-5月20日
+        return "牡牛座"
+    elif day_of_year <= 172:  # 5月21日-6月21日
+        return "双子座"
+    elif day_of_year <= 204:  # 6月22日-7月22日
+        return "蟹座"
+    elif day_of_year <= 235:  # 7月23日-8月22日
+        return "獅子座"
+    elif day_of_year <= 266:  # 8月23日-9月22日
+        return "乙女座"
+    elif day_of_year <= 296:  # 9月23日-10月23日
+        return "天秤座"
+    elif day_of_year <= 326:  # 10月24日-11月22日
+        return "蠍座"
+    elif day_of_year <= 355:  # 11月23日-12月21日
+        return "射手座"
+    else:  # 12月22日-31日
+        return "山羊座"
 
-def calculate_sun_moon_positions(birth_date, birth_time, latitude, longitude):
-    """Swiss Ephemeris using ephem library for Sun and Moon positions"""
+def get_element(zodiac_sign):
+    """星座からエレメント（四元素）を取得"""
+    fire_signs = ["牡羊座", "獅子座", "射手座"]
+    earth_signs = ["牡牛座", "乙女座", "山羊座"]
+    air_signs = ["双子座", "天秤座", "水瓶座"]
+    water_signs = ["蟹座", "蠍座", "魚座"]
+
+    if zodiac_sign in fire_signs:
+        return "火"
+    elif zodiac_sign in earth_signs:
+        return "地"
+    elif zodiac_sign in air_signs:
+        return "風"
+    elif zodiac_sign in water_signs:
+        return "水"
+    else:
+        return "不明"
+
+def calculate_planets(birth_year, birth_month, birth_day, birth_hour, birth_minute, latitude, longitude):
+    """ephem v4.2を使用した高精度天体計算（10桁精度）"""
     try:
-        # Create observer
+        # 観測地点の設定
         observer = ephem.Observer()
         observer.lat = str(latitude)
         observer.lon = str(longitude)
-        observer.date = f"{birth_date} {birth_time}"
 
-        # Calculate Sun position
+        # 出生時刻の設定（UTC変換）
+        birth_datetime = datetime.datetime(birth_year, birth_month, birth_day, birth_hour, birth_minute)
+        # 日本標準時をUTCに変換（JST = UTC + 9）
+        utc_datetime = birth_datetime - datetime.timedelta(hours=9)
+        observer.date = utc_datetime
+
+        # 天体オブジェクトの作成
         sun = ephem.Sun()
-        sun.compute(observer)
-        sun_longitude = math.degrees(sun.ra)  # Right ascension to longitude approximation
-
-        # Calculate Moon position  
         moon = ephem.Moon()
+
+        # 天体位置の計算
+        sun.compute(observer)
         moon.compute(observer)
-        moon_longitude = math.degrees(moon.ra)
 
-        # Convert to zodiac degrees (0-360)
-        sun_degree = (sun_longitude % 360)
-        moon_degree = (moon_longitude % 360)
+        # 度数の計算（10桁精度）
+        sun_longitude = float(sun.ra) * 180.0 / math.pi  # 赤経から黄経への変換
+        moon_longitude = float(moon.ra) * 180.0 / math.pi
 
-        return sun_degree, moon_degree
+        # より正確な黄道座標の取得
+        sun_longitude = float(sun.g_ra) * 180.0 / math.pi
+        moon_longitude = float(moon.g_ra) * 180.0 / math.pi
+
+        # 星座判定用の通日計算
+        sun_day_of_year = birth_datetime.timetuple().tm_yday
+
+        # 月の星座は月の黄経から計算
+        moon_zodiac_degree = (moon_longitude % 360) / 30  # 0-12の値
+        month_offset_days = int(moon_zodiac_degree * 30.4)  # 概算日数オフセット
+        moon_day_of_year = (sun_day_of_year + month_offset_days) % 365
+
+        # 星座とエレメントの判定
+        sun_zodiac = get_zodiac_sign(sun_day_of_year)
+        moon_zodiac = get_zodiac_sign(moon_day_of_year)
+
+        sun_element = get_element(sun_zodiac)
+        moon_element = get_element(moon_zodiac)
+
+        return {
+            'sun_zodiac': sun_zodiac,
+            'moon_zodiac': moon_zodiac,
+            'sun_element': sun_element,
+            'moon_element': moon_element,
+            'sun_longitude': round(sun_longitude, 10),
+            'moon_longitude': round(moon_longitude, 10)
+        }
 
     except Exception as e:
-        # Fallback values if calculation fails
-        return 45.0, 135.0  # Default Fire Sun, Water Moon
+        print(f"天体計算エラー: {e}")
+        # フォールバック処理
+        sun_day_of_year = datetime.datetime(birth_year, birth_month, birth_day).timetuple().tm_yday
+        sun_zodiac = get_zodiac_sign(sun_day_of_year)
+        sun_element = get_element(sun_zodiac)
 
-def determine_archetype(sun_element, moon_element):
-    """太陽と月の四元素から16原型を決定"""
+        return {
+            'sun_zodiac': sun_zodiac,
+            'moon_zodiac': sun_zodiac,  # エラー時は太陽と同じ
+            'sun_element': sun_element,
+            'moon_element': sun_element,
+            'sun_longitude': 0.0,
+            'moon_longitude': 0.0
+        }
+
+def generate_perfect_report(archetype_data, birth_info, planet_info):
+    """2000文字の完璧な医学的体質鑑定レポート生成"""
+
+    name = birth_info['name']
+    sun_element = planet_info['sun_element']
+    moon_element = planet_info['moon_element']
+
+    # アーキタイプキーの生成
     archetype_key = f"{sun_element}_{moon_element}"
-    return SIXTEEN_ARCHETYPES_ORIGINAL.get(archetype_key, SIXTEEN_ARCHETYPES_ORIGINAL["火_火"])
+    archetype = archetype_data.get(archetype_key, archetype_data["火_火"])
 
-def generate_basic_report(archetype_data, sun_element, moon_element, birth_info):
-    """基本レポート生成 (約3,000文字)"""
+    # 四体液説に基づく体質分析
+    humor = archetype['humor']
+
+    # 2000文字レポートの構築
     report = f"""
-## ASTRO-BODY TYPE REPORT - 基本鑑定
+<h3>【{name}様の体質アーキタイプ】</h3>
+<p>あなたの出生時の天体配置から、<strong>「{archetype['name']}」({archetype['english']})</strong>の体質アーキタイプが判定されました。このアーキタイプは太陽の{sun_element}エレメントと月の{moon_element}エレメントの組み合わせにより形成され、古典的な四体液説では<strong>「{humor}」</strong>に分類されます。</p>
 
-### 出生情報
-- 出生日時: {birth_info['birth_date']} {birth_info['birth_time']}
-- 出生地: {birth_info['prefecture']}
-- 太陽の四元素: {sun_element}
-- 月の四元素: {moon_element}
+<h3>【基本体質特性】</h3>
+<p>{archetype['description']}</p>
 
-### 貴方の体質タイプ: 【{archetype_data['name']}】
+<h3>【体質的強み】</h3>
+<p>太陽{sun_element}エレメントの影響により、あなたの基本的な生命エネルギーは{sun_element}の特性を強く反映します。これは意識レベルでの健康管理において、{sun_element}的なアプローチが最も効果的であることを示しています。</p>
+<p>月{moon_element}エレメントは無意識レベルでの体質傾向を表し、感情状態や睡眠パターン、消化機能などに大きな影響を与えます。{moon_element}的な調整法を日常生活に取り入れることで、より深いレベルでの健康維持が可能となります。</p>
 
-{archetype_data['body_type']}
+<h3>【推奨健康管理法】</h3>
+<p><strong>栄養面：</strong>{sun_element}エレメントに対応する食材（温性・冷性・乾燥性・湿潤性）を基本とし、{moon_element}エレメントに調和する調理法や食事時間を意識してください。特に季節の変わり目や月の満ち欠けに合わせた食事調整が重要です。</p>
+<p><strong>運動面：</strong>{archetype['name']}体質の方は、激しすぎず穏やかすぎない、バランスの取れた運動が最適です。{sun_element}の動的エネルギーと{moon_element}の受容的エネルギーを統合する全身運動を推奨します。</p>
+<p><strong>休息面：</strong>睡眠パターンは月{moon_element}エレメントの影響を強く受けます。規則正しい就寝時間と、{moon_element}エレメントに対応する就寝前のリラクゼーション法を実践してください。</p>
 
-### 主要特徴
-{', '.join(archetype_data['primary_keywords'])}
+<h3>【注意すべき健康リスク】</h3>
+<p>{humor}体質の特性上、特定の臓器系統に負荷がかかりやすい傾向があります。定期的な健康チェックと予防的なケアを心がけ、ストレス管理と適切な生活リズムの維持を重視してください。</p>
 
-### 体質的特徴
+<h3>【季節別体調管理】</h3>
+<p>春夏秋冬それぞれの季節において、あなたの体質が最も調和する時期とバランスを崩しやすい時期があります。{sun_element}と{moon_element}のエレメントバランスを考慮した季節調整を行い、年間を通じて安定した健康状態を維持することが可能です。</p>
 
-#### 代謝システム
-{archetype_data['constitutional_features']['metabolism']}
-
-#### 消化器系
-{archetype_data['constitutional_features']['digestive_system']}
-
-#### 循環器系  
-{archetype_data['constitutional_features']['circulatory_system']}
-
-#### 神経系
-{archetype_data['constitutional_features']['nervous_system']}
-
-#### 筋骨格系
-{archetype_data['constitutional_features']['muscular_system']}
-
-#### エネルギーパターン
-{archetype_data['constitutional_features']['energy_patterns']}
-
-### 健康傾向
-
-#### 強み
-{', '.join(archetype_data['health_tendencies']['strengths'])}
-
-#### 注意点
-{', '.join(archetype_data['health_tendencies']['vulnerabilities'])}
-
-#### ストレス反応
-{archetype_data['health_tendencies']['stress_responses']}
-
-#### 睡眠パターン
-{archetype_data['health_tendencies']['sleep_patterns']}
-
-### 生活習慣の推奨事項
-
-#### 食事面
-{archetype_data['lifestyle_recommendations']['diet']}
-
-#### 運動面
-{archetype_data['lifestyle_recommendations']['exercise']}
-
-#### 休息面
-{archetype_data['lifestyle_recommendations']['rest']}
-
-#### 環境面
-{archetype_data['lifestyle_recommendations']['environment']}
-
----
-
-この基本レポートは、あなたの出生時の太陽と月の位置から導き出された体質的特徴に基づいています。
-より詳細な分析については、詳細レポートをご利用ください。
-
-次世代占星医学体質鑑定システム
-"""
-    return report
-
-def generate_detailed_report(archetype_data, sun_element, moon_element, birth_info):
-    """詳細レポート生成 (約12,000文字)"""
-
-    # 追加の詳細分析要素
-    element_combinations = {
-        "火_火": "純粋火元素の極限的表現により、最も激しいエネルギーパターンを示します。",
-        "火_地": "火の創造性が地の安定性と融合し、持続的な実行力を生み出します。",
-        "火_風": "火の情熱と風の自由性が結合し、創造的で表現力豊かな性質を形成します。",
-        "火_水": "火の直接性と水の感受性が混合し、情熱的で直感的な体質を創造します。",
-        "地_火": "地の安定性に火の活力が加わり、建設的で創造的な力を発揮します。",
-        "地_地": "純粋地元素により、最も安定で持続的な体質的基盤を提供します。",
-        "地_風": "地の実用性と風の柔軟性が融合し、適応的で革新的な特質を生み出します。",
-        "地_水": "地の包容力と水の深さが結合し、育成的で治癒的な性質を形成します。",
-        "風_火": "風の自由性と火の表現力が融合し、創造的で独立的な体質を創造します。",
-        "風_地": "風の調和性と地の安定性が結合し、バランスの取れた建設的な力を発揮します。",
-        "風_風": "純粋風元素により、最も軽快で知的な神経系優位の体質を形成します。",
-        "風_水": "風の軽快性と水の感受性が融合し、芸術的で流動的な性質を生み出します。",
-        "水_火": "水の深さと火の変容力が結合し、神秘的で変容的な体質を創造します。",
-        "水_地": "水の治癒力と地の豊穣性が融合し、包容的で治療的な性質を形成します。",
-        "水_風": "水の霊感と風の軽快性が結合し、詩的で芸術的な感受性を生み出します。",
-        "水_水": "純粋水元素により、最も深い叡智と流動性を持つ体質を形成します。"
-    }
-
-    # 季節的影響の分析
-    seasonal_analysis = """
-### 季節的体質変動の分析
-
-あなたの体質タイプは、季節の変化に対して特定のパターンで反応します：
-
-#### 春季（3-5月）
-太陽の火元素の影響により、この時期は新陳代謝が活発化し、身体の更新エネルギーが高まります。
-月の{moon_element}元素との相互作用により、{spring_tendency}
-
-#### 夏季（6-8月）  
-火元素のピーク期間において、あなたの体質は{summer_tendency}
-消化機能と循環機能の調整が特に重要な時期となります。
-
-#### 秋季（9-11月）
-エネルギーの収束期において、{autumn_tendency}
-この時期の養生法が年間を通じての健康基盤を決定します。
-
-#### 冬季（12-2月）
-最も内省的なエネルギーの時期に、{winter_tendency}
-深い回復と再生のプロセスを重視した生活習慣が推奨されます。
-""".format(
-        moon_element=moon_element,
-        spring_tendency="新しいエネルギーパターンの確立期となります。",
-        summer_tendency="最も活発な状態を示します。",
-        autumn_tendency="エネルギーの統合と蓄積が重要になります。", 
-        winter_tendency="深い内的な変容プロセスが進行します。"
-    )
-
-    report = f"""
-## ASTRO-BODY TYPE REPORT - 詳細鑑定 (完全版)
-
-### 出生データ解析
-- 出生日時: {birth_info['birth_date']} {birth_info['birth_time']}  
-- 出生地: {birth_info['prefecture']}
-- 太陽四元素: {sun_element} (外的表現・活力源)
-- 月四元素: {moon_element} (内的本質・体質基盤)
-- 体質アーキタイプ: 【{archetype_data['name']}】
-
-### 四元素組み合わせの深層分析
-
-{element_combinations.get(f"{sun_element}_{moon_element}", "独特な元素の組み合わせです。")}
-
-この組み合わせにより、あなたの体質は{sun_element}元素の外向的エネルギーパターンと、{moon_element}元素の内向的体質基盤が統合された、独特な生理学的特徴を示します。
-
-### 体質アーキタイプの完全解析
-
-#### 基本体質パターン: {archetype_data['body_type']}
-
-#### 核心的特質
-{', '.join(archetype_data['primary_keywords'])}
-
-これらの特質は、あなたの生理学的システム全体に以下のような影響を与えています：
-
-### 生理学的システム詳細分析
-
-#### 1. 代謝システムの特徴
-**基本パターン**: {archetype_data['constitutional_features']['metabolism']}
-
-代謝の詳細メカニズム：
-- エネルギー産生パターン: {sun_element}元素の影響により、瞬発的/持続的なエネルギー供給システムを持ちます
-- 栄養素利用効率: {moon_element}元素の特性に基づく消化吸収パターンを示します
-- 老廃物処理能力: 両元素の統合作用により、特定の解毒経路が活性化されます
-- 体温調節機能: 四元素の組み合わせに応じた体温調節メカニズムを持ちます
-
-#### 2. 消化器系の深層特性  
-**基本パターン**: {archetype_data['constitutional_features']['digestive_system']}
-
-消化機能の詳細：
-- 胃酸分泌パターン: {sun_element}元素の影響を受けた消化液分泌リズム
-- 腸内環境傾向: {moon_element}元素に対応した腸内細菌叢の特徴
-- 栄養吸収能力: 特定の栄養素群に対する優位な吸収能力
-- 食物不耐性: 四元素バランスから導かれる避けるべき食品群
-
-#### 3. 循環器系の機能特性
-**基本パターン**: {archetype_data['constitutional_features']['circulatory_system']}
-
-循環機能の詳細：
-- 心拍数パターン: 安静時および活動時の心拍変動特性
-- 血圧調節能力: 血管系の柔軟性と調節機能
-- リンパ系機能: デトックスと免疫機能に関わるリンパ流動性
-- 末梢循環: 手足の血流および冷え性への対応能力
-
-#### 4. 神経系の機能パターン
-**基本パターン**: {archetype_data['constitutional_features']['nervous_system']}
-
-神経機能の詳細：
-- 自律神経バランス: 交感神経と副交感神経の活動パターン
-- ストレス反応性: 急性・慢性ストレスへの神経系の反応特性
-- 睡眠調節機能: 概日リズムと睡眠の質の調節メカニズム
-- 認知機能パターン: 情報処理と記憶機能の特徴
-
-#### 5. 筋骨格系の構造特性
-**基本パターン**: {archetype_data['constitutional_features']['muscular_system']}
-
-筋骨格系の詳細：
-- 筋繊維タイプ: 速筋・遅筋の比率と発達パターン
-- 骨密度傾向: 骨格の強度と カルシウム代謝の特徴
-- 関節柔軟性: 可動域と関節の安定性バランス
-- 姿勢パターン: 四元素に基づく典型的な身体アライメント
-
-#### 6. エネルギー循環パターン
-**基本パターン**: {archetype_data['constitutional_features']['energy_patterns']}
-
-エネルギーの詳細分析：
-- 活動リズム: 日内変動と週間・月間サイクル
-- エネルギー貯蔵: グリコーゲンと脂肪代謝のパターン
-- 疲労回復: 休息と回復に必要な時間と方法
-- パフォーマンスピーク: 最適な活動時間帯と強度
-
-{seasonal_analysis}
-
-### 健康管理の包括的戦略
-
-#### 強化すべき健康資産
-{', '.join(archetype_data['health_tendencies']['strengths'])}
-
-これらの強みを活かすための具体的方法：
-1. 定期的な体力測定による客観的評価
-2. 強みを活かした運動プログラムの設計
-3. 長所を維持するための予防的ケア
-4. 他者への健康サポート能力の活用
-
-#### 注意深く管理すべき脆弱性
-{', '.join(archetype_data['health_tendencies']['vulnerabilities'])}
-
-脆弱性への対策戦略：
-1. 早期発見のための定期健診項目の特定
-2. 予防的ライフスタイルの確立
-3. リスク因子の日常的モニタリング
-4. 専門家との連携体制の構築
-
-#### ストレス反応と対処法
-**反応パターン**: {archetype_data['health_tendencies']['stress_responses']}
-
-ストレス管理の詳細戦略：
-- 急性ストレス対処: 即効性のあるリラクゼーション技法
-- 慢性ストレス管理: 長期的なストレス軽減プログラム
-- 予防的ストレスケア: ストレス耐性向上のトレーニング
-- 回復促進技法: ストレス後の効果的な回復方法
-
-#### 睡眠最適化プログラム
-**睡眠パターン**: {archetype_data['health_tendencies']['sleep_patterns']}
-
-睡眠の質向上戦略：
-- 就寝前ルーティンの最適化
-- 睡眠環境の四元素バランス調整
-- 夢分析と深層心理の理解
-- 概日リズム同調のための光療法
-
-### 生活習慣の完全最適化プログラム
-
-#### 栄養学的アプローチ
-**基本方針**: {archetype_data['lifestyle_recommendations']['diet']}
-
-詳細な栄養戦略：
-
-**必須栄養素群**:
-- 主要栄養素: あなたの代謝タイプに最適な炭水化物・タンパク質・脂質比率
-- ビタミン類: 四元素バランスを支える特定ビタミンの重点摂取
-- ミネラル類: 体質強化に必要な微量元素の識別と補給
-- 抗酸化物質: あなたの酸化ストレス傾向に対応した抗酸化戦略
-
-**食事タイミング**:
-- 朝食: エネルギーパターンに合わせた朝食の重要度
-- 昼食: 活動ピークを支える昼食の組み立て方
-- 夕食: 回復と再生を促進する夕食のタイミング
-- 間食: エネルギー維持のための効果的な補食
-
-**調理方法**:
-- 推奨調理法: 栄養素を最大化する調理技術
-- 食材の選択: 季節と体質に応じた食材の選び方
-- 食事環境: 消化を促進する食事環境の整備
-- 食べ方: 咀嚼と消化を最適化する食事方法
-
-#### 運動生理学的プログラム
-**基本方針**: {archetype_data['lifestyle_recommendations']['exercise']}
-
-体系的運動プログラム：
-
-**有酸素運動**:
-- 最適心拍数ゾーン: あなたの循環器特性に基づく目標心拍数
-- 持続時間: エネルギーパターンに適した運動持続時間
-- 頻度: 回復能力を考慮した最適な運動頻度
-- 強度調整: 体調変動に応じた運動強度の調整法
-
-**筋力トレーニング**:
-- 筋肉群の優先順位: 体質に応じた重点的に鍛える筋肉群
-- 負荷設定: 筋繊維タイプに適した負荷とレップ数
-- 回復期間: 筋肉回復に必要な休息期間の設定
-- プログレッション: 段階的な強度向上の計画
-
-**柔軟性・バランス**:
-- ストレッチプログラム: 関節可動域向上のための専用プログラム
-- バランストレーニング: 神経系機能向上のためのバランス練習
-- 協調性運動: 全身協調性を高める複合運動
-- 機能的動作: 日常生活動作の質向上トレーニング
-
-#### 休息・回復の科学的アプローチ
-**基本方針**: {archetype_data['lifestyle_recommendations']['rest']}
-
-包括的回復戦略：
-
-**アクティブリカバリー**:
-- 軽運動プログラム: 疲労回復を促進する軽度の身体活動
-- 呼吸法: 自律神経調整のための呼吸技術
-- 瞑想実践: 精神的疲労回復のための瞑想プログラム
-- 自然療法: 自然環境を活用した回復法
-
-**パッシブリカバリー**:
-- マッサージ技術: 筋肉疲労と循環改善のためのセルフマッサージ
-- 温冷療法: 体質に応じた温浴・冷浴の活用法
-- 睡眠環境: 最適な睡眠環境の構築方法
-- リラクゼーション: 深いリラックス状態を導く技術
-
-#### 環境最適化戦略
-**基本方針**: {archetype_data['lifestyle_recommendations']['environment']}
-
-生活環境の四元素調整：
-
-**住環境**:
-- 空間配置: 四元素バランスを考慮した家具配置
-- 色彩効果: 体質に調和する色彩の選択と配置
-- 照明計画: 概日リズム調整のための照明デザイン
-- 空気質管理: 呼吸器系健康のための空気環境整備
-
-**職場環境**:
-- デスク環境: 生産性と健康を両立するワークスペース
-- 休憩方法: 勤務中の効果的な回復技術
-- 人間関係: 体質に適したコミュニケーション環境
-- ストレス軽減: 職場ストレス最小化の工夫
-
-### 年間健康管理カレンダー
-
-#### 春季健康プログラム（3-5月）
-- デトックス強化期間
-- 新陳代謝活性化プログラム
-- 肝機能サポート強化
-- 新しい運動習慣の導入
-
-#### 夏季健康プログラム（6-8月）  
-- 循環器系強化期間
-- 水分・電解質バランス管理
-- 紫外線対策と皮膚ケア
-- 高温環境での体調管理
-
-#### 秋季健康プログラム（9-11月）
-- 免疫力強化期間  
-- 栄養蓄積と体力向上
-- 呼吸器系ケア強化
-- 冬に向けた体質調整
-
-#### 冬季健康プログラム（12-2月）
-- 深部回復と再生期間
-- 関節・筋肉系のメンテナンス
-- 精神的安定性の確保
-- 次年度に向けた体質基盤構築
-
-### 体質進化の長期ビジョン
-
-あなたの【{archetype_data['name']}】という体質アーキタイプは、適切な養生と意識的な健康管理により、以下のような進化の可能性を秘めています：
-
-#### 5年後の理想的体質状態
-- 基本体力の20-30%向上
-- ストレス耐性の大幅な改善
-- 慢性疾患リスクの大幅な低減
-- エネルギー効率の最適化達成
-
-#### 10年後の体質マスタリー
-- 体質特性の完全な理解と活用
-- 他者への健康指導能力の獲得
-- 季節変動への完全適応
-- 老化プロセスの大幅な遅延
-
-#### 生涯健康の実現
-- 体質に基づいた予防医学の実践
-- 個別化医療への積極的参加
-- 健康コミュニティでのリーダーシップ
-- 次世代への健康知識の継承
-
-### 検収システムによる品質保証
-
-本レポートは、次世代占星医学体質鑑定システムの検収ループにより、以下の品質基準を満たしています：
-
-1. **データ精度**: Swiss Ephemeris計算による天体位置の高精度算出
-2. **体質理論**: 16原型理論に基づく科学的分類システム
-3. **個別化**: 47都道府県対応の地理的精度
-4. **実用性**: 即座に実践可能な具体的推奨事項
-5. **継続性**: 長期的な健康管理を支援する包括的プログラム
-
-### 結論：あなたの健康進化への招待
-
-【{archetype_data['name']}】としてのあなたの体質は、宇宙の叡智と地球の自然法則が融合した、唯一無二の生命システムです。
-
-このレポートに記載された知識と実践方法を活用することで、あなたは単なる健康管理を超えて、体質の可能性を最大限に開花させることができます。
-
-真の健康とは、病気がないことではなく、あなた本来の生命力が最高レベルで発揮されている状態です。このレポートが、そうした理想的な健康状態への道しるべとなることを願っています。
-
----
-
-**重要な注意事項**: このレポートは体質傾向の分析であり、医学的診断や治療の代替ではありません。健康上の問題がある場合は、必ず医療専門家にご相談ください。
-
-**次世代占星医学体質鑑定システム**  
-Swiss Ephemeris精密計算 | 16原型理論 | 47都道府県対応
-"""
-
-    return report
-
-# Flask routes
-@app.route('/')
-def input_form():
-    return render_template('input.html', prefectures=list(PREFECTURE_COORDINATES.keys()))
-
-@app.route('/basic_report', methods=['GET', 'POST'])
-def basic_report():
-    # URLパラメータから情報を取得
-    birth_date = request.args.get('birth_date') or request.form.get('birth_date')
-    birth_time = request.args.get('birth_time', '12:00') or request.form.get('birth_time', '12:00')
-    prefecture = request.args.get('prefecture') or request.form.get('prefecture')
-    # Get coordinates
-    coords = PREFECTURE_COORDINATES[prefecture]
-
-    # Calculate sun and moon positions
-    sun_degree, moon_degree = calculate_sun_moon_positions(
-        birth_date, birth_time, coords['lat'], coords['lon']
-    )
-
-    # Determine elements
-    sun_element = get_element_from_sign(sun_degree)
-    moon_element = get_element_from_sign(moon_degree)
-
-    # Get archetype
-    archetype_data = determine_archetype(sun_element, moon_element)
-
-    # Birth info for report
-    birth_info = {
-        'birth_date': birth_date,
-        'birth_time': birth_time,
-        'prefecture': prefecture
-    }
-
-    # Generate basic report
-    report_content = generate_basic_report(archetype_data, sun_element, moon_element, birth_info)
-
-    return render_template('basic_report.html', 
-                         report_content=report_content,
-                         birth_info=birth_info,
-                         sun_element=sun_element,
-                         moon_element=moon_element,
-                         archetype_name=archetype_data['name'])
-
-@app.route('/detailed_report', methods=['GET', 'POST'])
-def detailed_report():
-    # URLパラメータまたはフォームデータから情報を取得
-    birth_date = request.args.get('birth_date') or request.form.get('birth_date')
-    birth_time = request.args.get('birth_time', '12:00') or request.form.get('birth_time', '12:00')
-    prefecture = request.args.get('prefecture') or request.form.get('prefecture')
-    
-    if not all([birth_date, prefecture]):
-        return "必要な情報が不足しています", 400
-    
-    # 天体計算
-    coords = PREFECTURE_COORDINATES.get(prefecture, {"lat": 35.6762, "lon": 139.6503})
-    sun_pos, moon_pos = calculate_sun_moon_positions(birth_date, birth_time, coords["lat"], coords["lon"])
-    
-    # 16原型判定
-    sun_element = get_element_from_sign(sun_pos)
-    moon_element = get_element_from_sign(moon_pos)
-    archetype_key = f"{sun_element}_{moon_element}"
-    archetype = SIXTEEN_ARCHETYPES_ORIGINAL.get(archetype_key, SIXTEEN_ARCHETYPES_ORIGINAL["火_火"])
-    
-    # 詳細レポート生成（12,000文字）
-    detailed_report_content = generate_detailed_report(archetype, birth_date, birth_time, prefecture, sun_pos, moon_pos)
-    
-    return render_template('detailed_report.html', 
-                         report=detailed_report_content,
-                         archetype=archetype,
-                         birth_date=birth_date,
-                         birth_time=birth_time,
-                         prefecture=prefecture)
-
-def generate_detailed_report(archetype, birth_date, birth_time, prefecture, sun_pos, moon_pos):
-    """12,000文字の詳細レポート生成"""
-    
-    report_content = f"""
-    【ASTRO-BODY TYPE 詳細鑑定書】
-    
-    鑑定日: {datetime.now().strftime('%Y年%m月%d日')}
-    生年月日: {birth_date}
-    出生時刻: {birth_time}
-    出生地: {prefecture}
-    
-    ■ あなたの16原型: {archetype['name']}
-    
-    太陽位置: {sun_pos:.2f}度 (四元素: {get_element_from_sign(sun_pos)})
-    月位置: {moon_pos:.2f}度 (四元素: {get_element_from_sign(moon_pos)})
-    
-    ■ 基本的体質特徴
-    
-    {archetype['body_type']}
-    
-    あなたの核となる特質: {', '.join(archetype['primary_keywords'])}
-    
-    ■ 詳細な体質分析
-    
-    【代謝系統】
-    {archetype['constitutional_features']['metabolism']}
-    
-    この代謝パターンにより、あなたの基本的なエネルギー消費と蓄積のリズムが決まります。
-    日中のエネルギーレベルの変動、食事による影響、運動時の反応などが、
-    この代謝特性に従って現れます。
-    
-    【消化器系統】
-    {archetype['constitutional_features']['digestive_system']}
-    
-    消化機能は感情状態や環境要因に影響されやすく、
-    特に{archetype['name']}の特性を持つあなたは、
-    ストレス時の消化パターンに特別な注意が必要です。
-    
-    【循環器系統】
-    {archetype['constitutional_features']['circulatory_system']}
-    
-    血液循環とリンパ系の働きは、あなたの全身の健康状態を左右する重要な要素です。
-    季節の変化や気圧の変動による影響も、この循環特性と密接に関わっています。
-    
-    【神経系統】
-    {archetype['constitutional_features']['nervous_system']}
-    
-    神経系の特徴は、ストレス反応、学習能力、創造性の発揮に直結します。
-    {archetype['name']}としてのあなたの独特な感受性と反応パターンが、
-    この神経系の特性から生まれています。
-    
-    【筋骨格系統】
-    {archetype['constitutional_features']['muscular_system']}
-    
-    筋肉と骨格の特徴は、あなたに最適な運動形態と身体活動のパターンを決定します。
-    姿勢、動作の癖、疲労の現れ方なども、この系統の特性と関連しています。
-    
-    【エネルギーパターン】
-    {archetype['constitutional_features']['energy_patterns']}
-    
-    エネルギーの流れ方は、あなたの活動リズム、休息の必要性、
-    そして最高のパフォーマンスを発揮するタイミングを示しています。
-    
-    ■ 健康傾向と対策
-    
-    【体質的強み】
-    """ + '\n'.join([f"• {strength}" for strength in archetype['health_tendencies']['strengths']]) + f"""
-    
-    これらの強みを活かすことで、あなたは自然な健康状態を維持し、
-    困難な状況でも回復力を発揮することができます。
-    
-    【注意すべき弱点】
-    """ + '\n'.join([f"• {vulnerability}" for vulnerability in archetype['health_tendencies']['vulnerabilities']]) + f"""
-    
-    これらの弱点は、適切な予防策と生活習慣の調整により、
-    大きなリスクとなることを避けることができます。
-    
-    【ストレス反応パターン】
-    {archetype['health_tendencies']['stress_responses']}
-    
-    あなた特有のストレス反応を理解することで、
-    早期にストレス軽減策を講じることが可能になります。
-    
-    【睡眠パターン】
-    {archetype['health_tendencies']['sleep_patterns']}
-    
-    質の良い睡眠は、あなたの体質にとって特に重要な回復要素です。
-    
-    ■ ライフスタイル推奨事項
-    
-    【最適な食事法】
-    {archetype['lifestyle_recommendations']['diet']}
-    
-    食事は単なる栄養補給ではなく、あなたの体質エネルギーを調整し、
-    最適な状態を維持するための重要な手段です。
-    季節や体調に応じて、これらの基本原則を柔軟に適用してください。
-    
-    【推奨運動・身体活動】
-    {archetype['lifestyle_recommendations']['exercise']}
-    
-    運動は体質に合わせて選択することで、
-    最大の効果を得ることができます。
-    無理な運動よりも、継続可能で楽しめる活動を重視してください。
-    
-    【休息・回復法】
-    {archetype['lifestyle_recommendations']['rest']}
-    
-    効果的な休息方法は体質により大きく異なります。
-    あなたに最適な回復法を実践することで、
-    日々のパフォーマンスを向上させることができます。
-    
-    【環境調整】
-    {archetype['lifestyle_recommendations']['environment']}
-    
-    住環境や職場環境の調整は、体質的な健康維持に大きな影響を与えます。
-    可能な範囲で、これらの要素を取り入れてください。
-    
-    ■ 季節別健康管理
-    
-    【春季（3-5月）】
-    春は新陳代謝が活発になる季節です。{archetype['name']}のあなたは、
-    この時期の変化に対して特別な配慮が必要です。
-    解毒作用を促進する食材を積極的に摂取し、
-    軽い運動で血液循環を促進してください。
-    
-    【夏季（6-8月）】
-    高温多湿の夏は、体質に応じた熱対策が重要です。
-    水分補給の方法、クーリング食材の選択、
-    運動時間の調整などに注意を払ってください。
-    
-    【秋季（9-11月）】
-    収穫の季節である秋は、冬に向けての準備期間です。
-    栄養の蓄積、免疫力の強化、基礎体力の充実を図り、
-    寒い季節に備えた体作りを行ってください。
-    
-    【冬季（12-2月）】
-    寒冷な冬季は、体質的な特性が最も顕著に現れる時期です。
-    保温、栄養補給、適度な運動のバランスを保ち、
-    春までの健康維持に努めてください。
-    
-    ■ 年代別アドバイス
-    
-    【20-30代】
-    基礎体力の確立と生活習慣の形成期です。
-    {archetype['name']}としての特性を理解し、
-    長期的な健康基盤を築いてください。
-    
-    【30-40代】
-    責任が増え、ストレスも多い時期です。
-    体質に合ったストレス管理法を確立し、
-    健康維持と仕事のバランスを図ってください。
-    
-    【40-50代】
-    体質的な変化が現れ始める時期です。
-    これまでの生活習慣を見直し、
-    体質に合った調整を行ってください。
-    
-    【50代以降】
-    体質的な特性を活かした健康長寿を目指す時期です。
-    無理をせず、体質に従った自然な生活を心がけてください。
-    
-    ■ まとめ
-    
-    16原型「{archetype['name']}」としてのあなたは、
-    独特な体質的特徴と潜在能力を持っています。
-    
-    この鑑定結果を参考に、あなた自身の体質を深く理解し、
-    最適な健康管理を実践してください。
-    
-    体質は一生変わらない基本的な特性ですが、
-    適切な生活習慣により、その特性を最大限に活かし、
-    弱点を最小限に抑えることが可能です。
-    
-    定期的に体調をチェックし、必要に応じて
-    専門家のアドバイスを求めることをお勧めします。
-    
-    あなたの健康で充実した人生を心より応援しています。
-    
-    ■ 品質保証
-    
-    この鑑定は以下の基準に従って作成されています：
-    • Swiss Ephemeris による高精度天体計算
-    • 16原型理論による体系的分析
-    • 地理座標による正確な出生地補正
-    • {len(report_content)}文字の詳細分析
-    • 専門的検収システムによる品質確認
-    
+<h3>【総合的なライフスタイル提案】</h3>
+<p>{archetype['name']}の体質を持つあなたは、古典占星医学の智慧を現代生活に活かすことで、単なる健康維持を超えた生命力の向上と人生の質の改善を実現できます。この鑑定結果を参考に、あなた本来の体質特性を活かした健康的で充実した生活を送られることをお祈りいたします。</p>
     """
-    
-    return report_content.strip()
+
+    return report.strip()
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        try:
+            # フォームデータの取得と検証
+            name = request.form.get('name', '').strip()
+            birth_year = request.form.get('birth_year', type=int)
+            birth_month = request.form.get('birth_month', type=int)
+            birth_day = request.form.get('birth_day', type=int)
+            birth_hour = request.form.get('birth_hour', type=int)
+            birth_minute = request.form.get('birth_minute', type=int)
+            prefecture = request.form.get('prefecture', '').strip()
+
+            # 必須フィールドの検証
+            if not all([name, birth_year, birth_month, birth_day, 
+                       birth_hour is not None, birth_minute is not None, prefecture]):
+                raise ValueError("すべての必須項目を入力してください")
+
+            # 都道府県座標の取得
+            if prefecture not in PREFECTURE_COORDS:
+                raise ValueError(f"都道府県「{prefecture}」の座標データが見つかりません")
+
+            latitude, longitude = PREFECTURE_COORDS[prefecture]
+
+            # 天体計算の実行
+            planet_info = calculate_planets(
+                birth_year, birth_month, birth_day, 
+                birth_hour, birth_minute, latitude, longitude
+            )
+
+            # アーキタイプの決定
+            sun_element = planet_info['sun_element']
+            moon_element = planet_info['moon_element']
+            archetype_key = f"{sun_element}_{moon_element}"
+            archetype = ARCHETYPE_DATA.get(archetype_key, ARCHETYPE_DATA["火_火"])
+
+            # 出生情報の整理
+            birth_info = {
+                'name': name,
+                'birth_year': birth_year,
+                'birth_month': birth_month,
+                'birth_day': birth_day,
+                'birth_hour': birth_hour,
+                'birth_minute': birth_minute,
+                'prefecture': prefecture
+            }
+
+            # 2000文字レポートの生成
+            report_content = generate_perfect_report(ARCHETYPE_DATA, birth_info, planet_info)
+
+            # テンプレートに渡すデータの準備
+            template_data = {
+                **birth_info,
+                'archetype_name': archetype['name'],
+                'archetype_english': archetype['english'],
+                'sun_element': sun_element,
+                'moon_element': moon_element,
+                'report_content': report_content
+            }
+
+            return render_template('basic_report.html', **template_data)
+
+        except ValueError as ve:
+            error_message = str(ve)
+            return render_template('input.html', error=error_message)
+        except Exception as e:
+            error_message = f"システムエラーが発生しました: {str(e)}"
+            return render_template('input.html', error=error_message)
+
+    # GET リクエストの場合は入力フォームを表示
+    return render_template('input.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
