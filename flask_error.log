@@ -277,3 +277,25 @@ jinja2.exceptions.UndefinedError: list_reverseiterator object has no element 0
  * Restarting with watchdog (inotify)
  * Debugger is active!
  * Debugger PIN: 903-792-757
+10.12.63.232 - - [03/Sep/2025 03:51:03] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 03:51:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:51:03] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:51:37] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 03:51:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:51:38] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:51:44] "GET /basic_report?name=小田翔子&archetype=慈愛なる育成者 HTTP/1.1" 200 -
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757

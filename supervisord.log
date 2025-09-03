@@ -42,3 +42,7 @@
 2025-09-03 03:49:55,139 INFO stopped: flask_app (exit status 0)
 2025-09-03 03:49:55,144 INFO spawned: 'flask_app' with pid 5108
 2025-09-03 03:49:56,716 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-03 03:56:39,476 INFO waiting for flask_app to stop
+2025-09-03 03:56:39,570 INFO stopped: flask_app (exit status 0)
+2025-09-03 03:56:39,574 INFO spawned: 'flask_app' with pid 5741
+2025-09-03 03:56:41,114 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
