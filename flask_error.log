@@ -504,3 +504,43 @@ NameError: name 'get_deficient_humor' is not defined. Did you mean: 'get_dominan
  * Restarting with watchdog (inotify)
  * Debugger is active!
  * Debugger PIN: 903-792-757
+10.12.63.232 - - [03/Sep/2025 05:55:57] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:55:57] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:55:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:56:09] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:56:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:56:10] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:56:34] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:56:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:56:34] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:56:42] "GET /basic_report?name=小田剛&archetype=間欠泉 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:56:45] "GET /detailed_report?name=小田剛&archetype=間欠泉 HTTP/1.1" 200 -
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+127.0.0.1 - - [03/Sep/2025 06:12:23] "POST /result HTTP/1.1" 200 -
+127.0.0.1 - - [03/Sep/2025 06:12:23] "GET /detailed_report?name=山田%20太郎&archetype=超新星 HTTP/1.1" 200 -
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
