@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}様のASTRO-MEDICAL REPORT - 完全版</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #8e44ad;
+            --accent-color: #d4af37;
+            --text-dark: #2c3e50;
+            --text-light: #5a6c7d;
+            --bg-light: #f8f9fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Noto Serif JP', serif;
+            line-height: 1.8;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .report-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-white);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+        }
+
+        .report-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 50px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-title {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .personal-name {
+            font-size: 1.5em;
+            margin: 20px 0;
+            padding: 15px 30px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .report-meta {
+            background: var(--bg-light);
+            padding: 30px 50px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .meta-info {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 0.9em;
+            color: var(--text-light);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .chapter-section {
+            padding: 50px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .chapter-section:last-of-type {
+            border-bottom: none;
+        }
+
+        .chapter-number {
+            display: inline-block;
+            background: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .chapter-title {
+            font-size: 2em;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 15px;
+        }
+
+        .generated-content {
+            font-size: 1.05em;
+            line-height: 2.2;
+            color: var(--text-dark);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: justify;
+            margin: 20px 0;
+        }
+
+        .chapter-content {
+            font-size: 1.05em;
+            line-height: 2;
+            color: var(--text-dark);
+        }
+
+        .epilogue {
+            background: var(--bg-light);
+            padding: 50px;
+            text-align: center;
+        }
+
+        .epilogue-title {
+            font-size: 1.8em;
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+        }
+
+        .epilogue-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1em;
+            line-height: 2;
+        }
+
+        .report-footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .character-count {
+            background: var(--accent-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* 印刷用スタイル */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .report-container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+
+            .chapter-section {
+                page-break-inside: avoid;
+            }
+
+            .chapter-title {
+                page-break-after: avoid;
+            }
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .report-header {
+                padding: 40px 20px;
+            }
+
+            .chapter-section {
+                padding: 30px 20px;
+            }
+
+            .report-title {
+                font-size: 2em;
+            }
+
+            .chapter-title {
+                font-size: 1.5em;
+            }
+
+            .generated-content {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <!-- ヘッダー -->
+        <div class="report-header">
+            <h1 class="report-title">ASTRO-MEDICAL REPORT</h1>
+            <div class="personal-name">{{ name }}様専用レポート</div>
+            <p style="margin-top: 20px; font-size: 1.1em;">織田先生の16原型論に基づく包括的体質分析</p>
+        </div>
+
+        <!-- メタ情報 -->
+        <div class="report-meta">
+            <div class="meta-info">
+                <div class="meta-item">
+                    <span class="meta-label">アーキタイプ</span>
+                    <span class="meta-value">{{ archetype.name }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">元素組合せ</span>
+                    <span class="meta-value">{{ archetype.element_combination }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">体質分類</span>
+                    <span class="meta-value">{{ archetype.body_type }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">気質</span>
+                    <span class="meta-value">{{ archetype.temperament }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- メインコンテンツ -->
+        <div class="report-content">
+            {% if report_content %}
+                <!-- 第1章 -->
+                <section class="chapter-section">
+                    <div class="chapter-number">第1章</div>
+                    <h2 class="chapter-title">{{ archetype.name }}というアーキタイプの深層分析</h2>
+                    <div class="generated-content">
+                        {{ report_content.chapter1|replace('\n', '<br>')|safe }}
+                    </div>
+                </section>
+
+                <!-- 第2章 -->
+                <section class="chapter-section">
+                    <div class="chapter-number">第2章</div>
+                    <h2 class="chapter-title">天体配置が示す多層的な個性の解読</h2>
+                    <div class="generated-content">
+                        {{ report_content.chapter2|replace('\n', '<br>')|safe }}
+                    </div>
+                </section>
+
+                <!-- 第3章 -->
+                <section class="chapter-section">
+                    <div class="chapter-number">第3章</div>
+                    <h2 class="chapter-title">ASTRO-MEDICAL体質論による包括的健康分析</h2>
+                    <div class="generated-content">
+                        {{ report_content.chapter3|replace('\n', '<br>')|safe }}
+                    </div>
+                </section>
+
+                <!-- 第4章 -->
+                <section class="chapter-section">
+                    <div class="chapter-number">第4章</div>
+                    <h2 class="chapter-title">{{ name }}様のためのホリスティック処方箋</h2>
+                    <div class="generated-content">
+                        {{ report_content.chapter4|replace('\n', '<br>')|safe }}
+                    </div>
+                </section>
+
+                <!-- 第5章 -->
+                <section class="chapter-section">
+                    <div class="chapter-number">第5章</div>
+                    <h2 class="chapter-title">天命を生きるためのライフプランニング</h2>
+                    <div class="generated-content">
+                        {{ report_content.chapter5|replace('\n', '<br>')|safe }}
+                    </div>
+                </section>
+
+                <!-- エピローグ -->
+                <section class="epilogue">
+                    <h2 class="epilogue-title">エピローグ：{{ name }}様へのメッセージ</h2>
+                    <div class="epilogue-content">
+                        <div class="generated-content">
+                            {{ report_content.epilogue|replace('\n', '<br>')|safe }}
+                        </div>
+                    </div>
+                </section>
+            {% else %}
+                <!-- デフォルトコンテンツ -->
+                <section class="chapter-section">
+                    <div class="chapter-number">準備中</div>
+                    <h2 class="chapter-title">レポート生成中</h2>
+                    <div class="chapter-content">
+                        <p>{{ name }}様の詳細なレポートを生成しています。しばらくお待ちください。</p>
+                    </div>
+                </section>
+            {% endif %}
+        </div>
+
+        <!-- フッター -->
+        <footer class="report-footer">
+            <p>© 2024 ASTRO-MEDICAL SYSTEM | 織田先生の16原型論に基づく</p>
+            <p>生成日時: {{ report_date if report_date else '2024年' }}</p>
+            {% if total_characters %}
+            <div class="character-count">
+                総文字数: {{ "{:,}".format(total_characters) }}文字
+            </div>
+            {% endif %}
+        </footer>
+    </div>
+</body>
+</html>
