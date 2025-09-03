@@ -1,0 +1,36 @@
+2025-09-03 03:32:28,682 INFO RPC interface 'supervisor' initialized
+2025-09-03 03:32:28,682 CRIT Server 'unix_http_server' running without any HTTP authentication checking
+2025-09-03 03:32:28,684 INFO daemonizing the supervisord process
+2025-09-03 03:32:28,685 INFO supervisord started with pid 2220
+2025-09-03 03:32:29,688 INFO spawned: 'flask_app' with pid 2246
+2025-09-03 03:32:30,720 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-03 03:32:30,721 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:31,724 INFO spawned: 'flask_app' with pid 2273
+2025-09-03 03:32:31,755 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:32,758 INFO spawned: 'flask_app' with pid 2275
+2025-09-03 03:32:32,791 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:35,055 INFO spawned: 'flask_app' with pid 2323
+2025-09-03 03:32:36,100 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-03 03:32:36,100 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:37,103 INFO spawned: 'flask_app' with pid 2332
+2025-09-03 03:32:37,133 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:38,136 INFO spawned: 'flask_app' with pid 2360
+2025-09-03 03:32:39,168 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-03 03:32:39,169 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:40,172 INFO spawned: 'flask_app' with pid 2382
+2025-09-03 03:32:40,203 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:41,206 INFO spawned: 'flask_app' with pid 2383
+2025-09-03 03:32:41,237 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:43,240 INFO spawned: 'flask_app' with pid 2419
+2025-09-03 03:32:44,285 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-03 03:32:44,286 WARN exited: flask_app (exit status 1; not expected)
+2025-09-03 03:32:45,289 INFO spawned: 'flask_app' with pid 2447
+2025-09-03 03:32:46,949 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-03 03:32:50,420 INFO waiting for flask_app to stop
+2025-09-03 03:32:50,520 INFO stopped: flask_app (exit status 0)
+2025-09-03 03:32:50,525 INFO spawned: 'flask_app' with pid 2462
+2025-09-03 03:32:52,208 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-09-03 03:39:19,575 INFO waiting for flask_app to stop
+2025-09-03 03:39:19,692 INFO stopped: flask_app (exit status 0)
+2025-09-03 03:39:19,697 INFO spawned: 'flask_app' with pid 3395
+2025-09-03 03:39:21,304 INFO success: flask_app entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

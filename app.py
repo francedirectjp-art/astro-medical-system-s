@@ -246,6 +246,45 @@ def input_form():
     """入力ページ"""
     return render_template('input.html', prefectures=list(PREFECTURE_COORDINATES.keys()))
 
+@app.route('/result', methods=['POST'])
+def show_result():
+    """パーソナライズされた鑑定結果ページ"""
+    try:
+        # フォームデータを取得
+        name = request.form.get('name', '').strip()
+        if not name:
+            name = "お客様"
+        
+        birth_year = int(request.form.get('birth_year'))
+        birth_month = int(request.form.get('birth_month'))
+        birth_day = int(request.form.get('birth_day'))
+        birth_hour = int(request.form.get('birth_hour'))
+        birth_minute = int(request.form.get('birth_minute'))
+        prefecture = request.form.get('prefecture')
+        
+        # 天体位置を計算
+        result = calculate_celestial_positions(
+            birth_year, birth_month, birth_day, 
+            birth_hour, birth_minute, prefecture
+        )
+        
+        if result['success']:
+            # 成功時は結果ページへ
+            return render_template('result.html', 
+                                 name=name,
+                                 data=result['celestial_positions'],
+                                 info=result['calculation_info'])
+        else:
+            # エラー時は入力ページへ戻る
+            return render_template('input.html', 
+                                 prefectures=list(PREFECTURE_COORDINATES.keys()),
+                                 error=result.get('error', '計算エラーが発生しました'))
+    
+    except Exception as e:
+        return render_template('input.html', 
+                             prefectures=list(PREFECTURE_COORDINATES.keys()),
+                             error=f'エラーが発生しました: {str(e)}')
+
 @app.route('/calculate', methods=['POST'])
 def calculate_api():
     """天体計算API"""
@@ -258,6 +297,9 @@ def calculate_api():
             if field not in data:
                 return jsonify({'success': False, 'error': f'必須フィールド {field} が不足しています'})
 
+        # 名前を取得（オプション）
+        name = data.get('name', 'お客様')
+
         # 天体位置計算
         result = calculate_celestial_positions(
             int(data['birth_year']),
@@ -267,6 +309,10 @@ def calculate_api():
             int(data['birth_minute']),
             data['prefecture']
         )
+        
+        # 名前を結果に追加
+        if result['success']:
+            result['name'] = name
 
         return jsonify(result)
 
@@ -278,12 +324,56 @@ def calculate_api():
 @app.route('/basic_report')
 def basic_report_page():
     """基本レポートページ（2000文字）"""
-    return render_template('basic_report.html')
+    # URLパラメータから情報を取得
+    name = request.args.get('name', 'お客様')
+    archetype_name = request.args.get('archetype', '未分類')
+    
+    # アーキタイプ情報を取得（簡易的に再構築）
+    archetype = None
+    for key, value in SIXTEEN_ARCHETYPES.items():
+        if value['name'] == archetype_name:
+            archetype = value
+            break
+    
+    # デフォルトのアーキタイプ情報
+    if not archetype:
+        archetype = {
+            "name": archetype_name,
+            "element_combination": "未定",
+            "temperament": "複合的",
+            "body_type": "混合型"
+        }
+    
+    return render_template('basic_report.html', 
+                         name=name,
+                         archetype=archetype)
 
 @app.route('/detailed_report') 
 def detailed_report_page():
     """詳細レポートページ（12,000文字）"""
-    return render_template('detailed_report.html')
+    # URLパラメータから情報を取得
+    name = request.args.get('name', 'お客様')
+    archetype_name = request.args.get('archetype', '未分類')
+    
+    # アーキタイプ情報を取得（簡易的に再構築）
+    archetype = None
+    for key, value in SIXTEEN_ARCHETYPES.items():
+        if value['name'] == archetype_name:
+            archetype = value
+            break
+    
+    # デフォルトのアーキタイプ情報
+    if not archetype:
+        archetype = {
+            "name": archetype_name,
+            "element_combination": "未定",
+            "temperament": "複合的",
+            "body_type": "混合型"
+        }
+    
+    return render_template('detailed_report.html', 
+                         name=name,
+                         archetype=archetype)
 
 if __name__ == '__main__':
     # Railway環境では環境変数PORTを使用

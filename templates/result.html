@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ name }}様の占星医学鑑定結果</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="container">
+        <!-- パーソナライズされたヘッダー -->
+        <header class="result-header">
+            <div class="welcome-message">
+                <h1 class="result-title">
+                    <span class="star-icon">✦</span>
+                    {{ name }}様の占星医学鑑定結果
+                    <span class="star-icon">✦</span>
+                </h1>
+                <p class="result-subtitle">
+                    宇宙があなたに与えた特別な体質と健康の叡智
+                </p>
+            </div>
+            
+            <div class="birth-info">
+                <p class="birth-datetime">
+                    <span class="icon">📅</span>
+                    {{ info.jst_datetime }}生まれ
+                </p>
+                <p class="birth-location">
+                    <span class="icon">📍</span>
+                    {{ info.location }}
+                </p>
+            </div>
+        </header>
+
+        <!-- 16原型診断結果 -->
+        <section class="archetype-section">
+            <h2 class="section-title">あなたの宇宙的原型</h2>
+            <div class="archetype-card">
+                <div class="archetype-name">
+                    {{ info.archetype.name }}
+                </div>
+                <div class="archetype-details">
+                    <div class="detail-item">
+                        <span class="detail-label">元素の組み合わせ</span>
+                        <span class="detail-value">{{ info.archetype.element_combination }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">気質</span>
+                        <span class="detail-value">{{ info.archetype.temperament }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">体質タイプ</span>
+                        <span class="detail-value">{{ info.archetype.body_type }}</span>
+                    </div>
+                </div>
+                <div class="archetype-message">
+                    <p>{{ name }}様は、{{ info.archetype.name }}のタイプです。</p>
+                    <p>この原型は、{{ info.archetype.temperament }}な性質を持ち、{{ info.archetype.body_type }}の特徴があります。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 天体位置の詳細 -->
+        <section class="celestial-section">
+            <h2 class="section-title">出生時の天体配置</h2>
+            <div class="celestial-grid">
+                {% for planet_name, planet_data in data.items() %}
+                <div class="planet-card" data-element="{{ planet_data.element }}">
+                    <div class="planet-header">
+                        <span class="planet-symbol">
+                            {% if planet_name == '太陽' %}☉
+                            {% elif planet_name == '月' %}☽
+                            {% elif planet_name == '水星' %}☿
+                            {% elif planet_name == '金星' %}♀
+                            {% elif planet_name == '火星' %}♂
+                            {% elif planet_name == '木星' %}♃
+                            {% elif planet_name == '土星' %}♄
+                            {% else %}◯
+                            {% endif %}
+                        </span>
+                        <h3 class="planet-name">{{ planet_name }}</h3>
+                    </div>
+                    <div class="planet-info">
+                        <div class="zodiac-position">
+                            <span class="zodiac-name">{{ planet_data.zodiac }}</span>
+                            <span class="zodiac-degree">{{ planet_data.degrees }}°{{ planet_data.minutes }}'</span>
+                        </div>
+                        <div class="element-badge element-{{ planet_data.element }}">
+                            {{ planet_data.element }}の元素
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- パーソナライズされた健康アドバイス -->
+        <section class="advice-section">
+            <h2 class="section-title">{{ name }}様への健康アドバイス</h2>
+            <div class="advice-cards">
+                <div class="advice-card">
+                    <h3 class="advice-title">
+                        <span class="icon">🌟</span>
+                        強みを活かす
+                    </h3>
+                    <p class="advice-text">
+                        {{ name }}様の{{ info.archetype.temperament }}な気質は、あなたの最大の強みです。
+                        この特性を理解し、日々の生活に活かすことで、より健康的で充実した人生を送ることができます。
+                    </p>
+                </div>
+                
+                <div class="advice-card">
+                    <h3 class="advice-title">
+                        <span class="icon">⚖️</span>
+                        バランスを整える
+                    </h3>
+                    <p class="advice-text">
+                        {{ info.archetype.element_combination }}の組み合わせを持つ{{ name }}様は、
+                        これらの元素のバランスを意識することが重要です。
+                        過度な偏りを避け、中庸を保つことを心がけましょう。
+                    </p>
+                </div>
+                
+                <div class="advice-card">
+                    <h3 class="advice-title">
+                        <span class="icon">🌱</span>
+                        体質に合った生活
+                    </h3>
+                    <p class="advice-text">
+                        {{ info.archetype.body_type }}の体質を持つ{{ name }}様には、
+                        その特性に合った食事、運動、休息のパターンがあります。
+                        自分の体質を理解し、それに適した生活習慣を築くことが大切です。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 詳細レポートへのリンク -->
+        <section class="report-links">
+            <h2 class="section-title">さらに詳しく知る</h2>
+            <div class="report-buttons">
+                <a href="/basic_report?name={{ name|urlencode }}&archetype={{ info.archetype.name|urlencode }}" 
+                   class="report-btn basic-btn">
+                    <span class="btn-icon">📋</span>
+                    <span class="btn-text">基本レポート（2,000文字）</span>
+                    <span class="btn-description">体質の基本的な特徴と健康指針</span>
+                </a>
+                
+                <a href="/detailed_report?name={{ name|urlencode }}&archetype={{ info.archetype.name|urlencode }}" 
+                   class="report-btn detailed-btn">
+                    <span class="btn-icon">📚</span>
+                    <span class="btn-text">詳細レポート（12,000文字）</span>
+                    <span class="btn-description">完全な体質分析と具体的な健康プログラム</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- アクションボタン -->
+        <div class="action-buttons">
+            <button onclick="window.print()" class="action-btn print-btn">
+                <span class="icon">🖨️</span>
+                印刷する
+            </button>
+            <button onclick="shareResult()" class="action-btn share-btn">
+                <span class="icon">📤</span>
+                シェアする
+            </button>
+            <a href="/" class="action-btn new-btn">
+                <span class="icon">🔄</span>
+                新しい鑑定
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // シェア機能
+        function shareResult() {
+            const text = `{{ name }}様の占星医学鑑定結果：{{ info.archetype.name }}タイプと判定されました。`;
+            const url = window.location.href;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: '占星医学鑑定結果',
+                    text: text,
+                    url: url
+                }).catch(err => console.log('シェアがキャンセルされました'));
+            } else {
+                // フォールバック：URLをクリップボードにコピー
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('URLがクリップボードにコピーされました');
+                });
+            }
+        }
+
+        // ページロード時のアニメーション
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.planet-card, .advice-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('fade-in');
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

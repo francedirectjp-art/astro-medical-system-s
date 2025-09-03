@@ -1,0 +1,462 @@
+/* 結果ページ専用スタイル */
+
+/* ヘッダー */
+.result-header {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(255, 215, 0, 0.05));
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.result-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
+    animation: rotate 30s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.welcome-message {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 2rem;
+}
+
+.result-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+}
+
+.star-icon {
+    display: inline-block;
+    animation: twinkle 2s ease-in-out infinite;
+    margin: 0 0.5rem;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.9); }
+}
+
+.result-subtitle {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.birth-info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+.birth-datetime, .birth-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-light);
+    font-size: 1rem;
+}
+
+/* セクション */
+.section-title {
+    font-size: 1.8rem;
+    color: var(--primary-gold);
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+}
+
+/* 原型セクション */
+.archetype-section {
+    margin-bottom: 3rem;
+}
+
+.archetype-card {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(20, 20, 35, 0.95));
+    border: 2px solid var(--primary-gold);
+    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.archetype-card::before {
+    content: '✦';
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem;
+    color: rgba(212, 175, 55, 0.2);
+}
+
+.archetype-name {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--secondary-gold);
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(212, 175, 55, 0.3); }
+    50% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 30px rgba(212, 175, 55, 0.5); }
+}
+
+.archetype-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.detail-item {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.detail-label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.detail-value {
+    display: block;
+    color: var(--primary-gold);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.archetype-message {
+    background: rgba(212, 175, 55, 0.05);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-gold);
+    text-align: left;
+    line-height: 1.8;
+}
+
+.archetype-message p {
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+}
+
+.archetype-message p:last-child {
+    margin-bottom: 0;
+}
+
+/* 天体セクション */
+.celestial-section {
+    margin-bottom: 3rem;
+}
+
+.celestial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.planet-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    transition: var(--transition);
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.planet-card.fade-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.planet-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+    border-color: var(--primary-gold);
+}
+
+.planet-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.planet-symbol {
+    font-size: 2rem;
+    color: var(--primary-gold);
+}
+
+.planet-name {
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+.zodiac-position {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+.zodiac-name {
+    font-weight: 600;
+    color: var(--secondary-gold);
+}
+
+.zodiac-degree {
+    color: var(--text-muted);
+    font-family: monospace;
+}
+
+/* 元素バッジ */
+.element-badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.element-火 {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+    color: white;
+}
+
+.element-地 {
+    background: linear-gradient(135deg, #8b7355, #a0826d);
+    color: white;
+}
+
+.element-風 {
+    background: linear-gradient(135deg, #74c0fc, #a5d8ff);
+    color: #1a1a1a;
+}
+
+.element-水 {
+    background: linear-gradient(135deg, #4c6ef5, #667eea);
+    color: white;
+}
+
+/* アドバイスセクション */
+.advice-section {
+    margin-bottom: 3rem;
+}
+
+.advice-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.advice-card {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), var(--card-bg));
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.advice-card.fade-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.advice-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-gold);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.advice-text {
+    color: var(--text-light);
+    line-height: 1.8;
+}
+
+/* レポートリンク */
+.report-links {
+    margin-bottom: 3rem;
+}
+
+.report-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.report-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background: var(--card-bg);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: var(--transition);
+    text-align: center;
+}
+
+.report-btn:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-gold);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+.basic-btn:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), var(--card-bg));
+}
+
+.detailed-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), var(--card-bg));
+}
+
+.btn-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.btn-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--primary-gold);
+    margin-bottom: 0.5rem;
+}
+
+.btn-description {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* アクションボタン */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--primary-gold);
+    border-radius: 25px;
+    color: var(--primary-gold);
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.action-btn:hover {
+    background: var(--primary-gold);
+    color: var(--dark-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* 印刷用スタイル */
+@media print {
+    .action-buttons,
+    .report-links {
+        display: none;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+
+    .result-header,
+    .archetype-card,
+    .planet-card,
+    .advice-card {
+        border: 1px solid #ccc;
+        background: white;
+    }
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .celestial-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .advice-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .report-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .birth-info {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .archetype-name {
+        font-size: 2rem;
+    }
+}

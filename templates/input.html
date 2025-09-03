@@ -3,231 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>次世代占星医学体質鑑定システム</title>
-    <style>
-        body {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d30 100%);
-            color: #d4af37;
-            font-family: 'Times New Roman', serif;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .container {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid #d4af37;
-            border-radius: 15px;
-            padding: 40px;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-        }
-
-        h1 {
-            text-align: center;
-            color: #d4af37;
-            font-size: 28px;
-            margin-bottom: 30px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        label {
-            display: block;
-            color: #d4af37;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 8px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px;
-            background: #2d2d30;
-            border: 2px solid #d4af37;
-            border-radius: 8px;
-            color: #d4af37;
-            font-size: 16px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #ffd700;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
-        }
-
-        select option {
-            background: #2d2d30;
-            color: #d4af37;
-        }
-
-        .time-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
-            color: #000;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .submit-btn:hover {
-            background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        .description {
-            text-align: center;
-            color: #b8860b;
-            font-size: 14px;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            font-style: italic;
-        }
-
-        .required {
-            color: #ff6b6b;
-            font-size: 14px;
-        }
-    </style>
+    <title>次世代占星医学体質鑑定システム - 入力フォーム</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="stars"></div>
     <div class="container">
-        <h1>次世代占星医学体質鑑定システム</h1>
-        <p class="description">
-            あなたの出生時の天体配置から、体質と健康傾向を科学的に分析いたします。<br>
-            正確な鑑定のため、出生情報を詳しくご入力ください。
-        </p>
+        <header class="header">
+            <h1 class="main-title">
+                <span class="title-icon">✦</span>
+                次世代占星医学体質鑑定システム
+                <span class="title-icon">✦</span>
+            </h1>
+            <p class="subtitle">あなただけの体質と健康傾向を宇宙の叡智から読み解きます</p>
+        </header>
 
-        <form method="POST" action="/">
-            <div class="form-group">
-                <label for="name">お名前 <span class="required">*</span></label>
-                <input type="text" id="name" name="name" required placeholder="山田太郎">
-            </div>
+        {% if error %}
+        <div class="error-message" role="alert">
+            <span class="error-icon">⚠️</span>
+            {{ error }}
+        </div>
+        {% endif %}
 
-            <div class="form-group">
-                <label for="birth_year">生年 <span class="required">*</span></label>
-                <input type="number" id="birth_year" name="birth_year" min="1900" max="2030" required placeholder="1990">
-            </div>
+        <form id="astroForm" method="POST" action="/result" class="astro-form">
+            <fieldset class="form-section">
+                <legend>基本情報</legend>
+                
+                <div class="form-group">
+                    <label for="name" class="form-label">
+                        お名前 <span class="required" aria-label="必須">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        class="form-input"
+                        required 
+                        placeholder="例：山田 太郎"
+                        aria-required="true"
+                        aria-describedby="name-help"
+                        maxlength="50"
+                    >
+                    <small id="name-help" class="help-text">
+                        鑑定結果をパーソナライズするために使用します
+                    </small>
+                </div>
+            </fieldset>
 
-            <div class="form-group">
-                <label for="birth_month">生月 <span class="required">*</span></label>
-                <select id="birth_month" name="birth_month" required>
-                    <option value="">月を選択してください</option>
-                    <option value="1">1月</option>
-                    <option value="2">2月</option>
-                    <option value="3">3月</option>
-                    <option value="4">4月</option>
-                    <option value="5">5月</option>
-                    <option value="6">6月</option>
-                    <option value="7">7月</option>
-                    <option value="8">8月</option>
-                    <option value="9">9月</option>
-                    <option value="10">10月</option>
-                    <option value="11">11月</option>
-                    <option value="12">12月</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="birth_day">生日 <span class="required">*</span></label>
-                <input type="number" id="birth_day" name="birth_day" min="1" max="31" required placeholder="15">
-            </div>
-
-            <div class="form-group">
-                <div class="time-group">
-                    <div>
-                        <label for="birth_hour">時間 <span class="required">*</span></label>
-                        <input type="number" id="birth_hour" name="birth_hour" min="0" max="23" required placeholder="14">
+            <fieldset class="form-section">
+                <legend>生年月日・時刻</legend>
+                
+                <div class="date-time-grid">
+                    <div class="form-group">
+                        <label for="birth_year" class="form-label">
+                            生年 <span class="required" aria-label="必須">*</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="birth_year" 
+                            name="birth_year" 
+                            class="form-input"
+                            min="1900" 
+                            max="2030" 
+                            required 
+                            placeholder="1990"
+                            aria-required="true"
+                        >
                     </div>
-                    <div>
-                        <label for="birth_minute">分 <span class="required">*</span></label>
-                        <input type="number" id="birth_minute" name="birth_minute" min="0" max="59" required placeholder="30">
+
+                    <div class="form-group">
+                        <label for="birth_month" class="form-label">
+                            生月 <span class="required" aria-label="必須">*</span>
+                        </label>
+                        <select id="birth_month" name="birth_month" class="form-input" required aria-required="true">
+                            <option value="">選択</option>
+                            {% for i in range(1, 13) %}
+                            <option value="{{ i }}">{{ i }}月</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birth_day" class="form-label">
+                            生日 <span class="required" aria-label="必須">*</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="birth_day" 
+                            name="birth_day" 
+                            class="form-input"
+                            min="1" 
+                            max="31" 
+                            required 
+                            placeholder="15"
+                            aria-required="true"
+                        >
                     </div>
                 </div>
+
+                <div class="time-grid">
+                    <div class="form-group">
+                        <label for="birth_hour" class="form-label">
+                            時 <span class="required" aria-label="必須">*</span>
+                        </label>
+                        <select id="birth_hour" name="birth_hour" class="form-input" required aria-required="true">
+                            <option value="">選択</option>
+                            {% for i in range(24) %}
+                            <option value="{{ i }}">{{ '%02d'|format(i) }}時</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="birth_minute" class="form-label">
+                            分 <span class="required" aria-label="必須">*</span>
+                        </label>
+                        <select id="birth_minute" name="birth_minute" class="form-input" required aria-required="true">
+                            <option value="">選択</option>
+                            {% for i in range(0, 60, 5) %}
+                            <option value="{{ i }}">{{ '%02d'|format(i) }}分</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <small class="help-text">
+                    <span class="info-icon">ℹ️</span>
+                    正確な出生時刻は、より精密な鑑定結果をもたらします
+                </small>
+            </fieldset>
+
+            <fieldset class="form-section">
+                <legend>出生地</legend>
+                
+                <div class="form-group">
+                    <label for="prefecture" class="form-label">
+                        都道府県 <span class="required" aria-label="必須">*</span>
+                    </label>
+                    <select id="prefecture" name="prefecture" class="form-input" required aria-required="true">
+                        <option value="">都道府県を選択してください</option>
+                        {% for pref in prefectures %}
+                        <option value="{{ pref }}">{{ pref }}</option>
+                        {% endfor %}
+                    </select>
+                    <small class="help-text">
+                        <span class="info-icon">ℹ️</span>
+                        出生地の緯度・経度から天体位置を正確に計算します
+                    </small>
+                </div>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span class="btn-text">鑑定を開始する</span>
+                    <span class="btn-icon">🔮</span>
+                </button>
             </div>
 
-            <div class="form-group">
-                <label for="prefecture">出生地（都道府県） <span class="required">*</span></label>
-                <select id="prefecture" name="prefecture" required>
-                    <option value="">都道府県を選択してください</option>
-                    <option value="北海道">北海道</option>
-                    <option value="青森県">青森県</option>
-                    <option value="岩手県">岩手県</option>
-                    <option value="宮城県">宮城県</option>
-                    <option value="秋田県">秋田県</option>
-                    <option value="山形県">山形県</option>
-                    <option value="福島県">福島県</option>
-                    <option value="茨城県">茨城県</option>
-                    <option value="栃木県">栃木県</option>
-                    <option value="群馬県">群馬県</option>
-                    <option value="埼玉県">埼玉県</option>
-                    <option value="千葉県">千葉県</option>
-                    <option value="東京都">東京都</option>
-                    <option value="神奈川県">神奈川県</option>
-                    <option value="新潟県">新潟県</option>
-                    <option value="富山県">富山県</option>
-                    <option value="石川県">石川県</option>
-                    <option value="福井県">福井県</option>
-                    <option value="山梨県">山梨県</option>
-                    <option value="長野県">長野県</option>
-                    <option value="岐阜県">岐阜県</option>
-                    <option value="静岡県">静岡県</option>
-                    <option value="愛知県">愛知県</option>
-                    <option value="三重県">三重県</option>
-                    <option value="滋賀県">滋賀県</option>
-                    <option value="京都府">京都府</option>
-                    <option value="大阪府">大阪府</option>
-                    <option value="兵庫県">兵庫県</option>
-                    <option value="奈良県">奈良県</option>
-                    <option value="和歌山県">和歌山県</option>
-                    <option value="鳥取県">鳥取県</option>
-                    <option value="島根県">島根県</option>
-                    <option value="岡山県">岡山県</option>
-                    <option value="広島県">広島県</option>
-                    <option value="山口県">山口県</option>
-                    <option value="徳島県">徳島県</option>
-                    <option value="香川県">香川県</option>
-                    <option value="愛媛県">愛媛県</option>
-                    <option value="高知県">高知県</option>
-                    <option value="福岡県">福岡県</option>
-                    <option value="佐賀県">佐賀県</option>
-                    <option value="長崎県">長崎県</option>
-                    <option value="熊本県">熊本県</option>
-                    <option value="大分県">大分県</option>
-                    <option value="宮崎県">宮崎県</option>
-                    <option value="鹿児島県">鹿児島県</option>
-                    <option value="沖縄県">沖縄県</option>
-                </select>
+            <div class="privacy-notice">
+                <p>
+                    <span class="lock-icon">🔒</span>
+                    ご入力いただいた情報は鑑定にのみ使用され、保存されません
+                </p>
             </div>
-
-            <button type="submit" class="submit-btn">鑑定開始</button>
         </form>
+
+        <!-- ローディング画面 -->
+        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+            <div class="loading-content">
+                <div class="zodiac-wheel">
+                    <div class="zodiac-spinner"></div>
+                </div>
+                <h2 class="loading-title">天体位置を計算中...</h2>
+                <p class="loading-message" id="loadingMessage">あなたの宇宙的な体質を分析しています</p>
+                <div class="loading-progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
