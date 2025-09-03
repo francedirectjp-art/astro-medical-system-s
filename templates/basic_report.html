@@ -319,7 +319,7 @@
                     {% set _ = element_count.update({planet_data.element: element_count[planet_data.element] + 1}) %}
                     {% set _ = element_planets[planet_data.element].append(planet_name) %}
                 {% endfor %}
-                {% set sorted_elements = element_count|dictsort(false, 'value')|reverse %}
+                {% set sorted_elements = element_count.items()|sort(attribute=1, reverse=true)|list %}
                 
                 {% for element_name, count in sorted_elements %}
                 <div class="element-box">
@@ -330,26 +330,39 @@
             </div>
             
             <div class="content">
+                {% if sorted_elements|length > 0 %}
                 <p>
                     {{ name }}様の天体配置において、最も強い元素は{{ sorted_elements[0][0] }}（{{ sorted_elements[0][1] }}個の天体）です。
                     これは{{ element_planets[sorted_elements[0][0]]|join('、') }}が該当し、あなたの性格と体質の基調を形成しています。
                 </p>
+                {% endif %}
+                
+                {% if sorted_elements|length > 1 %}
                 <p>
                     二番目に強い{{ sorted_elements[1][0] }}の元素（{{ sorted_elements[1][1] }}個）は、
                     {{ element_planets[sorted_elements[1][0]]|join('、') }}に現れており、補完的な役割を果たしています。
                 </p>
+                {% endif %}
+                
+                {% if sorted_elements|length > 3 %}
                 <p>
                     {{ sorted_elements[2][0] }}の元素（{{ sorted_elements[2][1] }}個）は{{ element_planets[sorted_elements[2][0]]|join('、') }}に、
                     {{ sorted_elements[3][0] }}の元素（{{ sorted_elements[3][1] }}個）は{{ element_planets[sorted_elements[3][0]]|join('、') }}に現れています。
                 </p>
+                {% endif %}
+                
                 <p>
                     この四元素バランスから、{{ archetype.name }}タイプとしての特徴がより明確になります。
                     太陽の{{ celestial_data.sun.element }}と月の{{ celestial_data.moon.element }}の組み合わせは、
                     意識と無意識の調和を示し、
-                    {% if sorted_elements[1][0] == '火' %}活動的なエネルギーの補強
-                    {% elif sorted_elements[1][0] == '地' %}実践的な安定性の確保
-                    {% elif sorted_elements[1][0] == '風' %}知的な柔軟性の発揮
-                    {% else %}感情的な深みの探求
+                    {% if sorted_elements|length > 1 %}
+                        {% if sorted_elements[1][0] == '火' %}活動的なエネルギーの補強
+                        {% elif sorted_elements[1][0] == '地' %}実践的な安定性の確保
+                        {% elif sorted_elements[1][0] == '風' %}知的な柔軟性の発揮
+                        {% else %}感情的な深みの探求
+                        {% endif %}
+                    {% else %}
+                        バランスの取れた発展
                     {% endif %}を可能にしています。
                 </p>
             </div>
@@ -360,9 +373,9 @@
             <div class="content">
                 <p>
                     {{ name }}様の体質は{{ archetype.temperament }}であり、
-                    {% if sorted_elements[1][0] == '火' %}高い代謝率と活発な循環系
-                    {% elif sorted_elements[1][0] == '地' %}安定した消化系と骨格系
-                    {% elif sorted_elements[1][0] == '風' %}敏感な神経系と呼吸器系
+                    {% if celestial_data.sun.element == '火' %}高い代謝率と活発な循環系
+                    {% elif celestial_data.sun.element == '地' %}安定した消化系と骨格系
+                    {% elif celestial_data.sun.element == '風' %}敏感な神経系と呼吸器系
                     {% else %}繊細な水分代謝とリンパ系
                     {% endif %}に特徴があります。
                     日常的な健康管理では、これらの系統に特に注意を払うことが重要です。
