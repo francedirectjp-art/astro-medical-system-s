@@ -770,6 +770,120 @@ def detailed_report_page():
                          report_date=report_date,
                          total_characters=len(report_content['full_text']))
 
+@app.route('/pdf_download')
+def pdf_download():
+    """PDF形式での鑑定結果ダウンロード"""
+    from weasyprint import HTML, CSS
+    from datetime import datetime
+    import io
+    import json
+    from flask import make_response
+    
+    # URLパラメータとセッションから情報を取得
+    name = request.args.get('name', session.get('name', 'お客様'))
+    archetype_name = request.args.get('archetype', '未分類')
+    
+    # セッションから天体データを取得
+    celestial_data_raw = session.get('celestial_data')
+    celestial_data = {}
+    
+    if celestial_data_raw:
+        try:
+            celestial_positions = json.loads(celestial_data_raw)
+            planet_mapping = {
+                '太陽': 'sun', '月': 'moon', '水星': 'mercury',
+                '金星': 'venus', '火星': 'mars', '木星': 'jupiter', '土星': 'saturn'
+            }
+            for jp_name, en_name in planet_mapping.items():
+                if jp_name in celestial_positions:
+                    celestial_data[en_name] = {
+                        'sign': celestial_positions[jp_name]['zodiac'],
+                        'element': celestial_positions[jp_name]['element'],
+                        'degree': celestial_positions[jp_name]['degree_in_sign'],
+                        'quality': get_sign_quality(celestial_positions[jp_name]['zodiac']),
+                        'planet_name': jp_name
+                    }
+                    
+                    # サビアンシンボルを追加
+                    sabian = get_sabian_for_position(celestial_positions[jp_name]['zodiac'], 
+                                                   int(celestial_positions[jp_name]['degree_in_sign']))
+                    if sabian:
+                        celestial_data[en_name]['sabian'] = sabian
+                        
+        except Exception as e:
+            print(f"天体データの解析エラー: {e}")
+            celestial_data = get_default_celestial_data()
+    else:
+        celestial_data = get_default_celestial_data()
+
+    # アーキタイプ情報の生成
+    sun_element = celestial_data.get('sun', {}).get('element', '火')
+    moon_element = celestial_data.get('moon', {}).get('element', '土')
+    
+    # デフォルトのアーキタイプデータ（PDF用に簡略化）
+    archetype_data = {
+        "name": archetype_name or f"{sun_element}×{moon_element}の調和者",
+        "name_en": "The Harmonizer", 
+        "element_combination": f"{sun_element}×{moon_element}",
+        "temperament": f"{sun_element}と{moon_element}の統合",
+        "body_type": "調和型体質",
+        "tagline": f"{sun_element}の力強さと{moon_element}の安定性を兼ね備えた人",
+        "core": f"あなたは{sun_element}と{moon_element}の融合による独特な体質を持っています。この組み合わせは、情熱と安定性のバランスが取れた性質を生み出します。",
+        "talents": f"{sun_element}の創造力と{moon_element}の実用性を活かした問題解決能力、バランス感覚に優れた調整力",
+        "challenges": "異なる元素の特性を統合することで生じる内なる葛藤を乗り越え、調和を見つけることが課題",
+        "key_traits": f"創造性と実用性のバランス、{sun_element}由来の行動力、{moon_element}由来の安定感"
+    }
+    
+    # 追加の説明を生成
+    archetype_data['element_analysis'] = f"{sun_element}と{moon_element}の組み合わせは、バランスの取れた性質を生み出します。"
+    archetype_data['development_theme'] = "この組み合わせにより、あなたは創造性と実用性を兼ね備えた独特な才能を発揮できます。"
+    
+    # レポート内容の生成
+    element_analysis = calculate_element_distribution(celestial_data)
+    constitution = generate_medical_constitution(name, archetype_data, celestial_data)
+    prescription = generate_holistic_prescriptions(name, archetype_data, celestial_data)  
+    life_design = generate_life_planning(name, archetype_data, celestial_data)
+    
+    # 生年月日の整形
+    birth_date_str = session.get('birth_date', '日時不明')
+    birth_date_formatted = f"生年月日：{birth_date_str}"
+    
+    # レポート作成日
+    report_date = f"鑑定日：{datetime.now().strftime('%Y年%m月%d日')}"
+    
+    # PDFテンプレートをレンダリング
+    html_content = render_template('pdf_report.html',
+                                 name=name,
+                                 birth_date_formatted=birth_date_formatted,
+                                 report_date=report_date,
+                                 archetype=archetype_data,
+                                 celestial_data=celestial_data,
+                                 element_analysis=element_analysis,
+                                 constitution=constitution,
+                                 prescription=prescription,
+                                 life_design=life_design)
+    
+    # HTMLからPDFを生成
+    try:
+        html_doc = HTML(string=html_content)
+        pdf_bytes = html_doc.write_pdf()
+        
+        # ファイル名の生成（ASCII安全）
+        current_date = datetime.now().strftime('%Y%m%d')
+        safe_name = "".join(c for c in name if c.isalnum() or c in (' ', '-', '_')).replace(' ', '_')
+        filename = f"astro_medical_report_{safe_name}_{current_date}.pdf"
+        
+        # レスポンスの作成
+        response = make_response(pdf_bytes)
+        response.headers['Content-Type'] = 'application/pdf'
+        response.headers['Content-Disposition'] = f'attachment; filename="{filename}"'
+        
+        return response
+        
+    except Exception as e:
+        print(f"PDF生成エラー: {e}")
+        return f"PDF生成中にエラーが発生しました: {str(e)}", 500
+
 def get_sign_quality(sign):
     """星座のクオリティを返す"""
     cardinal = ['牡羊座', '蟹座', '天秤座', '山羊座']
@@ -860,7 +974,7 @@ def generate_archetype_analysis(name, archetype, sun_element, moon_element, cele
     text = f"""
 【第1章：{archetype['name']}というアーキタイプの深層分析】
 
-{name}様の本質を形作る「{archetype['name']}」というアーキタイプは、太陽の{sun_element}エレメントと月の{moon_element}エレメントが織りなす、極めて独特な存在様式を表しています。このアーキタイプは、織田先生の16原型論において、{archetype['tagline']}
+{name}様の本質を形作る「{archetype['name']}」というアーキタイプは、太陽の{sun_element}エレメントと月の{moon_element}エレメントが織りなす、極めて独特な存在様式を表しています。このアーキタイプは、言うなれば「{archetype['tagline']}」です。
 
 ■ 原型の核心的性質
 
@@ -943,17 +1057,7 @@ def generate_archetype_analysis(name, archetype, sun_element, moon_element, cele
 専門的なスキルや独創的な表現へと発展する可能性を秘めています。
 """
     
-    text += f"""
 
-■ 同じアーキタイプを持つ歴史的人物との共鳴
-
-歴史上、{archetype['name']}的な資質を持つとされる人物たちは、それぞれの時代において革新的な貢献をしてきました。
-彼らに共通するのは、既存の枠組みにとらわれない独創性と、深い内的確信に基づく行動力です。
-
-{name}様もまた、この系譜に連なる存在として、独自の方法で世界に貢献する可能性を秘めています。
-それは必ずしも歴史に名を残すような大きな功績である必要はありません。
-日々の生活の中で、{archetype['name']}としての本質を生きることそのものが、周囲に大きな影響を与えているのです。
-"""
     
     return text
 
@@ -1231,11 +1335,7 @@ def generate_holistic_prescriptions(name, archetype, celestial_data):
 ◆ 季節別の食養生
 {get_seasonal_dietary_advice(dominant_element)}
 
-◆ 1日の食事リズム
-- 朝食（7:00-8:00）：{get_breakfast_advice(dominant_element)}
-- 昼食（12:00-13:00）：{get_lunch_advice(dominant_element)}
-- 夕食（18:00-19:00）：{get_dinner_advice(dominant_element)}
-- 間食：{get_snack_advice(dominant_element)}
+
 
 ◆ 避けるべき食材と食習慣
 {get_foods_to_avoid(dominant_element, archetype['body_type'])}
@@ -1295,12 +1395,7 @@ def generate_holistic_prescriptions(name, archetype, celestial_data):
 - 仕事場：{get_workspace_setup(archetype['element_combination'])}
 - リビング：観葉植物と自然光を重視
 
-■ 季節ごとのケアプログラム
 
-春（3-5月）：デトックスと再生
-夏（6-8月）：活動と社交
-秋（9-11月）：収穫と感謝
-冬（12-2月）：内省と計画
 
 これらの処方は、{name}様の個性に合わせてカスタマイズ可能です。無理なく、楽しみながら実践することが最も重要です。
 """
@@ -1444,29 +1539,7 @@ def generate_life_planning(name, archetype, celestial_data):
 - 新しい出会いへの開放性
 - 孤独な時間の大切さも認識
 
-■ 健康寿命の最大化
 
-{archetype['body_type']}の特性を考慮した長寿の秘訣：
-
-1. 30代：予防の基礎作り
-- 定期健診の習慣化
-- ストレス管理技術の習得
-- 運動習慣の確立
-
-2. 40代：バランスの調整
-- ホルモンバランスの観察
-- 食生活の最適化
-- 心理的な成熟
-
-3. 50代：智慧の活用
-- 経験を活かした健康管理
-- 次世代への貢献準備
-- 精神的な深まり
-
-4. 60代以降：統合と超越
-- 全体性の実現
-- 遺産（レガシー）の創造
-- 宇宙的視点の獲得
 
 ■ スピリチュアルな成長の道
 
@@ -1778,7 +1851,7 @@ def generate_epilogue(name, archetype):
 
 願わくば、この占星医学的な洞察が、{name}様の人生により深い意味と方向性をもたらし、健康と幸福、そして魂の充足への道を照らす光となりますように。
 
-織田先生の16原型論に基づく、{name}様専用のASTRO-MEDICAL REPORTを終えるにあたり、宇宙の祝福と共に。
+{name}様専用のASTRO-MEDICAL REPORTを終えるにあたり、宇宙の祝福と共に。
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 監修：織田剛

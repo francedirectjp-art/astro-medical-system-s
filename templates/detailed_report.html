@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }}様のASTRO-MEDICAL REPORT - 完全版</title>
+    <title>{{ name }}様のASTRO-BODY TYPE REPORT - 詳細鑑定書</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         /* リセットと基本設定 */
@@ -426,10 +426,21 @@
     <div class="report-container">
         <!-- ヘッダー -->
         <header class="report-header">
-            <h1 class="report-title">ASTRO-MEDICAL REPORT</h1>
-            <div class="personal-name">{{ name }}様</div>
-            <p class="report-subtitle">あなたの魂の青写真に基づく完全なセルフケアガイド</p>
+            <h1 class="report-title">ASTRO-BODY TYPE REPORT</h1>
+            <div class="personal-name">詳細鑑定書</div>
+            <p class="report-subtitle">伝統的占星術に基づく包括的体質分析</p>
         </header>
+
+        <!-- PDFダウンロードボタン -->
+        <div style="text-align: center; margin: 30px 0; position: sticky; top: 20px; z-index: 1000;">
+            <a href="/pdf_download?name={{ name|urlencode }}&archetype={{ archetype.name|urlencode }}" 
+               class="pdf-download-btn" 
+               target="_blank"
+               style="display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #d4af37, #ffd700); color: #2c3e50; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 1.1em; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); transition: all 0.3s ease; border: none; cursor: pointer;">
+                <span style="font-size: 1.2em;">📄</span>
+                <span>PDFをダウンロード</span>
+            </a>
+        </div>
 
         <!-- サマリーシート -->
         <section class="summary-sheet">
@@ -967,7 +978,7 @@
                     ご活用ください。
                 </p>
                 <p style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
-                    ～ ASTRO-MEDICAL REPORT ～<br>
+                    ～ ASTRO-BODY TYPE REPORT ～<br>
                     Generated with cosmic wisdom and love
                 </p>
             </div>

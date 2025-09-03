@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ name }}様の占星医学鑑定結果 - ASTRO-BODY TYPE REPORT</title>
+    <style>
+        /* PDF専用CSS - 印刷最適化 */
+        @page {
+            size: A4;
+            margin: 25mm 20mm 30mm 20mm;
+            @top-center {
+                content: "ASTRO-BODY TYPE REPORT";
+                font-family: "Noto Sans JP", sans-serif;
+                font-size: 10pt;
+                color: #666;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 5mm;
+            }
+            @bottom-center {
+                content: "- " counter(page) " -";
+                font-family: "Noto Sans JP", sans-serif;
+                font-size: 10pt;
+                color: #666;
+            }
+        }
+        
+        /* 表紙ページ用 */
+        @page cover {
+            margin: 0;
+            @top-center { content: none; }
+            @bottom-center { content: none; }
+        }
+        
+        /* 目次ページ用 */
+        @page toc {
+            @top-center {
+                content: "目次";
+                font-family: "Noto Sans JP", sans-serif;
+                font-size: 10pt;
+                color: #666;
+            }
+        }
+
+        /* 基本スタイル */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Noto Serif JP", serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: #333;
+            background: white;
+        }
+
+        /* 表紙スタイル */
+        .cover-page {
+            page: cover;
+            height: 297mm;
+            background: linear-gradient(135deg, #2c3e50 0%, #8e44ad 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40mm;
+            break-after: page;
+        }
+
+        .cover-title {
+            font-size: 32pt;
+            font-weight: 700;
+            margin-bottom: 20mm;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .cover-subtitle {
+            font-size: 20pt;
+            margin-bottom: 30mm;
+            opacity: 0.9;
+        }
+
+        .cover-name {
+            font-size: 24pt;
+            font-weight: 700;
+            margin-bottom: 10mm;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding: 15mm 0;
+        }
+
+        .cover-date {
+            font-size: 14pt;
+            opacity: 0.7;
+            margin-top: 20mm;
+        }
+
+        .cover-footer {
+            position: absolute;
+            bottom: 30mm;
+            font-size: 12pt;
+            opacity: 0.6;
+        }
+
+        /* 目次スタイル */
+        .toc-page {
+            page: toc;
+            break-after: page;
+            padding-top: 20mm;
+        }
+
+        .toc-title {
+            font-size: 18pt;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20mm;
+            color: #2c3e50;
+            border-bottom: 2px solid #8e44ad;
+            padding-bottom: 5mm;
+        }
+
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8mm;
+            padding-bottom: 3mm;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        .toc-chapter {
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .toc-page-num {
+            font-weight: 700;
+            color: #8e44ad;
+        }
+
+        /* 本文スタイル */
+        .content-page {
+            break-before: page;
+        }
+
+        .chapter {
+            break-before: page;
+            margin-bottom: 15mm;
+        }
+
+        .chapter-header {
+            text-align: center;
+            margin-bottom: 15mm;
+            border-bottom: 3px solid #8e44ad;
+            padding-bottom: 10mm;
+        }
+
+        .chapter-number {
+            font-size: 14pt;
+            color: #8e44ad;
+            font-weight: 700;
+            margin-bottom: 5mm;
+        }
+
+        .chapter-title {
+            font-size: 18pt;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 10mm 0 5mm 0;
+            border-left: 4px solid #d4af37;
+            padding-left: 5mm;
+        }
+
+        .subsection-title {
+            font-size: 12pt;
+            font-weight: 700;
+            color: #8e44ad;
+            margin: 8mm 0 3mm 0;
+        }
+
+        .content-text {
+            margin-bottom: 5mm;
+            text-align: justify;
+            text-indent: 1em;
+        }
+
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #d4af37;
+            padding: 8mm;
+            margin: 8mm 0;
+            border-radius: 2mm;
+        }
+
+        .important-note {
+            background: linear-gradient(135deg, #fff7e6, #fff0d6);
+            border: 1px solid #d4af37;
+            padding: 8mm;
+            margin: 8mm 0;
+            border-radius: 3mm;
+        }
+
+        .archetype-badge {
+            background: linear-gradient(135deg, #d4af37, #ffd700);
+            color: #2c3e50;
+            padding: 3mm 8mm;
+            border-radius: 15mm;
+            font-weight: 700;
+            display: inline-block;
+            margin: 5mm 0;
+            text-align: center;
+        }
+
+        /* エピローグスタイル */
+        .epilogue {
+            break-before: page;
+            text-align: center;
+            padding-top: 30mm;
+        }
+
+        .epilogue-title {
+            font-size: 16pt;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 15mm;
+        }
+
+        .supervisor-signature {
+            margin-top: 30mm;
+            padding-top: 15mm;
+            border-top: 1px solid #ccc;
+            font-size: 12pt;
+            color: #666;
+        }
+
+        /* テーブルスタイル */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8mm 0;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 3mm;
+            text-align: left;
+        }
+
+        th {
+            background: #f5f5f5;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        /* 改ページ制御 */
+        .no-break {
+            page-break-inside: avoid;
+        }
+
+        .break-after {
+            page-break-after: always;
+        }
+
+        .break-before {
+            page-break-before: always;
+        }
+
+        /* 印刷時の調整 */
+        @media print {
+            .cover-page { 
+                height: 100vh; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 表紙 -->
+    <div class="cover-page">
+        <div class="cover-title">ASTRO-BODY TYPE<br>REPORT</div>
+        <div class="cover-subtitle">次世代占星医学体質鑑定システム</div>
+        <div class="cover-name">{{ name }}様</div>
+        <div class="cover-date">{{ birth_date_formatted }}<br>{{ report_date }}</div>
+        <div class="cover-footer">監修：織田剛</div>
+    </div>
+
+    <!-- 目次 -->
+    <div class="toc-page">
+        <h1 class="toc-title">目次</h1>
+        
+        <div class="toc-item">
+            <span class="toc-chapter">第1章　アーキタイプの深層分析</span>
+            <span class="toc-page-num">3</span>
+        </div>
+        
+        <div class="toc-item">
+            <span class="toc-chapter">第2章　天体配置が明かす多層的な才能構造</span>
+            <span class="toc-page-num">7</span>
+        </div>
+        
+        <div class="toc-item">
+            <span class="toc-chapter">第3章　占星医学による体質分析</span>
+            <span class="toc-page-num">12</span>
+        </div>
+        
+        <div class="toc-item">
+            <span class="toc-chapter">第4章　統合ホリスティック処方箋</span>
+            <span class="toc-page-num">16</span>
+        </div>
+        
+        <div class="toc-item">
+            <span class="toc-chapter">第5章　理想の人生設計</span>
+            <span class="toc-page-num">22</span>
+        </div>
+        
+        <div class="toc-item">
+            <span class="toc-chapter">エピローグ</span>
+            <span class="toc-page-num">26</span>
+        </div>
+    </div>
+
+    <!-- 本文開始 -->
+    <div class="content-page">
+        
+        <!-- 第1章 -->
+        <div class="chapter">
+            <div class="chapter-header">
+                <div class="chapter-number">第1章</div>
+                <h1 class="chapter-title">{{ archetype.name }}の深層分析</h1>
+            </div>
+
+            <div class="important-note no-break">
+                <div class="subsection-title">あなたの原型的本質</div>
+                <div class="content-text">
+                    <strong>{{ name }}様</strong>は、宇宙的な観点から<span class="archetype-badge">{{ archetype.name }}</span>として分類されます。この原型は{{ archetype.description }}
+                </div>
+            </div>
+
+            <div class="section-title">太陽{{ celestial_data.sun.sign }}の核心的才能</div>
+            {% if celestial_data.sun.sabian %}
+            <div class="highlight-box no-break">
+                <div class="subsection-title">サビアンシンボル：{{ celestial_data.sun.sabian.title_ja }}</div>
+                <div class="content-text">{{ celestial_data.sun.sabian.interpretation }}</div>
+                <div class="content-text"><strong>職業的才能：</strong>{{ celestial_data.sun.sabian.vocational_talent }}</div>
+                <div class="content-text"><strong>対人関係才能：</strong>{{ celestial_data.sun.sabian.interpersonal_talent }}</div>
+                <div class="content-text"><strong>創造的才能：</strong>{{ celestial_data.sun.sabian.creative_talent }}</div>
+            </div>
+            {% endif %}
+
+            <div class="section-title">月{{ celestial_data.moon.sign }}の感情的基盤</div>
+            {% if celestial_data.moon.sabian %}
+            <div class="highlight-box no-break">
+                <div class="subsection-title">サビアンシンボル：{{ celestial_data.moon.sabian.title_ja }}</div>
+                <div class="content-text">{{ celestial_data.moon.sabian.interpretation }}</div>
+                <div class="content-text"><strong>職業的才能：</strong>{{ celestial_data.moon.sabian.vocational_talent }}</div>
+                <div class="content-text"><strong>対人関係才能：</strong>{{ celestial_data.moon.sabian.interpersonal_talent }}</div>
+                <div class="content-text"><strong>創造的才能：</strong>{{ celestial_data.moon.sabian.creative_talent }}</div>
+            </div>
+            {% endif %}
+
+            <div class="section-title">{{ archetype.element_combination }}の純粋な融合</div>
+            <div class="content-text">{{ archetype.element_analysis }}</div>
+            <div class="content-text">{{ archetype.development_theme }}</div>
+        </div>
+
+        <!-- 第2章 -->
+        <div class="chapter">
+            <div class="chapter-header">
+                <div class="chapter-number">第2章</div>
+                <h1 class="chapter-title">天体配置が明かす多層的な才能構造</h1>
+            </div>
+
+            {% for planet_name, planet_data in celestial_data.items() %}
+            {% if planet_name not in ['sun', 'moon'] %}
+            <div class="section-title">{{ planet_data.planet_name }}{{ planet_data.sign }}の特質</div>
+            
+            {% if planet_data.sabian %}
+            <div class="highlight-box no-break">
+                <div class="subsection-title">サビアンシンボル：{{ planet_data.sabian.title_ja }}</div>
+                <div class="content-text">{{ planet_data.sabian.interpretation }}</div>
+                <div class="content-text"><strong>職業的才能：</strong>{{ planet_data.sabian.vocational_talent }}</div>
+                <div class="content-text"><strong>対人関係才能：</strong>{{ planet_data.sabian.interpersonal_talent }}</div>
+                <div class="content-text"><strong>創造的才能：</strong>{{ planet_data.sabian.creative_talent }}</div>
+            </div>
+            {% endif %}
+
+            {% if planet_data.interpretation %}
+            <div class="content-text">{{ planet_data.interpretation }}</div>
+            {% endif %}
+
+            {% if planet_data.medical_correspondence %}
+            <div class="content-text"><strong>身体への影響：</strong>{{ planet_data.medical_correspondence }}</div>
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+
+            <div class="section-title">{{ name }}様の四元素配分</div>
+            <div class="content-text">{{ element_analysis }}</div>
+        </div>
+
+        <!-- 第3章 -->
+        <div class="chapter">
+            <div class="chapter-header">
+                <div class="chapter-number">第3章</div>
+                <h1 class="chapter-title">占星医学による体質分析</h1>
+            </div>
+
+            <div class="section-title">基本体質：{{ constitution.humor_type }}</div>
+            <div class="content-text">{{ constitution.humor_description }}</div>
+            <div class="content-text">{{ constitution.physical_characteristics }}</div>
+
+            <div class="section-title">臓器システムの特徴</div>
+            <div class="content-text">{{ constitution.organ_system }}</div>
+
+            <div class="section-title">季節との調和</div>
+            <div class="content-text">{{ constitution.seasonal_harmony }}</div>
+
+            <div class="section-title">生体リズムの最適化</div>
+            <div class="content-text">{{ constitution.circadian_optimization }}</div>
+        </div>
+
+        <!-- 第4章 -->
+        <div class="chapter">
+            <div class="chapter-header">
+                <div class="chapter-number">第4章</div>
+                <h1 class="chapter-title">統合ホリスティック処方箋</h1>
+            </div>
+
+            <div class="section-title">ライフスタイル医学的アプローチ</div>
+            <div class="content-text">{{ prescription.lifestyle_medicine }}</div>
+
+            <div class="section-title">栄養療法の指針</div>
+            <div class="content-text">{{ prescription.nutrition_therapy }}</div>
+
+            <div class="section-title">運動療法の推奨</div>
+            <div class="content-text">{{ prescription.exercise_therapy }}</div>
+
+            <div class="section-title">エネルギー医学的視点</div>
+            <div class="content-text">{{ prescription.energy_medicine }}</div>
+
+            <div class="section-title">心理療法的アプローチ</div>
+            <div class="content-text">{{ prescription.psychological_approach }}</div>
+        </div>
+
+        <!-- 第5章 -->
+        <div class="chapter">
+            <div class="chapter-header">
+                <div class="chapter-number">第5章</div>
+                <h1 class="chapter-title">理想の人生設計</h1>
+            </div>
+
+            <div class="section-title">キャリア開発戦略</div>
+            <div class="content-text">{{ life_design.career_strategy }}</div>
+
+            <div class="section-title">人間関係の最適化</div>
+            <div class="content-text">{{ life_design.relationship_optimization }}</div>
+
+
+            <div class="section-title">スピリチュアルな成長への道</div>
+            <div class="content-text">{{ life_design.spiritual_growth }}</div>
+        </div>
+
+        <!-- エピローグ -->
+        <div class="epilogue">
+            <h1 class="epilogue-title">エピローグ</h1>
+            <div class="content-text" style="text-align: justify; max-width: 150mm; margin: 0 auto;">
+                {{ name }}様へ。この包括的な分析が、あなたの内なる宇宙への理解を深め、より豊かで健康的な人生への指針となることを心より願っております。
+                占星医学は古代からの叡智と現代科学の融合であり、あなた固有の体質と才能を最大限に活かすためのマップとしてご活用ください。
+            </div>
+            
+            <div class="content-text" style="text-align: justify; max-width: 150mm; margin: 15mm auto 0;">
+                宇宙は常に私たちとともにあり、天体の動きは私たちの内なる変化と深く共鳴しています。この報告書があなたの人生の新たな章の始まりとなりますように。
+            </div>
+
+            <div class="supervisor-signature">
+                <div>監修：織田剛</div>
+                <div style="margin-top: 5mm; font-size: 10pt;">16原型論アストロメディカルシステム</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -341,6 +341,77 @@
     gap: 1.5rem;
 }
 
+/* シンプルな単一ボタン */
+.single-report-button {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.main-report-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 4rem;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(20, 20, 35, 0.95));
+    border: 3px solid var(--primary-gold);
+    border-radius: 20px;
+    text-decoration: none;
+    transition: var(--transition);
+    text-align: center;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.main-report-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.main-report-btn:hover::before {
+    left: 100%;
+}
+
+.main-report-btn:hover {
+    transform: translateY(-8px);
+    border-color: var(--secondary-gold);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(20, 20, 35, 0.95));
+}
+
+.main-report-btn .btn-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+.main-report-btn .btn-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--secondary-gold);
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.05em;
+    position: relative;
+    z-index: 1;
+}
+
+.main-report-btn .btn-description {
+    color: var(--text-light);
+    font-size: 1rem;
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
 .report-btn {
     display: flex;
     flex-direction: column;
@@ -458,5 +529,18 @@
 
     .archetype-name {
         font-size: 2rem;
+    }
+
+    .main-report-btn {
+        padding: 2rem 2rem;
+        max-width: 100%;
+    }
+
+    .main-report-btn .btn-text {
+        font-size: 1.2rem;
+    }
+
+    .main-report-btn .btn-icon {
+        font-size: 3rem;
     }
 }
