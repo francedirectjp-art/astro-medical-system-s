@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 import ephem
 import math
 from datetime import datetime, timedelta
 import json
 
 app = Flask(__name__)
+app.secret_key = 'your-secret-key-for-session-management-change-in-production'
 
 # 47都道府県の座標データ
 PREFECTURE_COORDINATES = {
@@ -269,6 +270,12 @@ def show_result():
         )
         
         if result['success']:
+            # セッションに天体データを保存（後でレポートで使用）
+            import json
+            from flask import session
+            session['celestial_data'] = json.dumps(result['celestial_positions'])
+            session['name'] = name
+            
             # 成功時は結果ページへ
             return render_template('result.html', 
                                  name=name,
@@ -324,29 +331,74 @@ def calculate_api():
 @app.route('/basic_report')
 def basic_report_page():
     """基本レポートページ（2000文字）"""
+    import json
+    
     # URLパラメータから情報を取得
-    name = request.args.get('name', 'お客様')
+    name = request.args.get('name', session.get('name', 'お客様'))
     archetype_name = request.args.get('archetype', '未分類')
     
-    # アーキタイプ情報を取得（簡易的に再構築）
+    # セッションから天体データを取得
+    celestial_data_raw = session.get('celestial_data')
+    if celestial_data_raw:
+        try:
+            celestial_positions = json.loads(celestial_data_raw)
+            # データ形式を変換
+            celestial_data = {}
+            planet_mapping = {
+                '太陽': 'sun', '月': 'moon', '水星': 'mercury',
+                '金星': 'venus', '火星': 'mars', '木星': 'jupiter', '土星': 'saturn'
+            }
+            for jp_name, en_name in planet_mapping.items():
+                if jp_name in celestial_positions:
+                    celestial_data[en_name] = {
+                        'sign': celestial_positions[jp_name]['zodiac'],
+                        'element': celestial_positions[jp_name]['element'],
+                        'degree': celestial_positions[jp_name]['degree_in_sign']
+                    }
+        except:
+            # デフォルトデータ
+            celestial_data = {
+                'sun': {'sign': '牡羊座', 'element': '火', 'degree': 15.5},
+                'moon': {'sign': '蟹座', 'element': '水', 'degree': 22.3},
+                'mercury': {'sign': '双子座', 'element': '風', 'degree': 8.7},
+                'venus': {'sign': '牡牛座', 'element': '地', 'degree': 18.2},
+                'mars': {'sign': '獅子座', 'element': '火', 'degree': 25.8},
+                'jupiter': {'sign': '射手座', 'element': '火', 'degree': 12.4},
+                'saturn': {'sign': '山羊座', 'element': '地', 'degree': 5.9}
+            }
+    else:
+        # デフォルトデータ
+        celestial_data = {
+            'sun': {'sign': '牡羊座', 'element': '火', 'degree': 15.5},
+            'moon': {'sign': '蟹座', 'element': '水', 'degree': 22.3},
+            'mercury': {'sign': '双子座', 'element': '風', 'degree': 8.7},
+            'venus': {'sign': '牡牛座', 'element': '地', 'degree': 18.2},
+            'mars': {'sign': '獅子座', 'element': '火', 'degree': 25.8},
+            'jupiter': {'sign': '射手座', 'element': '火', 'degree': 12.4},
+            'saturn': {'sign': '山羊座', 'element': '地', 'degree': 5.9}
+        }
+    
+    # アーキタイプ情報を取得
     archetype = None
     for key, value in SIXTEEN_ARCHETYPES.items():
         if value['name'] == archetype_name:
             archetype = value
+            archetype['key_traits'] = ['直感的', '情熱的', '創造的', '独立心が強い']
             break
     
-    # デフォルトのアーキタイプ情報
     if not archetype:
         archetype = {
             "name": archetype_name,
-            "element_combination": "未定",
+            "element_combination": "火×水",
             "temperament": "複合的",
-            "body_type": "混合型"
+            "body_type": "混合型",
+            "key_traits": ['適応力が高い', '柔軟性がある', '創造的', '直感的']
         }
     
     return render_template('basic_report.html', 
                          name=name,
-                         archetype=archetype)
+                         archetype=archetype,
+                         celestial_data=celestial_data)
 
 @app.route('/detailed_report') 
 def detailed_report_page():

@@ -3,237 +3,475 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ name }}様の基本レポート - {{ archetype.name if archetype else '占星医学体質鑑定' }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>ASTRO-BODY TYPE REPORT - {{ archetype.name }}</title>
     <style>
-        .report-container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 3rem;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 250, 252, 0.98));
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .report-header {
-            text-align: center;
-            border-bottom: 3px double var(--primary-gold);
-            padding-bottom: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .report-title {
-            font-family: 'Noto Serif JP', serif;
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-        }
-
-        .report-content {
-            font-family: 'Noto Serif JP', serif;
-            font-size: 1.1rem;
-            line-height: 2;
+        body {
+            font-family: 'Times New Roman', 'Yu Mincho', 'YuMincho', 'Hiragino Mincho Pro', serif;
+            line-height: 1.8;
             color: #2c3e50;
-            text-align: justify;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
         }
 
-        .report-section {
-            margin-bottom: 3rem;
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
-        .report-section-title {
-            font-size: 1.6rem;
-            color: var(--primary-gold);
-            border-bottom: 2px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(255, 255, 255, 0.5));
-            border-left: 4px solid var(--primary-gold);
-            padding: 1.5rem;
-            margin: 2rem 0;
-            border-radius: 8px;
-        }
-
-        .personal-message {
-            background: rgba(212, 175, 55, 0.05);
-            padding: 2rem;
-            border-radius: 10px;
+        .header {
             text-align: center;
-            margin-bottom: 3rem;
-            font-size: 1.2rem;
+            border-bottom: 3px double #8b4513;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .main-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #8b4513;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .archetype-name {
+            font-size: 1.8em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .birth-info {
+            font-size: 1.1em;
+            color: #34495e;
+            margin-bottom: 10px;
+        }
+
+        .element-info {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.6em;
+            color: #8b4513;
+            border-bottom: 2px solid #d4af37;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        .content {
+            font-size: 1.1em;
+            text-align: justify;
+            text-justify: inter-ideograph;
+            margin-bottom: 20px;
+        }
+
+        .planet-analysis {
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 5px solid #d4af37;
+            margin: 20px 0;
+        }
+
+        .element-balance {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .element-box {
+            background: linear-gradient(135deg, #f8f9fa, #ffffff);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #d4af37;
+            text-align: center;
+        }
+
+        .element-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #8b4513;
+            margin-bottom: 5px;
+        }
+
+        .element-count {
+            font-size: 1.1em;
             color: #34495e;
         }
 
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-top: 3rem;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
-            color: var(--dark-bg);
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .planet-detail {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(212, 175, 55, 0.05);
+            border-radius: 8px;
         }
 
-        .back-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid #d4af37;
+        }
+
+        .next-report-link {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #8b4513, #d4af37);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .next-report-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(139, 69, 19, 0.3);
         }
 
         @media print {
-            .back-link {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .next-report-link {
                 display: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
     <div class="container">
-        <div class="report-container">
-            <!-- パーソナライズされたヘッダー -->
-            <header class="report-header">
-                <h1 class="report-title">
-                    ✦ {{ name }}様の基本レポート ✦
-                </h1>
-                <p class="report-subtitle">
-                    占星医学体質鑑定 - 2,000文字詳説
+        <header class="header">
+            <h1 class="main-title">ASTRO-BODY TYPE REPORT</h1>
+            <div class="archetype-name">16原型：{{ archetype.name }}</div>
+            <div class="birth-info">
+                {{ name }}様の占星医学体質鑑定
+            </div>
+            <div class="element-info">
+                太陽：{{ celestial_data.sun.sign }}（{{ celestial_data.sun.element }}の元素） | 
+                月：{{ celestial_data.moon.sign }}（{{ celestial_data.moon.element }}の元素）
+            </div>
+        </header>
+
+        <section class="section">
+            <h2 class="section-title">あなたの原型：{{ archetype.name }}</h2>
+            <div class="content">
+                <p><strong>元素の組み合わせ</strong>：{{ archetype.element_combination }} - {{ archetype.temperament }}な性質</p>
+                <p>
+                    {{ name }}様の太陽は{{ celestial_data.sun.sign }}（{{ celestial_data.sun.element }}の元素）に位置し、
+                    月は{{ celestial_data.moon.sign }}（{{ celestial_data.moon.element }}の元素）に位置しています。
+                    この配置により、あなたは「{{ archetype.name }}」という原型に分類されます。
+                    この原型は{{ archetype.body_type }}の体質を持ち、独特な生命エネルギーのパターンを示しています。
                 </p>
-            </header>
-
-            <!-- パーソナルメッセージ -->
-            <div class="personal-message">
-                <p>{{ name }}様、この度は占星医学体質鑑定をご利用いただき、ありがとうございます。</p>
-                <p>あなたの宇宙的原型は「<strong>{{ archetype.name if archetype else '分析中' }}</strong>」と判定されました。</p>
+                <p>
+                    太陽が{{ celestial_data.sun.sign }}の{{ "%.2f"|format(celestial_data.sun.degree) }}度に位置することは、
+                    {% if celestial_data.sun.degree < 10 %}始まりの段階
+                    {% elif celestial_data.sun.degree < 20 %}発展の段階
+                    {% else %}完成の段階
+                    {% endif %}にあることを示しており、これはあなたの基本的な生命力の表現方法に影響を与えています。
+                </p>
+                <p>
+                    月が{{ celestial_data.moon.sign }}の{{ "%.2f"|format(celestial_data.moon.degree) }}度にあることは、
+                    あなたの感情の本質と無意識の反応パターンを示しています。
+                    {% if celestial_data.moon.degree < 10 %}初期段階
+                    {% elif celestial_data.moon.degree < 20 %}中期段階
+                    {% else %}成熟段階
+                    {% endif %}の月は、感情的な成熟度と内的な安定性に関する重要な示唆を与えています。
+                </p>
             </div>
+        </section>
 
-            <!-- レポート本文 -->
-            <div class="report-content">
-                <!-- セクション1: 原型の概要 -->
-                <section class="report-section">
-                    <h2 class="report-section-title">1. あなたの宇宙的原型について</h2>
-                    <p>
-                        {{ name }}様は、「{{ archetype.name if archetype else '特別な原型' }}」というユニークな宇宙的原型をお持ちです。
-                        この原型は、{{ archetype.element_combination if archetype else '複合的な元素' }}の組み合わせから生まれ、
-                        {{ archetype.temperament if archetype else '独特' }}な気質を特徴としています。
-                    </p>
-                    <p>
-                        古代から伝わる占星医学の叡智によれば、この原型を持つ方は、生まれながらにして特別な使命と才能を授かっています。
-                        あなたの体質タイプは「{{ archetype.body_type if archetype else '複合型' }}」に分類され、
-                        これは身体的、精神的、そして霊的な側面において独自の特性を示しています。
-                    </p>
-                </section>
-
-                <!-- セクション2: 体質の特徴 -->
-                <section class="report-section">
-                    <h2 class="report-section-title">2. 体質の詳細な特徴</h2>
-                    <div class="highlight-box">
-                        <p>
-                            <strong>{{ name }}様の体質的強み：</strong><br>
-                            {{ archetype.temperament if archetype else '複合的' }}な性質は、あなたに優れた適応力と創造性をもたらします。
-                            この体質の持ち主は、環境の変化に柔軟に対応し、困難な状況でも独自の解決策を見出す能力に長けています。
-                        </p>
-                    </div>
-                    <p>
-                        身体的には、{{ archetype.body_type if archetype else '混合型' }}の特徴として、
-                        エネルギーの流れが独特のパターンを示します。これは、適切な生活習慣を維持することで、
-                        優れた健康状態と活力を保つことができることを意味しています。
-                    </p>
-                    <p>
-                        精神的な側面では、{{ name }}様は深い洞察力と直感力を持ち合わせています。
-                        これらの才能を活かすことで、人生における重要な決断を的確に下すことができるでしょう。
-                    </p>
-                </section>
-
-                <!-- セクション3: 健康への示唆 -->
-                <section class="report-section">
-                    <h2 class="report-section-title">3. 健康維持のための具体的アドバイス</h2>
-                    <p>
-                        {{ name }}様の{{ archetype.element_combination if archetype else '元素バランス' }}を考慮すると、
-                        以下の点に注意を払うことが、最適な健康状態を維持する鍵となります：
-                    </p>
-                    <div class="highlight-box">
-                        <p><strong>🌟 日常生活での実践事項：</strong></p>
-                        <ul style="list-style-type: none; padding-left: 0;">
-                            <li>• 朝の時間帯に瞑想や軽い運動を取り入れる</li>
-                            <li>• {{ archetype.temperament if archetype else '気質' }}に合った食事法を実践する</li>
-                            <li>• 自然との触れ合いを大切にし、定期的にエネルギーをリチャージする</li>
-                            <li>• 創造的な活動に時間を割き、内なる才能を表現する</li>
-                        </ul>
-                    </div>
-                    <p>
-                        特に重要なのは、{{ name }}様の体質タイプに適した休息とリラクゼーションです。
-                        過度なストレスは、あなたの繊細なエネルギーバランスを崩す可能性があるため、
-                        定期的な休息時間を確保することをお勧めします。
-                    </p>
-                </section>
-
-                <!-- セクション4: 人間関係と社会的役割 -->
-                <section class="report-section">
-                    <h2 class="report-section-title">4. 人間関係における特性</h2>
-                    <p>
-                        {{ archetype.name if archetype else 'あなたの原型' }}を持つ{{ name }}様は、
-                        人間関係において独特の魅力と影響力を発揮します。
-                        {{ archetype.temperament if archetype else '特有' }}な気質により、
-                        周囲の人々に安心感と信頼感を与える存在となっています。
-                    </p>
-                    <p>
-                        コミュニケーションにおいては、直感的な理解力と共感能力が強みとなります。
-                        これらの才能を活かすことで、深い人間関係を築き、
-                        社会において重要な役割を果たすことができるでしょう。
-                    </p>
-                </section>
-
-                <!-- セクション5: 総括とメッセージ -->
-                <section class="report-section">
-                    <h2 class="report-section-title">5. {{ name }}様への特別なメッセージ</h2>
-                    <div class="highlight-box" style="background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(212, 175, 55, 0.05));">
-                        <p>
-                            {{ name }}様、あなたは宇宙から特別な贈り物を授かった存在です。
-                            「{{ archetype.name if archetype else '特別な原型' }}」という原型は、
-                            この地球上で果たすべき独自の使命を示しています。
-                        </p>
-                        <p>
-                            あなたの{{ archetype.temperament if archetype else '独特' }}な性質と
-                            {{ archetype.body_type if archetype else '体質' }}は、
-                            適切に理解し活用することで、人生における大きな成功と充実感をもたらすでしょう。
-                        </p>
-                        <p>
-                            日々の生活において、自分自身の内なる声に耳を傾け、
-                            宇宙のリズムと調和しながら歩むことを心がけてください。
-                            あなたの人生は、まさに宇宙の壮大な計画の一部なのです。
-                        </p>
-                    </div>
-                </section>
-
-                <!-- 結語 -->
-                <section class="report-section">
-                    <p style="text-align: center; font-style: italic; color: var(--primary-gold); margin-top: 3rem;">
-                        〜 このレポートが{{ name }}様の人生の羅針盤となることを願って 〜
-                    </p>
-                </section>
+        <section class="section">
+            <h2 class="section-title">体質の特徴</h2>
+            <div class="content">
+                <p>
+                    太陽が{{ celestial_data.sun.sign }}にあることから、
+                    {% if celestial_data.sun.element == '火' %}活動的で情熱的な
+                    {% elif celestial_data.sun.element == '地' %}実践的で堅実な
+                    {% elif celestial_data.sun.element == '風' %}知的で社交的な
+                    {% else %}感受性豊かで直感的な
+                    {% endif %}基本体質を持っています。
+                    
+                    月が{{ celestial_data.moon.sign }}にあることで、
+                    {% if celestial_data.moon.element == '火' %}衝動的で率直な
+                    {% elif celestial_data.moon.element == '地' %}慎重で保守的な
+                    {% elif celestial_data.moon.element == '風' %}柔軟で適応力のある
+                    {% else %}共感的で養育的な
+                    {% endif %}感情的反応が加わります。
+                </p>
+                <p>
+                    {{ name }}様の主要な特質として、{{ archetype.key_traits[:2]|join('、') }}が挙げられます。
+                    これらの特質は、日常生活や人間関係において重要な役割を果たし、あなたの独自性を形成しています。
+                </p>
             </div>
+        </section>
 
-            <!-- ナビゲーション -->
-            <div style="text-align: center; margin-top: 3rem;">
-                <a href="/" class="back-link">
-                    <span>🔄</span>
-                    <span>新しい鑑定を行う</span>
-                </a>
+        <section class="section">
+            <h2 class="section-title">7天体の詳細分析</h2>
+            <div class="planet-analysis">
+                <div class="planet-detail">
+                    <strong>太陽 - {{ celestial_data.sun.sign }} {{ "%.2f"|format(celestial_data.sun.degree) }}度</strong><br>
+                    生命力と自己表現：{{ name }}様の中核的なアイデンティティは
+                    {% if celestial_data.sun.element == '火' %}創造的で独立心が強く
+                    {% elif celestial_data.sun.element == '地' %}実践的で信頼性が高く
+                    {% elif celestial_data.sun.element == '風' %}知的で コミュニケーション能力に優れ
+                    {% else %}感情豊かで直感的で
+                    {% endif %}あります。
+                    {% if celestial_data.sun.degree <= 10 %}初期度数は純粋で未熟なエネルギー
+                    {% elif celestial_data.sun.degree <= 20 %}中期度数はバランスと発展
+                    {% else %}後期度数は成熟と統合
+                    {% endif %}を示しています。
+                </div>
+
+                <div class="planet-detail">
+                    <strong>月 - {{ celestial_data.moon.sign }} {{ "%.2f"|format(celestial_data.moon.degree) }}度</strong><br>
+                    感情と無意識：
+                    {% if celestial_data.moon.element == '火' %}即座に反応し、感情を直接的に表現
+                    {% elif celestial_data.moon.element == '地' %}感情を安定させ、実際的なニーズに焦点
+                    {% elif celestial_data.moon.element == '風' %}感情を理性化し、客観的な視点を保持
+                    {% else %}深い感情的つながりと共感能力
+                    {% endif %}する傾向があります。
+                </div>
+
+                <div class="planet-detail">
+                    <strong>水星 - {{ celestial_data.mercury.sign }} {{ "%.2f"|format(celestial_data.mercury.degree) }}度</strong><br>
+                    思考とコミュニケーション：{{ celestial_data.mercury.element }}の元素により、
+                    {% if celestial_data.mercury.element == '火' %}直感的で素早い思考
+                    {% elif celestial_data.mercury.element == '地' %}実践的で詳細な分析
+                    {% elif celestial_data.mercury.element == '風' %}論理的で多角的な視点
+                    {% else %}感情的で想像力豊かな表現
+                    {% endif %}が特徴です。
+                </div>
+
+                <div class="planet-detail">
+                    <strong>金星 - {{ celestial_data.venus.sign }} {{ "%.2f"|format(celestial_data.venus.degree) }}度</strong><br>
+                    愛と美：{{ celestial_data.venus.element }}の元素は、
+                    {% if celestial_data.venus.element == '火' %}情熱的で冒険的な愛情表現
+                    {% elif celestial_data.venus.element == '地' %}安定した実際的な関係性
+                    {% elif celestial_data.venus.element == '風' %}知的で社交的な交流
+                    {% else %}深い感情的なつながり
+                    {% endif %}を求めます。
+                </div>
+
+                <div class="planet-detail">
+                    <strong>火星 - {{ celestial_data.mars.sign }} {{ "%.2f"|format(celestial_data.mars.degree) }}度</strong><br>
+                    行動とエネルギー：{{ celestial_data.mars.element }}の元素により、
+                    {% if celestial_data.mars.element == '火' %}直接的で積極的な行動
+                    {% elif celestial_data.mars.element == '地' %}着実で持続的な努力
+                    {% elif celestial_data.mars.element == '風' %}戦略的で知的なアプローチ
+                    {% else %}感情に基づいた直感的な行動
+                    {% endif %}を取ります。
+                </div>
+
+                <div class="planet-detail">
+                    <strong>木星 - {{ celestial_data.jupiter.sign }} {{ "%.2f"|format(celestial_data.jupiter.degree) }}度</strong><br>
+                    成長と拡大：{{ celestial_data.jupiter.element }}の元素は、
+                    {% if celestial_data.jupiter.element == '火' %}冒険と探求による成長
+                    {% elif celestial_data.jupiter.element == '地' %}実践的な達成による拡大
+                    {% elif celestial_data.jupiter.element == '風' %}知識と交流による発展
+                    {% else %}感情的な深まりによる成熟
+                    {% endif %}を促進します。
+                </div>
+
+                <div class="planet-detail">
+                    <strong>土星 - {{ celestial_data.saturn.sign }} {{ "%.2f"|format(celestial_data.saturn.degree) }}度</strong><br>
+                    責任と構造：{{ celestial_data.saturn.element }}の元素により、
+                    {% if celestial_data.saturn.element == '火' %}自己主張と独立性の課題
+                    {% elif celestial_data.saturn.element == '地' %}物質的安定と実践の課題
+                    {% elif celestial_data.saturn.element == '風' %}コミュニケーションと理解の課題
+                    {% else %}感情的成熟と境界の課題
+                    {% endif %}に取り組みます。
+                </div>
             </div>
-        </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">四元素バランス分析</h2>
+            <div class="element-balance">
+                {% set element_count = {'火': 0, '地': 0, '風': 0, '水': 0} %}
+                {% set element_planets = {'火': [], '地': [], '風': [], '水': []} %}
+                {% for planet_name, planet_data in celestial_data.items() %}
+                    {% set _ = element_count.update({planet_data.element: element_count[planet_data.element] + 1}) %}
+                    {% set _ = element_planets[planet_data.element].append(planet_name) %}
+                {% endfor %}
+                {% set sorted_elements = element_count|dictsort(false, 'value')|reverse %}
+                
+                {% for element_name, count in sorted_elements %}
+                <div class="element-box">
+                    <div class="element-name">{{ element_name }}の元素: {{ count }}個</div>
+                    <div class="element-count">{{ element_planets[element_name]|join('、') }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="content">
+                <p>
+                    {{ name }}様の天体配置において、最も強い元素は{{ sorted_elements[0][0] }}（{{ sorted_elements[0][1] }}個の天体）です。
+                    これは{{ element_planets[sorted_elements[0][0]]|join('、') }}が該当し、あなたの性格と体質の基調を形成しています。
+                </p>
+                <p>
+                    二番目に強い{{ sorted_elements[1][0] }}の元素（{{ sorted_elements[1][1] }}個）は、
+                    {{ element_planets[sorted_elements[1][0]]|join('、') }}に現れており、補完的な役割を果たしています。
+                </p>
+                <p>
+                    {{ sorted_elements[2][0] }}の元素（{{ sorted_elements[2][1] }}個）は{{ element_planets[sorted_elements[2][0]]|join('、') }}に、
+                    {{ sorted_elements[3][0] }}の元素（{{ sorted_elements[3][1] }}個）は{{ element_planets[sorted_elements[3][0]]|join('、') }}に現れています。
+                </p>
+                <p>
+                    この四元素バランスから、{{ archetype.name }}タイプとしての特徴がより明確になります。
+                    太陽の{{ celestial_data.sun.element }}と月の{{ celestial_data.moon.element }}の組み合わせは、
+                    意識と無意識の調和を示し、
+                    {% if sorted_elements[1][0] == '火' %}活動的なエネルギーの補強
+                    {% elif sorted_elements[1][0] == '地' %}実践的な安定性の確保
+                    {% elif sorted_elements[1][0] == '風' %}知的な柔軟性の発揮
+                    {% else %}感情的な深みの探求
+                    {% endif %}を可能にしています。
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">健康と体質への示唆</h2>
+            <div class="content">
+                <p>
+                    {{ name }}様の体質は{{ archetype.temperament }}であり、
+                    {% if sorted_elements[1][0] == '火' %}高い代謝率と活発な循環系
+                    {% elif sorted_elements[1][0] == '地' %}安定した消化系と骨格系
+                    {% elif sorted_elements[1][0] == '風' %}敏感な神経系と呼吸器系
+                    {% else %}繊細な水分代謝とリンパ系
+                    {% endif %}に特徴があります。
+                    日常的な健康管理では、これらの系統に特に注意を払うことが重要です。
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">人生の方向性</h2>
+            <div class="content">
+                <p>
+                    {{ name }}様の「{{ archetype.name }}」という原型は、人生において
+                    {% if archetype.element_combination == '火×火' %}情熱的なリーダーシップと創造的な自己表現
+                    {% elif archetype.element_combination == '火×地' %}実践的な目標達成と持続的な成長
+                    {% elif archetype.element_combination == '火×風' %}革新的なアイデアと社会的な影響力
+                    {% elif archetype.element_combination == '火×水' %}直感的な洞察と感情的な変容
+                    {% elif archetype.element_combination == '地×火' %}着実な進歩と情熱的な献身
+                    {% elif archetype.element_combination == '地×地' %}物質的な安定と実践的な知恵
+                    {% elif archetype.element_combination == '地×風' %}論理的な構築と知的な達成
+                    {% elif archetype.element_combination == '地×水' %}感情的な安定と実践的な養育
+                    {% elif archetype.element_combination == '風×火' %}知的な革新と情熱的なコミュニケーション
+                    {% elif archetype.element_combination == '風×地' %}実践的な知識と体系的な思考
+                    {% elif archetype.element_combination == '風×風' %}多様な視点と知的な探求
+                    {% elif archetype.element_combination == '風×水' %}感情的な理解と直感的なコミュニケーション
+                    {% elif archetype.element_combination == '水×火' %}感情的な情熱と直感的な行動
+                    {% elif archetype.element_combination == '水×地' %}感情的な安定と実践的な配慮
+                    {% elif archetype.element_combination == '水×風' %}感情的な表現と知的な理解
+                    {% else %}深い感情的な洞察と霊的な成長
+                    {% endif %}を追求することが重要です。
+                </p>
+                <p>
+                    金星が{{ celestial_data.venus.sign }}の{{ "%.0f"|format(celestial_data.venus.degree) }}度にあることは、
+                    {% if celestial_data.venus.element == '火' %}情熱的で冒険的な
+                    {% elif celestial_data.venus.element == '地' %}安定した実際的な
+                    {% elif celestial_data.venus.element == '風' %}知的で社交的な
+                    {% else %}深い感情的な
+                    {% endif %}価値観と美意識を示しています。
+                    
+                    これは人間関係において
+                    {% if celestial_data.venus.element == '火' %}率直で熱意ある交流
+                    {% elif celestial_data.venus.element == '地' %}信頼できる長期的な絆
+                    {% elif celestial_data.venus.element == '風' %}知的刺激とコミュニケーション
+                    {% else %}深い感情的なつながり
+                    {% endif %}を求める傾向を生み出します。
+                </p>
+                <p>
+                    {% if archetype.temperament %}{{ archetype.temperament }}な気質{% else %}あなたの気質{% endif %}は、
+                    火星が{{ celestial_data.mars.sign }}の{{ "%.0f"|format(celestial_data.mars.degree) }}度、
+                    土星が{{ celestial_data.saturn.sign }}の{{ "%.0f"|format(celestial_data.saturn.degree) }}度にあることで、
+                    {% if celestial_data.mars.element == '火' and celestial_data.saturn.element == '火' %}持続的な情熱と自己規律
+                    {% elif celestial_data.mars.element == '地' and celestial_data.saturn.element == '地' %}着実な努力と長期的な計画
+                    {% elif celestial_data.mars.element == celestial_data.saturn.element %}調和的な行動と責任感
+                    {% else %}多様なアプローチと柔軟な対応
+                    {% endif %}を可能にしています。
+                </p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">まとめ</h2>
+            <div class="content">
+                <p>
+                    {{ name }}様は「{{ archetype.name }}」として、{{ archetype.temperament }}な性質と
+                    {{ archetype.element_combination }}の独特な組み合わせを持っています。
+                    
+                    この原型は
+                    {% if archetype.element_combination == '火×火' %}純粋な情熱と創造力
+                    {% elif archetype.element_combination == '火×地' %}実践的な行動力
+                    {% elif archetype.element_combination == '火×風' %}革新的な思考
+                    {% elif archetype.element_combination == '火×水' %}直感的な洞察
+                    {% elif archetype.element_combination == '地×火' %}着実な進歩
+                    {% elif archetype.element_combination == '地×地' %}確固たる安定性
+                    {% elif archetype.element_combination == '地×風' %}論理的な構築力
+                    {% elif archetype.element_combination == '地×水' %}実践的な共感
+                    {% elif archetype.element_combination == '風×火' %}知的な革新
+                    {% elif archetype.element_combination == '風×地' %}体系的な思考
+                    {% elif archetype.element_combination == '風×風' %}純粋な知性
+                    {% elif archetype.element_combination == '風×水' %}感情的な理解
+                    {% elif archetype.element_combination == '水×火' %}感情的な変容
+                    {% elif archetype.element_combination == '水×地' %}感情的な安定
+                    {% elif archetype.element_combination == '水×風' %}直感的な表現
+                    {% else %}深い感情的な知恵
+                    {% endif %}を体現しています。
+                </p>
+                <p>
+                    この基本レポートで示された傾向と特質を理解することで、あなたは自己の潜在能力を最大限に活かし、
+                    より充実した人生を送ることができるでしょう。
+                </p>
+                <p>
+                    「{{ archetype.name }}」の原型を持つあなたには、
+                    {% if archetype.element_combination.startswith('火') %}情熱的なリーダーシップ
+                    {% elif archetype.element_combination.startswith('地') %}実践的な達成力
+                    {% elif archetype.element_combination.startswith('風') %}知的な革新性
+                    {% else %}感情的な深い理解力
+                    {% endif %}という特別な才能があります。
+                    これらの才能を活かし、あなた独自の道を歩んでください。
+                </p>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p style="font-style: italic; color: #7f8c8d; margin-bottom: 20px;">
+                このレポートは約2,000文字の基本分析です。<br>
+                より詳細な分析をご希望の場合は、12,000文字のASTRO-BODY TYPE REPORTをご覧ください。
+            </p>
+            <a href="/detailed_report?name={{ name|urlencode }}&archetype={{ archetype.name|urlencode }}" class="next-report-link">
+                詳細レポートを見る →
+            </a>
+        </footer>
     </div>
 </body>
 </html>
