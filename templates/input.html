@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>次世代占星医学体質鑑定システム - 入力フォーム</title>
+    <title>ASTRO BODY TYPE ANALICIS - 入力フォーム</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
@@ -13,10 +13,10 @@
         <header class="header">
             <h1 class="main-title">
                 <span class="title-icon">✦</span>
-                次世代占星医学体質鑑定システム
+                ASTRO BODY TYPE ANALICIS
                 <span class="title-icon">✦</span>
             </h1>
-            <p class="subtitle">あなただけの体質と健康傾向を宇宙の叡智から読み解きます</p>
+            <p class="subtitle">あなただけの体質と健康傾向を伝統的占星術で読み解きます</p>
         </header>
 
         {% if error %}
@@ -130,7 +130,7 @@
 
                 <small class="help-text">
                     <span class="info-icon">ℹ️</span>
-                    正確な出生時刻は、より精密な鑑定結果をもたらします
+                    わからない方は正午12時で入力して下さい
                 </small>
             </fieldset>
 
@@ -176,7 +176,7 @@
                     <div class="zodiac-spinner"></div>
                 </div>
                 <h2 class="loading-title">天体位置を計算中...</h2>
-                <p class="loading-message" id="loadingMessage">あなたの宇宙的な体質を分析しています</p>
+                <p class="loading-message" id="loadingMessage">あなたの体質を分析しています</p>
                 <div class="loading-progress">
                     <div class="progress-bar" id="progressBar"></div>
                 </div>
