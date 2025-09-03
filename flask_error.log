@@ -299,3 +299,208 @@ jinja2.exceptions.UndefinedError: list_reverseiterator object has no element 0
  * Restarting with watchdog (inotify)
  * Debugger is active!
  * Debugger PIN: 903-792-757
+10.12.63.232 - - [03/Sep/2025 03:57:24] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 03:57:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:57:24] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:57:46] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 03:57:46] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:57:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 03:57:53] "GET /basic_report?name=小田剛&archetype=間欠泉 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 03:58:21] "GET /detailed_report?name=小田剛&archetype=間欠泉 HTTP/1.1" 200 -
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/test_report.py', reloading
+ * Detected change in '/home/user/webapp/test_report.py', reloading
+ * Detected change in '/home/user/webapp/test_report.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/test_report.py', reloading
+127.0.0.1 - - [03/Sep/2025 04:48:46] "POST /result HTTP/1.1" 200 -
+127.0.0.1 - - [03/Sep/2025 04:48:46] "[35m[1mGET /detailed_report?name=山田%20太郎&archetype=超新星 HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/webapp/app.py", line 626, in detailed_report_page
+    report_content = generate_comprehensive_report(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/webapp/app.py", line 705, in generate_comprehensive_report
+    chapter3 = generate_medical_constitution(name, archetype, celestial_data)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/webapp/app.py", line 888, in generate_medical_constitution
+    2. 不足しやすい体液：{get_deficient_humor(archetype['body_type'])}
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'get_deficient_humor' is not defined. Did you mean: 'get_dominant_humor'?
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+127.0.0.1 - - [03/Sep/2025 04:49:13] "POST /result HTTP/1.1" 200 -
+127.0.0.1 - - [03/Sep/2025 04:49:13] "GET /detailed_report?name=山田%20太郎&archetype=超新星 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:50:58] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:50:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:50:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:51:29] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:51:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:51:29] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:51:34] "GET /basic_report?name=織田剛&archetype=間欠泉 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:51:38] "GET /detailed_report?name=織田剛&archetype=間欠泉 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:54:30] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:54:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:54:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:55:06] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:55:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:55:06] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:55:34] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:55:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:55:34] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:56:12] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:56:13] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:56:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:56:19] "GET /basic_report?name=小田翔子&archetype=庭園 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:56:26] "GET /detailed_report?name=小田翔子&archetype=庭園 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:57:12] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:57:12] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:57:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:57:20] "[33mGET /robots.txt HTTP/1.1[0m" 404 -
+10.12.63.232 - - [03/Sep/2025 04:57:20] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:57:33] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:57:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:57:33] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:57:41] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:58:22] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:58:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:58:22] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 04:58:26] "GET /basic_report?name=小田光織&archetype=サイクロン HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 04:58:32] "GET /detailed_report?name=小田光織&archetype=サイクロン HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:47] "[33mGET /robots.txt HTTP/1.1[0m" 404 -
+10.12.63.232 - - [03/Sep/2025 05:02:47] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:49] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:50] "GET /static/css/style.css HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:50] "GET /static/js/main.js HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:50] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+10.12.63.232 - - [03/Sep/2025 05:02:55] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:56] "GET /static/css/style.css HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:56] "GET /static/js/main.js HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:02:57] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+10.12.63.232 - - [03/Sep/2025 05:03:00] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:00] "GET /static/css/style.css HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:00] "GET /static/js/main.js HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+10.12.63.232 - - [03/Sep/2025 05:03:28] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:03:28] "GET /static/css/result.css HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:43] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:03:43] "GET /static/css/result.css HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:50] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:03:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:03:50] "GET /static/css/result.css HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:04:07] "GET /detailed_report?name=小田%20翔子&archetype=庭園 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:04:16] "GET /detailed_report?name=荒川%20希実&archetype=伝道師 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:04:22] "GET /detailed_report?name=菅生麻美&archetype=雨雲 HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:05:09] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:05:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:05:09] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:05:50] "POST /result HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:05:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:05:50] "[36mGET /static/css/result.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:47:12] "GET / HTTP/1.1" 200 -
+10.12.63.232 - - [03/Sep/2025 05:47:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+10.12.63.232 - - [03/Sep/2025 05:47:12] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+127.0.0.1 - - [03/Sep/2025 05:53:33] "POST /result HTTP/1.1" 200 -
+127.0.0.1 - - [03/Sep/2025 05:53:33] "GET /detailed_report?name=山田%20太郎&archetype=超新星 HTTP/1.1" 200 -
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757

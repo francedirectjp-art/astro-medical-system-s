@@ -3,9 +3,131 @@ import ephem
 import math
 from datetime import datetime, timedelta
 import json
+import os
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-for-session-management-change-in-production'
+
+# サビアンシンボルデータのグローバル変数
+SABIAN_SYMBOLS = None
+
+def load_sabian_symbols():
+    """サビアンシンボルをJSONファイルから読み込む"""
+    global SABIAN_SYMBOLS
+    if SABIAN_SYMBOLS is None:
+        try:
+            with open('sabian_symbols.json', 'r', encoding='utf-8') as f:
+                SABIAN_SYMBOLS = json.load(f)
+        except FileNotFoundError:
+            print("サビアンシンボルファイルが見つかりません")
+            SABIAN_SYMBOLS = []
+    return SABIAN_SYMBOLS
+
+def get_sabian_for_position(sign, degree):
+    """特定の星座と度数に対応するサビアンシンボルを取得"""
+    symbols = load_sabian_symbols()
+    
+    # 星座名を英語に変換
+    sign_mapping = {
+        '牡羊座': 'aries', '牡牛座': 'taurus', '双子座': 'gemini',
+        '蟹座': 'cancer', '獅子座': 'leo', '乙女座': 'virgo',
+        '天秤座': 'libra', '蠍座': 'scorpio', '射手座': 'sagittarius',
+        '山羊座': 'capricorn', '水瓶座': 'aquarius', '魚座': 'pisces'
+    }
+    
+    sign_id = sign_mapping.get(sign)
+    if not sign_id:
+        return None
+    
+    # サビアンシンボルは切り上げ度数を使用（例：0.1度→1度、15.7度→16度）
+    sabian_degree = math.ceil(degree) if degree > 0 else 1
+    sabian_degree = min(30, max(1, sabian_degree))  # 1-30の範囲に制限
+    
+    # 該当する星座のシンボルを検索
+    for sign_data in symbols:
+        if sign_data['sign_id'] == sign_id:
+            for symbol in sign_data['degrees']:
+                if symbol['degree'] == sabian_degree:
+                    return {
+                        'sign': sign_data['sign_ja'],
+                        'degree': sabian_degree,
+                        'title': symbol['title_ja'],
+                        'keyword': symbol['keyword']
+                    }
+    return None
+
+def generate_sabian_talent_interpretation(planet_name, sabian_symbol, element):
+    """サビアンシンボルから才能の解釈を生成（霊的な表現を避け、実践的な才能にフォーカス）"""
+    
+    if not sabian_symbol:
+        return ""
+    
+    # 惑星別の才能領域
+    planet_talents = {
+        '太陽': '核心的な才能と人生の目的',
+        '月': '感情的知性と適応能力', 
+        '水星': '知的能力とコミュニケーション',
+        '金星': '審美眼と人間関係の才能',
+        '火星': '実行力と達成能力',
+        '木星': '成長と発展の可能性',
+        '土星': '専門性と持続力'
+    }
+    
+    talent_domain = planet_talents.get(planet_name, '潜在能力')
+    
+    # エレメント別の表現スタイル
+    element_styles = {
+        '火': '直感的で創造的な',
+        '地': '実践的で具体的な',
+        '風': '知的で革新的な',
+        '水': '感受性豊かで洞察力のある'
+    }
+    
+    style = element_styles.get(element, '独特な')
+    
+    interpretation = f"""
+{sabian_symbol['sign']}{sabian_symbol['degree']}度のサビアンシンボル「{sabian_symbol['title']}」は、
+{planet_name}が司る{talent_domain}において、「{sabian_symbol['keyword']}」という特別な才能を示しています。
+
+これは{style}方法で発揮され、以下のような具体的な能力として現れます：
+
+• 職業的には、{get_vocational_talent(sabian_symbol['keyword'], planet_name)}
+• 対人関係では、{get_interpersonal_talent(sabian_symbol['keyword'], element)}
+• 創造活動では、{get_creative_talent(sabian_symbol['keyword'], style)}
+
+この才能は訓練と経験によってさらに洗練され、専門的なスキルへと発展する可能性を秘めています。
+"""
+    
+    return interpretation
+
+def get_vocational_talent(keyword, planet):
+    """職業的才能の具体例を生成"""
+    # キーワードに基づいて職業的才能を推定
+    if '新' in keyword or '誕生' in keyword:
+        return "革新的なプロジェクトの立ち上げや、新しい分野の開拓に優れた能力"
+    elif '統合' in keyword or '調和' in keyword:
+        return "チームをまとめ、異なる要素を統合する管理能力やコーディネート力"
+    elif '変容' in keyword or '変化' in keyword:
+        return "組織改革や事業転換を導くチェンジマネジメントの才能"
+    elif '達成' in keyword or '完成' in keyword:
+        return "プロジェクトを完遂させる実行力と、目標達成への強いコミットメント"
+    else:
+        return "独自の視点から価値を創造し、新たな可能性を開く能力"
+
+def get_interpersonal_talent(keyword, element):
+    """対人関係の才能を生成"""
+    element_approach = {
+        '火': '情熱的で励ましに満ちたアプローチ',
+        '地': '信頼と安定を提供する堅実なサポート',
+        '風': '知的な刺激と新鮮な視点の提供',
+        '水': '深い共感と感情的な理解'
+    }
+    
+    return f"{element_approach.get(element, '独自の方法')}により、{keyword}に関連した人間関係の構築力"
+
+def get_creative_talent(keyword, style):
+    """創造的才能を生成"""
+    return f"{keyword}をテーマとした{style}表現により、独創的な作品や解決策を生み出す力"
 
 # 47都道府県の座標データ
 PREFECTURE_COORDINATES = {
@@ -695,8 +817,8 @@ def calculate_quality_distribution(celestial_data):
 def generate_comprehensive_report(name, archetype, celestial_data, sun_element, moon_element):
     """12,000文字以上の包括的レポートを生成"""
     
-    # 第1章：アーキタイプの深層分析（2,500文字）
-    chapter1 = generate_archetype_analysis(name, archetype, sun_element, moon_element)
+    # 第1章：アーキタイプの深層分析（サビアンシンボルを含む、2,500文字以上）
+    chapter1 = generate_archetype_analysis(name, archetype, sun_element, moon_element, celestial_data)
     
     # 第2章：惑星配置の詳細解釈（2,500文字）
     chapter2 = generate_planetary_interpretation(name, celestial_data)
@@ -725,7 +847,7 @@ def generate_comprehensive_report(name, archetype, celestial_data, sun_element, 
         'full_text': full_text
     }
 
-def generate_archetype_analysis(name, archetype, sun_element, moon_element):
+def generate_archetype_analysis(name, archetype, sun_element, moon_element, celestial_data=None):
     """第1章：アーキタイプの深層分析を生成（2,500文字）"""
     
     element_meanings = {
@@ -778,17 +900,65 @@ def generate_archetype_analysis(name, archetype, sun_element, moon_element):
 
 - 円熟期（50歳〜）：両方の要素が統合され、独自の wisdom（知恵）を獲得します。他者への貢献と自己実現が自然に一致する境地に至ります。
 
+■ 太陽と月のサビアンシンボルが示す核心的才能
+
+{name}様の太陽と月の正確な位置が示すサビアンシンボルは、最も重要な才能の指標です：
+"""
+    
+    # 太陽と月のサビアンシンボルを取得して追加
+    if celestial_data:
+        sun_data = celestial_data.get('sun', {})
+        moon_data = celestial_data.get('moon', {})
+        
+        if sun_data:
+            sun_sabian = get_sabian_for_position(sun_data.get('sign'), sun_data.get('degree', 0))
+            if sun_sabian:
+                text += f"""
+
+★ 太陽のサビアンシンボル：{sun_sabian['sign']}{sun_sabian['degree']}度
+「{sun_sabian['title']}」
+キーワード：{sun_sabian['keyword']}
+
+このシンボルは、{name}様の意識的な自己表現と人生の目的において、「{sun_sabian['keyword']}」という特別な才能を示しています。
+これは{sun_element}のエネルギーを通して、特にキャリアや社会的活動において顕著に現れます。
+"""
+        
+        if moon_data:
+            moon_sabian = get_sabian_for_position(moon_data.get('sign'), moon_data.get('degree', 0))
+            if moon_sabian:
+                text += f"""
+
+★ 月のサビアンシンボル：{moon_sabian['sign']}{moon_sabian['degree']}度
+「{moon_sabian['title']}」
+キーワード：{moon_sabian['keyword']}
+
+このシンボルは、{name}様の無意識的な感情パターンと内的才能において、「{moon_sabian['keyword']}」という潜在力を示しています。
+これは{moon_element}の性質を通して、特に対人関係や内的な創造活動において発揮されます。
+"""
+        
+        text += f"""
+
+これらのサビアンシンボルが示す才能は、{archetype['name']}というアーキタイプを通して統合され、
+{name}様独自の才能プロフィールを形成しています。これらは訓練と経験によってさらに洗練され、
+専門的なスキルや独創的な表現へと発展する可能性を秘めています。
+"""
+    
+    text += f"""
+
 ■ 同じアーキタイプを持つ歴史的人物との共鳴
 
-歴史上、{archetype['name']}的な資質を持つとされる人物たちは、それぞれの時代において革新的な貢献をしてきました。彼らに共通するのは、既存の枠組みにとらわれない独創性と、深い内的確信に基づく行動力です。
+歴史上、{archetype['name']}的な資質を持つとされる人物たちは、それぞれの時代において革新的な貢献をしてきました。
+彼らに共通するのは、既存の枠組みにとらわれない独創性と、深い内的確信に基づく行動力です。
 
-{name}様もまた、この系譜に連なる存在として、独自の方法で世界に貢献する可能性を秘めています。それは必ずしも歴史に名を残すような大きな功績である必要はありません。日々の生活の中で、{archetype['name']}としての本質を生きることそのものが、周囲に大きな影響を与えているのです。
+{name}様もまた、この系譜に連なる存在として、独自の方法で世界に貢献する可能性を秘めています。
+それは必ずしも歴史に名を残すような大きな功績である必要はありません。
+日々の生活の中で、{archetype['name']}としての本質を生きることそのものが、周囲に大きな影響を与えているのです。
 """
     
     return text
 
 def generate_planetary_interpretation(name, celestial_data):
-    """第2章：惑星配置の詳細解釈を生成（2,500文字）"""
+    """第2章：惑星配置の詳細解釈を生成（サビアンシンボルを含む、2,500文字以上）"""
     
     planet_meanings = {
         'sun': {'name': '太陽', 'domain': '本質的自己、生命力、創造性', 'medical': '心臓、背骨、目'},
@@ -801,11 +971,11 @@ def generate_planetary_interpretation(name, celestial_data):
     }
     
     text = f"""
-【第2章：天体配置が示す多層的な個性の解読】
+【第2章：天体配置とサビアンシンボルが示す才能の宝庫】
 
-{name}様の出生時の天体配置は、宇宙的な観点から見た個性の青写真です。各惑星が特定の星座に位置することで、それぞれ固有のエネルギーパターンが形成されています。
+{name}様の出生時の天体配置は、宇宙的な観点から見た個性の青写真です。各惑星が特定の星座の特定の度数に位置することで、それぞれ固有のエネルギーパターンと特別な才能を形成しています。特に注目すべきは、各惑星の正確な度数が示すサビアンシンボルです。これらは{name}様の隠された才能と可能性を具体的に示しています。
 
-■ 7惑星の詳細分析
+■ 7惑星の詳細分析とサビアンシンボルが示す才能
 """
     
     for planet_key, planet_data in celestial_data.items():
@@ -815,6 +985,9 @@ def generate_planetary_interpretation(name, celestial_data):
             element = planet_data.get('element', '不明')
             degree = planet_data.get('degree', 0)
             quality = planet_data.get('quality', '不明')
+            
+            # サビアンシンボルを取得
+            sabian = get_sabian_for_position(sign, degree)
             
             text += f"""
 
@@ -826,7 +999,17 @@ def generate_planetary_interpretation(name, celestial_data):
 {pm['name']}が{sign}に位置していることは、{name}様の{pm['domain']}に関して、{element}の性質が強く現れることを示しています。{sign}の{degree:.1f}度という具体的な位置は、この星座の{get_degree_interpretation(degree)}を強調しています。
 
 医学的観点から見ると、{pm['name']}は{pm['medical']}と関連しており、これらの器官や機能に{element}的な特徴が現れやすいことを示唆しています。例えば、{get_medical_tendency(element, pm['medical'])}といった傾向が考えられます。
-
+"""
+            
+            # サビアンシンボルの才能解釈を追加
+            if sabian:
+                sabian_interpretation = generate_sabian_talent_interpretation(pm['name'], sabian, element)
+                text += f"""
+★ サビアンシンボルが示す特別な才能：
+{sabian_interpretation}
+"""
+            
+            text += f"""
 日常生活では、この配置は{get_daily_manifestation(pm['name'], sign, element)}として現れることが多いでしょう。
 """
     
@@ -1384,6 +1567,11 @@ def generate_epilogue(name, archetype):
 願わくば、この占星医学的な洞察が、{name}様の人生により深い意味と方向性をもたらし、健康と幸福、そして魂の充足への道を照らす光となりますように。
 
 織田先生の16原型論に基づく、{name}様専用のASTRO-MEDICAL REPORTを終えるにあたり、宇宙の祝福と共に。
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+監修：織田剛
+ASTRO-MEDICAL SYSTEM © 2024
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
     
     return text
