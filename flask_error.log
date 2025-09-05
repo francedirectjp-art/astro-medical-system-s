@@ -1093,3 +1093,33 @@ ModuleNotFoundError: No module named 'flask'
 10.12.89.38 - - [05/Sep/2025 01:46:35] "GET /detailed_report HTTP/1.1" 200 -
 10.12.89.38 - - [05/Sep/2025 01:46:35] "GET /static/css/detailed_report_unified.css HTTP/1.1" 200 -
 10.12.89.38 - - [05/Sep/2025 01:46:36] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)

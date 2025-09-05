@@ -2075,4 +2075,6 @@ if __name__ == '__main__':
     # Railway環境では環境変数PORTを使用
     import os
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    # Production環境ではdebug=Falseに
+    debug_mode = os.environ.get('FLASK_ENV', 'production') == 'development'
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
