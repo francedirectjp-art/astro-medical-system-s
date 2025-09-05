@@ -198,25 +198,35 @@
                             </p>
                             
                             <div class="sabian-box">
-                                <h5 class="sabian-title">★ 太陽のサビアンシンボル：{{ celestial_data.sun.sign }}{{ (celestial_data.sun.degree|round)|int }}度</h5>
+                                <h5 class="sabian-title">★ 太陽のサビアンシンボル：{{ celestial_data.sun.sign }}{{ celestial_data.sun.sabian.degree if celestial_data.sun.sabian else (celestial_data.sun.degree|round)|int }}度</h5>
                                 <p class="sabian-text">
+                                    {% if celestial_data.sun.sabian %}
+                                    「{{ celestial_data.sun.sabian.title }}」<br>
+                                    キーワード：{{ celestial_data.sun.sabian.keyword }}
+                                    {% else %}
                                     「サビアンシンボルのタイトル」<br>
                                     キーワード：特別な才能のキーワード
+                                    {% endif %}
                                 </p>
                                 <p class="content-text">
-                                    このシンボルは、{{ name }}様の意識的な自己表現と人生の目的において、特別な才能を示しています。
+                                    このシンボルは、{{ name }}様の意識的な自己表現と人生の目的において、{% if celestial_data.sun.sabian %}「{{ celestial_data.sun.sabian.keyword }}」という{% endif %}特別な才能を示しています。
                                     これは{{ celestial_data.sun.element }}のエネルギーを通して、特にキャリアや社会的活動において顕著に現れます。
                                 </p>
                             </div>
                             
                             <div class="sabian-box">
-                                <h5 class="sabian-title">★ 月のサビアンシンボル：{{ celestial_data.moon.sign }}{{ (celestial_data.moon.degree|round)|int }}度</h5>
+                                <h5 class="sabian-title">★ 月のサビアンシンボル：{{ celestial_data.moon.sign }}{{ celestial_data.moon.sabian.degree if celestial_data.moon.sabian else (celestial_data.moon.degree|round)|int }}度</h5>
                                 <p class="sabian-text">
+                                    {% if celestial_data.moon.sabian %}
+                                    「{{ celestial_data.moon.sabian.title }}」<br>
+                                    キーワード：{{ celestial_data.moon.sabian.keyword }}
+                                    {% else %}
                                     「サビアンシンボルのタイトル」<br>
                                     キーワード：特別な才能のキーワード
+                                    {% endif %}
                                 </p>
                                 <p class="content-text">
-                                    このシンボルは、{{ name }}様の無意識的な感情パターンと内的才能において、潜在力を示しています。
+                                    このシンボルは、{{ name }}様の無意識的な感情パターンと内的才能において、{% if celestial_data.moon.sabian %}「{{ celestial_data.moon.sabian.keyword }}」という{% endif %}潜在力を示しています。
                                     これは{{ celestial_data.moon.element }}の性質を通して、特に対人関係や内的な創造活動において発揮されます。
                                 </p>
                             </div>
@@ -291,8 +301,12 @@
                                         <div class="sabian-box">
                                             <h6 class="sabian-title">★ サビアンシンボルが示す特別な才能：</h6>
                                             <p class="sabian-text">
-                                                {{ planet_data.sign }}{{ (planet_data.degree|round)|int }}度のサビアンシンボルは、
-                                                {{ planet_names[planet_key] }}が司る領域において、特別な才能を示しています。
+                                                {{ planet_data.sign }}{{ planet_data.sabian.degree if planet_data.sabian else (planet_data.degree|round)|int }}度のサビアンシンボル
+                                                {% if planet_data.sabian %}
+                                                「{{ planet_data.sabian.title }}」<br>
+                                                キーワード：{{ planet_data.sabian.keyword }}<br>
+                                                {% endif %}
+                                                {{ planet_names[planet_key] }}が司る領域において、{% if planet_data.sabian %}「{{ planet_data.sabian.keyword }}」という{% endif %}特別な才能を示しています。
                                             </p>
                                             <p class="content-text">
                                                 これは{% if planet_data.element == '火' %}直感的で創造的な{% elif planet_data.element == '地' %}実践的で具体的な{% elif planet_data.element == '風' %}知的で革新的な{% else %}感受性豊かで洞察力のある{% endif %}方法で発揮され、以下のような具体的な能力として現れます：

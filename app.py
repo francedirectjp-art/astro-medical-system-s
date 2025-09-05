@@ -16,10 +16,17 @@ def load_sabian_symbols():
     global SABIAN_SYMBOLS
     if SABIAN_SYMBOLS is None:
         try:
-            with open('sabian_symbols.json', 'r', encoding='utf-8') as f:
+            import os
+            # スクリプトのディレクトリを基準にパスを構築
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            json_path = os.path.join(base_dir, 'sabian_symbols.json')
+            with open(json_path, 'r', encoding='utf-8') as f:
                 SABIAN_SYMBOLS = json.load(f)
         except FileNotFoundError:
             print("サビアンシンボルファイルが見つかりません")
+            SABIAN_SYMBOLS = []
+        except Exception as e:
+            print(f"サビアンシンボル読み込みエラー: {e}")
             SABIAN_SYMBOLS = []
     return SABIAN_SYMBOLS
 
@@ -984,12 +991,20 @@ def detailed_report_page():
             }
             for jp_name, en_name in planet_mapping.items():
                 if jp_name in celestial_positions:
-                    celestial_data[en_name] = {
+                    planet_info = {
                         'sign': celestial_positions[jp_name]['zodiac'],
                         'element': celestial_positions[jp_name]['element'],
                         'degree': celestial_positions[jp_name]['degree_in_sign'],
                         'quality': get_sign_quality(celestial_positions[jp_name]['zodiac'])
                     }
+                    # サビアンシンボルを追加
+                    sabian = get_sabian_for_position(
+                        celestial_positions[jp_name]['zodiac'],
+                        celestial_positions[jp_name]['degree_in_sign']
+                    )
+                    if sabian:
+                        planet_info['sabian'] = sabian
+                    celestial_data[en_name] = planet_info
         except:
             celestial_data = get_default_celestial_data()
     else:
