@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRO BODY TYPE REPORT - {{ name }}様</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_unified.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result_unified.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="elegant-bg"></div>
+    <div class="container">
+        <!-- レポートヘッダー -->
+        <header class="report-header card fade-in">
+            <div class="report-badge">ASTRO BODY TYPE REPORT</div>
+            <h1 class="report-title">{{ name }}様の体質診断サマリー</h1>
+            <div class="accent-line"></div>
+            <p class="report-subtitle text-secondary">占星医学による体質分析レポート</p>
+            
+            <div class="birth-info-elegant">
+                <div class="birth-item">
+                    <span class="birth-label">生年月日</span>
+                    <span class="birth-value">{{ info.jst_datetime }}</span>
+                </div>
+                <div class="birth-item">
+                    <span class="birth-label">出生地</span>
+                    <span class="birth-value">{{ info.location }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 体質原型サマリー -->
+        <section class="section fade-in">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">診断結果：体質原型</h2>
+                </div>
+                <div class="archetype-summary">
+                    <div class="archetype-main">
+                        <h3 class="archetype-name-elegant">{{ info.archetype.name }}</h3>
+                        <div class="archetype-badges">
+                            <span class="badge badge-gold">{{ info.archetype.element_combination }}</span>
+                            <span class="badge badge-secondary">{{ info.archetype.temperament }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="archetype-description">
+                        <p class="lead-text">
+                            {{ name }}様は、{{ info.archetype.name }}タイプと診断されました。
+                            このタイプは{{ info.archetype.temperament }}な気質を持ち、
+                            {{ info.archetype.body_type }}という身体的特徴があります。
+                        </p>
+                        
+                        <div class="key-features">
+                            <h4 class="features-title">主要な特徴</h4>
+                            <ul class="features-list">
+                                <li>強みとなる資質：<span class="text-gold">{{ info.archetype.strength|default('リーダーシップ、決断力') }}</span></li>
+                                <li>体質的特徴：<span class="text-gold">{{ info.archetype.physical|default('活動的、熱産生が高い') }}</span></li>
+                                <li>注意すべき点：<span class="text-gold">{{ info.archetype.caution|default('過労、ストレス管理') }}</span></li>
+                                <li>推奨される生活習慣：<span class="text-gold">{{ info.archetype.lifestyle|default('規則的な運動、十分な休息') }}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7天体配置 -->
+        <section class="section fade-in">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">7天体の詳細配置</h2>
+                </div>
+                <div class="planets-grid">
+                    <!-- 太陽 -->
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">☉</span>
+                            <span class="planet-name">太陽</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['太陽'].zodiac }} {{ data['太陽'].degrees }}°{{ data['太陽'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">生命力・意志</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 月 -->
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">☽</span>
+                            <span class="planet-name">月</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['月'].zodiac }} {{ data['月'].degrees }}°{{ data['月'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">感情・無意識</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 水星 -->
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">☿</span>
+                            <span class="planet-name">水星</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['水星'].zodiac }} {{ data['水星'].degrees }}°{{ data['水星'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">思考・伝達</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 金星 -->
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">♀</span>
+                            <span class="planet-name">金星</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['金星'].zodiac }} {{ data['金星'].degrees }}°{{ data['金星'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">愛情・美意識</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 火星 -->
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">♂</span>
+                            <span class="planet-name">火星</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['火星'].zodiac }} {{ data['火星'].degrees }}°{{ data['火星'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">行動力・情熱</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 木星 -->
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">♃</span>
+                            <span class="planet-name">木星</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['木星'].zodiac }} {{ data['木星'].degrees }}°{{ data['木星'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">拡大・発展</p>
+                        </div>
+                    </div>
+                    
+                    <!-- 土星 -->
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">♄</span>
+                            <span class="planet-name">土星</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['土星'].zodiac }} {{ data['土星'].degrees }}°{{ data['土星'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">制限・課題</p>
+                        </div>
+                    </div>
+                    
+                    <!-- アセンダント (もしあれば) -->
+                    {% if 'ASC' in data %}
+                    <div class="planet-card-compact">
+                        <div class="planet-header-compact">
+                            <span class="planet-icon">AC</span>
+                            <span class="planet-name">アセンダント</span>
+                        </div>
+                        <div class="planet-details">
+                            <p class="planet-position">{{ data['ASC'].zodiac }} {{ data['ASC'].degrees }}°{{ data['ASC'].minutes }}'</p>
+                            <p class="planet-meaning text-muted">外見・第一印象</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- 元素バランス -->
+        <section class="section fade-in">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">元素バランス分析</h2>
+                </div>
+                <div class="element-balance">
+                    <div class="element-chart">
+                        <div class="element-bar">
+                            <span class="element-label">火</span>
+                            <div class="bar-container">
+                                <div class="bar bar-fire" style="width: {{ info.elements.fire|default(25) }}%"></div>
+                            </div>
+                            <span class="element-value">{{ info.elements.fire_count|default(2) }}天体</span>
+                        </div>
+                        <div class="element-bar">
+                            <span class="element-label">地</span>
+                            <div class="bar-container">
+                                <div class="bar bar-earth" style="width: {{ info.elements.earth|default(25) }}%"></div>
+                            </div>
+                            <span class="element-value">{{ info.elements.earth_count|default(2) }}天体</span>
+                        </div>
+                        <div class="element-bar">
+                            <span class="element-label">風</span>
+                            <div class="bar-container">
+                                <div class="bar bar-air" style="width: {{ info.elements.air|default(25) }}%"></div>
+                            </div>
+                            <span class="element-value">{{ info.elements.air_count|default(2) }}天体</span>
+                        </div>
+                        <div class="element-bar">
+                            <span class="element-label">水</span>
+                            <div class="bar-container">
+                                <div class="bar bar-water" style="width: {{ info.elements.water|default(25) }}%"></div>
+                            </div>
+                            <span class="element-value">{{ info.elements.water_count|default(1) }}天体</span>
+                        </div>
+                    </div>
+                    <div class="element-interpretation">
+                        <p class="text-secondary">
+                            あなたの元素バランスは{{ info.dominant_element|default('火') }}の元素が優位です。
+                            これは{{ info.element_meaning|default('活動的でエネルギッシュな体質') }}を示しています。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- アクションボタン -->
+        <section class="section action-section fade-in">
+            <div class="action-buttons-elegant">
+                <a href="/detailed_report" class="btn btn-primary btn-large">
+                    <span>詳細レポートを読む</span>
+                    <small class="btn-subtitle">12,000文字の完全版レポート</small>
+                </a>
+                
+                <div class="secondary-actions">
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        このページを印刷
+                    </button>
+                    <a href="/" class="btn btn-secondary">
+                        新規診断
+                    </a>
+                </div>
+            </div>
+            
+            <div class="report-note text-center mt-lg">
+                <p class="text-muted">
+                    詳細レポートでは、サビアンシンボル分析、7惑星の詳細解釈、<br>
+                    医学的体質論、ホリスティック処方箋、人生設計指針などが含まれます。
+                </p>
+            </div>
+        </section>
+
+        <!-- フッター -->
+        <footer class="report-footer text-center">
+            <div class="divider"></div>
+            <p class="text-muted">監修：織田剛 | ASTRO-MEDICAL REPORT SYSTEM</p>
+        </footer>
+    </div>
+
+    <script>
+        // フェードインアニメーション
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(20px)';
+                    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    
+                    setTimeout(() => {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

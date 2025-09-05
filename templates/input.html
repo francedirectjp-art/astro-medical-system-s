@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ASTRO BODY TYPE ANALICIS - 入力フォーム</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_unified.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="stars"></div>
+    <div class="elegant-bg"></div>
     <div class="container">
-        <header class="header">
+        <header class="header-elegant">
             <h1 class="main-title">
-                <span class="title-icon">✦</span>
                 ASTRO BODY TYPE ANALICIS
-                <span class="title-icon">✦</span>
             </h1>
-            <p class="subtitle">あなただけの体質と健康傾向を伝統的占星術で読み解きます</p>
+            <div class="accent-line"></div>
+            <p class="subtitle">占星医学による体質診断レポート</p>
         </header>
 
         {% if error %}
@@ -26,9 +25,11 @@
         </div>
         {% endif %}
 
-        <form id="astroForm" method="POST" action="/result" class="astro-form">
+        <form id="astroForm" method="POST" action="/result" class="card fade-in">
             <fieldset class="form-section">
-                <legend>基本情報</legend>
+                <div class="card-header">
+                    <h2 class="card-title">基本情報</h2>
+                </div>
                 
                 <div class="form-group">
                     <label for="name" class="form-label">
@@ -45,14 +46,16 @@
                         aria-describedby="name-help"
                         maxlength="50"
                     >
-                    <small id="name-help" class="help-text">
-                        鑑定結果をパーソナライズするために使用します
+                    <small id="name-help" class="help-text text-muted">
+                        レポートに記載するお名前
                     </small>
                 </div>
             </fieldset>
 
             <fieldset class="form-section">
-                <legend>生年月日・時刻</legend>
+                <div class="card-header">
+                    <h2 class="card-title">生年月日・時刻</h2>
+                </div>
                 
                 <div class="date-time-grid">
                     <div class="form-group">
@@ -128,14 +131,15 @@
                     </div>
                 </div>
 
-                <small class="help-text">
-                    <span class="info-icon">ℹ️</span>
-                    わからない方は正午12時で入力して下さい
+                <small class="help-text text-muted">
+                    ※ 出生時刻が不明の場合は正午（12:00）をお選びください
                 </small>
             </fieldset>
 
             <fieldset class="form-section">
-                <legend>出生地</legend>
+                <div class="card-header">
+                    <h2 class="card-title">出生地</h2>
+                </div>
                 
                 <div class="form-group">
                     <label for="prefecture" class="form-label">
@@ -147,24 +151,21 @@
                         <option value="{{ pref }}">{{ pref }}</option>
                         {% endfor %}
                     </select>
-                    <small class="help-text">
-                        <span class="info-icon">ℹ️</span>
-                        出生地の緯度・経度から天体位置を正確に計算します
+                    <small class="help-text text-muted">
+                        天体位置を正確に計算するために必要です
                     </small>
                 </div>
             </fieldset>
 
-            <div class="form-actions">
-                <button type="submit" class="submit-btn" id="submitBtn">
-                    <span class="btn-text">鑑定を開始する</span>
-                    <span class="btn-icon">🔮</span>
+            <div class="form-actions text-center mt-lg">
+                <button type="submit" class="btn btn-primary" id="submitBtn" style="width: 100%; padding: 1rem 2rem; font-size: 1.1rem;">
+                    診断を開始する
                 </button>
             </div>
 
-            <div class="privacy-notice">
-                <p>
-                    <span class="lock-icon">🔒</span>
-                    ご入力いただいた情報は鑑定にのみ使用され、保存されません
+            <div class="text-center mt-md">
+                <p class="text-muted" style="font-size: 0.9rem;">
+                    ご入力いただいた情報は診断にのみ使用され、保存されません
                 </p>
             </div>
         </form>
@@ -172,11 +173,11 @@
         <!-- ローディング画面 -->
         <div id="loadingOverlay" class="loading-overlay" style="display: none;">
             <div class="loading-content">
-                <div class="zodiac-wheel">
-                    <div class="zodiac-spinner"></div>
+                <div class="spinner-elegant">
+                    <div class="spinner-ring"></div>
                 </div>
-                <h2 class="loading-title">天体位置を計算中...</h2>
-                <p class="loading-message" id="loadingMessage">あなたの体質を分析しています</p>
+                <h2 class="loading-title text-gold">診断レポートを作成中</h2>
+                <p class="loading-message text-secondary" id="loadingMessage">天体位置を計算しています...</p>
                 <div class="loading-progress">
                     <div class="progress-bar" id="progressBar"></div>
                 </div>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRO BODY TYPE REPORT - {{ name }}様 完全版</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_unified.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/detailed_report_unified.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="elegant-bg"></div>
+    
+    <!-- 固定ナビゲーション -->
+    <nav class="report-nav">
+        <div class="nav-container">
+            <div class="nav-brand">ASTRO BODY TYPE REPORT</div>
+            <ul class="nav-menu">
+                <li><a href="#chapter1" class="nav-link">第1章</a></li>
+                <li><a href="#chapter2" class="nav-link">第2章</a></li>
+                <li><a href="#chapter3" class="nav-link">第3章</a></li>
+                <li><a href="#chapter4" class="nav-link">第4章</a></li>
+                <li><a href="#chapter5" class="nav-link">第5章</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="report-wrapper">
+        <!-- 印刷用表紙ページ（画面では表示されない） -->
+        <div class="cover-page print-only">
+            <div class="cover-content">
+                <div class="cover-header">
+                    <div class="cover-badge">ASTRO-MEDICAL REPORT</div>
+                    <div class="cover-line"></div>
+                </div>
+                
+                <div class="cover-main">
+                    <h1 class="cover-title">
+                        完全版<br>
+                        占星医学体質分析書
+                    </h1>
+                    
+                    <div class="cover-divider"></div>
+                    
+                    <div class="cover-recipient">
+                        <p class="cover-for">for</p>
+                        <h2 class="cover-name">{{ name }} 様</h2>
+                    </div>
+                </div>
+                
+                <div class="cover-footer">
+                    <p class="cover-date">作成日: <span id="reportDate"></span></p>
+                    <p class="cover-pages">12,000文字 完全版</p>
+                    <div class="cover-line"></div>
+                    <p class="cover-supervisor">監修：織田剛</p>
+                    <p class="cover-system">ASTRO-MEDICAL REPORT SYSTEM</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通常のヘッダー（画面表示用） -->
+        <header class="detailed-header screen-only">
+            <div class="header-content">
+                <div class="report-badge-large">COMPLETE REPORT</div>
+                <h1 class="detailed-title">{{ name }}様の完全版レポート</h1>
+                <div class="accent-line"></div>
+                <p class="detailed-subtitle">12,000文字による包括的占星医学分析</p>
+            </div>
+        </header>
+
+        <!-- 目次セクション -->
+        <section class="toc-section">
+            <div class="container-narrow">
+                <div class="card toc-card">
+                    <h2 class="toc-title">目次</h2>
+                    <ol class="toc-list">
+                        <li class="toc-item">
+                            <a href="#chapter1" class="toc-link">
+                                <span class="toc-number">第1章</span>
+                                <span class="toc-text">アーキタイプの深層分析</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter2" class="toc-link">
+                                <span class="toc-number">第2章</span>
+                                <span class="toc-text">天体配置とサビアンシンボル</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter3" class="toc-link">
+                                <span class="toc-number">第3章</span>
+                                <span class="toc-text">ASTRO-MEDICAL体質論</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter4" class="toc-link">
+                                <span class="toc-number">第4章</span>
+                                <span class="toc-text">ホリスティック処方箋</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter5" class="toc-link">
+                                <span class="toc-number">第5章</span>
+                                <span class="toc-text">人生設計とライフプランニング</span>
+                            </a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- メインコンテンツ -->
+        <main class="report-content">
+            
+            <!-- 第1章 -->
+            <article id="chapter1" class="chapter">
+                <div class="container-narrow">
+                    <div class="chapter-header">
+                        <span class="chapter-number">第1章</span>
+                        <h2 class="chapter-title">アーキタイプの深層分析</h2>
+                        <div class="chapter-divider"></div>
+                    </div>
+
+                    <div class="chapter-content">
+                        <!-- イントロダクション -->
+                        <section class="content-section">
+                            <p class="lead-paragraph">
+                                {{ name }}様の出生図が示す「{{ archetype_name }}」という原型は、
+                                人類の集合的無意識に刻まれた普遍的なパターンの一つです。
+                                この章では、あなたの本質的な性質と潜在能力について、
+                                深層心理学と占星医学の観点から詳細に分析いたします。
+                            </p>
+                        </section>
+
+                        <!-- メインセクション -->
+                        <section class="content-section">
+                            <h3 class="section-title">原型の本質</h3>
+                            <div class="content-card">
+                                <p>
+                                    あなたの太陽と月の配置が生み出す独特なエネルギーパターンは、
+                                    古代から現代まで続く占星術の叡智によって解明されてきました。
+                                </p>
+                                <p>
+                                    特に注目すべきは、太陽が示す意識的な自己表現と、
+                                    月が示す無意識的な感情パターンの相互作用です。
+                                    この二つの luminaries（発光体）の関係性が、
+                                    あなたの人格の基盤を形成しています。
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- 特別なボックス -->
+                        <section class="content-section">
+                            <div class="highlight-box">
+                                <h4 class="highlight-title">核心的な才能</h4>
+                                <p>
+                                    {{ archetype_name }}タイプの最も顕著な特徴は、
+                                    その卓越した適応能力と創造性にあります。
+                                    これは単なる性格的特徴ではなく、
+                                    生命エネルギーの独特な表現方法として理解されるべきです。
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- 詳細な分析 -->
+                        <section class="content-section">
+                            <h3 class="section-title">エレメントの統合</h3>
+                            <p>
+                                火・地・風・水という四大元素のバランスは、
+                                あなたの体質と気質の根本を決定づけています。
+                                現代医学では認識されていない、これらのエネルギー的な要素は、
+                                実際の身体的・精神的健康に深い影響を与えています。
+                            </p>
+                            
+                            <div class="element-detail-grid">
+                                <div class="element-detail-card">
+                                    <h4>優勢な元素</h4>
+                                    <p>あなたの優勢な元素についての詳細な説明がここに入ります。</p>
+                                </div>
+                                <div class="element-detail-card">
+                                    <h4>不足する元素</h4>
+                                    <p>バランスを取るために意識すべき元素についての説明。</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 第2章 -->
+            <article id="chapter2" class="chapter">
+                <div class="container-narrow">
+                    <div class="chapter-header">
+                        <span class="chapter-number">第2章</span>
+                        <h2 class="chapter-title">天体配置とサビアンシンボル</h2>
+                        <div class="chapter-divider"></div>
+                    </div>
+
+                    <div class="chapter-content">
+                        <section class="content-section">
+                            <p class="lead-paragraph">
+                                各天体の正確な度数が持つ象徴的意味は、
+                                サビアンシンボルという360度の神秘的な体系によって解き明かされます。
+                                これらのシンボルは、あなたの潜在的な才能と課題を詳細に描写します。
+                            </p>
+                        </section>
+
+                        <!-- 天体ごとの詳細 -->
+                        <section class="content-section">
+                            <div class="planet-analysis-card">
+                                <div class="planet-header">
+                                    <span class="planet-symbol">☉</span>
+                                    <h3>太陽のサビアンシンボル</h3>
+                                </div>
+                                <div class="planet-content">
+                                    <p class="sabian-degree">度数：○○座 ○○度</p>
+                                    <p class="sabian-symbol">「シンボルの説明」</p>
+                                    <p>
+                                        このシンボルが示す深い意味と、
+                                        あなたの人生における具体的な表れについて...
+                                    </p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 第3章以降も同様の構造で続く -->
+            
+        </main>
+
+        <!-- フッター -->
+        <footer class="detailed-footer">
+            <div class="container-narrow">
+                <div class="footer-content">
+                    <p class="footer-text">監修：織田剛</p>
+                    <p class="footer-copyright">ASTRO-MEDICAL REPORT SYSTEM</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 印刷ボタン -->
+    <button id="printButton" class="print-button" onclick="window.print()" aria-label="レポートを印刷">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+        </svg>
+        <span>印刷</span>
+    </button>
+
+    <!-- スムーズスクロール -->
+    <script>
+        // 現在の日付を設定
+        document.addEventListener('DOMContentLoaded', function() {
+            const reportDateElement = document.getElementById('reportDate');
+            if (reportDateElement) {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth() + 1;
+                const day = now.getDate();
+                reportDateElement.textContent = `${year}年${month}月${day}日`;
+            }
+        });
+
+        // 印刷時の処理
+        window.addEventListener('beforeprint', function() {
+            // 印刷前の処理（必要に応じて）
+            document.body.classList.add('printing');
+        });
+
+        window.addEventListener('afterprint', function() {
+            // 印刷後の処理
+            document.body.classList.remove('printing');
+        });
+
+        // スムーズスクロールと現在位置ハイライト
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const navHeight = document.querySelector('.report-nav').offsetHeight;
+                    const targetPosition = target.offsetTop - navHeight - 20;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // スクロール時の章ハイライト
+        window.addEventListener('scroll', () => {
+            const chapters = document.querySelectorAll('.chapter');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            chapters.forEach(chapter => {
+                const rect = chapter.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    current = chapter.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

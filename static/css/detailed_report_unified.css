@@ -1,0 +1,1172 @@
+/* ========================================
+   詳細レポート専用スタイル - Unified Design
+   読みやすさとエレガンスを重視
+   ======================================== */
+
+/* ----------------------------------------
+   レポート全体の構造
+   ---------------------------------------- */
+.report-wrapper {
+    min-height: 100vh;
+    padding-top: 60px; /* ナビゲーション分のスペース */
+}
+
+/* ----------------------------------------
+   固定ナビゲーション
+   ---------------------------------------- */
+.report-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 15, 20, 0.98);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--card-border);
+    z-index: 1000;
+    height: 60px;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-brand {
+    font-family: var(--font-serif);
+    color: var(--primary-gold);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: var(--space-lg);
+    margin: 0;
+    padding: 0;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    font-size: var(--text-sm);
+}
+
+.nav-link:hover {
+    color: var(--primary-gold);
+    background: rgba(201, 169, 97, 0.1);
+}
+
+.nav-link.active {
+    color: var(--primary-gold);
+    background: rgba(201, 169, 97, 0.15);
+}
+
+/* 印刷ボタン */
+.nav-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--card-border);
+    margin: 0 var(--space-sm);
+}
+
+.print-button {
+    background: var(--primary-gold);
+    color: var(--darker-bg);
+    border: none;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-md);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    letter-spacing: 0.02em;
+}
+
+.print-button:hover {
+    background: #ddb870;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+}
+
+.print-button:active {
+    transform: translateY(0);
+}
+
+/* ----------------------------------------
+   ヘッダーセクション
+   ---------------------------------------- */
+.detailed-header {
+    padding: var(--space-xxl) var(--space-lg);
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--card-border);
+    text-align: center;
+}
+
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.report-badge-large {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    background: var(--primary-gold);
+    color: var(--darker-bg);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-md);
+    text-transform: uppercase;
+}
+
+.detailed-title {
+    font-size: var(--text-3xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+    font-weight: 400;
+    font-family: var(--font-serif);
+}
+
+.detailed-subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+}
+
+/* ----------------------------------------
+   目次セクション
+   ---------------------------------------- */
+.toc-section {
+    padding: var(--space-xl) var(--space-lg);
+}
+
+.toc-card {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+}
+
+.toc-title {
+    font-size: var(--text-xl);
+    color: var(--primary-gold);
+    text-align: center;
+    margin-bottom: var(--space-lg);
+    font-family: var(--font-serif);
+}
+
+.toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc-item {
+    margin-bottom: var(--space-md);
+}
+
+.toc-link {
+    display: flex;
+    align-items: center;
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(201, 169, 97, 0.05);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: all var(--transition-base);
+    border: 1px solid transparent;
+}
+
+.toc-link:hover {
+    background: rgba(201, 169, 97, 0.1);
+    border-color: var(--primary-gold);
+    transform: translateX(5px);
+}
+
+.toc-number {
+    color: var(--primary-gold);
+    font-weight: 600;
+    margin-right: var(--space-md);
+    min-width: 60px;
+}
+
+.toc-text {
+    color: var(--text-primary);
+}
+
+/* ----------------------------------------
+   メインコンテンツエリア
+   ---------------------------------------- */
+.report-content {
+    padding: var(--space-xl) 0;
+}
+
+.container-narrow {
+    max-width: 800px;  /* 読みやすい幅に制限 */
+    margin: 0 auto;
+    padding: 0 var(--space-lg);
+}
+
+/* ----------------------------------------
+   章の構造
+   ---------------------------------------- */
+.chapter {
+    margin-bottom: var(--space-xxl);
+    scroll-margin-top: 80px; /* ナビゲーション分のオフセット */
+}
+
+.chapter-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    padding: var(--space-lg) 0;
+}
+
+.chapter-number {
+    display: inline-block;
+    padding: 0.25rem 1rem;
+    background: var(--primary-gold);
+    color: var(--darker-bg);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-sm);
+}
+
+.chapter-title {
+    font-size: var(--text-2xl);
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    font-family: var(--font-serif);
+}
+
+.chapter-divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+    margin: 0 auto;
+}
+
+/* ----------------------------------------
+   コンテンツセクション
+   ---------------------------------------- */
+.chapter-content {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    border: 1px solid var(--card-border);
+}
+
+.content-section {
+    margin-bottom: var(--space-xl);
+}
+
+.content-section:last-child {
+    margin-bottom: 0;
+}
+
+/* ----------------------------------------
+   テキストスタイル（読みやすさ重視）
+   ---------------------------------------- */
+.lead-paragraph {
+    font-size: var(--text-lg);
+    line-height: 2;
+    color: var(--text-primary);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-lg);
+    background: rgba(201, 169, 97, 0.05);
+    border-left: 4px solid var(--primary-gold);
+    border-radius: var(--radius-md);
+}
+
+.section-title {
+    font-size: var(--text-xl);
+    color: var(--primary-gold);
+    margin-bottom: var(--space-md);
+    font-family: var(--font-serif);
+    position: relative;
+    padding-bottom: var(--space-sm);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 2px;
+    background: var(--primary-gold);
+}
+
+/* 通常の段落 */
+.chapter-content p {
+    margin-bottom: var(--space-md);
+    line-height: 2;
+    color: var(--text-secondary);
+    text-align: justify;
+}
+
+/* ----------------------------------------
+   特別なコンテンツボックス
+   ---------------------------------------- */
+.content-card {
+    padding: var(--space-lg);
+    background: rgba(201, 169, 97, 0.03);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+    margin-bottom: var(--space-md);
+}
+
+.highlight-box {
+    padding: var(--space-lg);
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.1), rgba(201, 169, 97, 0.05));
+    border: 2px solid var(--primary-gold);
+    border-radius: var(--radius-lg);
+    margin: var(--space-lg) 0;
+}
+
+.highlight-title {
+    font-size: var(--text-lg);
+    color: var(--primary-gold);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+/* ----------------------------------------
+   要素詳細グリッド
+   ---------------------------------------- */
+.element-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+}
+
+.element-detail-card {
+    padding: var(--space-md);
+    background: rgba(201, 169, 97, 0.05);
+    border-radius: var(--radius-md);
+    border-left: 3px solid var(--primary-gold);
+}
+
+.element-detail-card h4 {
+    color: var(--primary-gold);
+    margin-bottom: var(--space-sm);
+}
+
+/* ----------------------------------------
+   天体分析カード
+   ---------------------------------------- */
+.planet-analysis-card {
+    background: var(--card-bg);
+    border: 1px solid var(--primary-gold);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: var(--space-lg);
+}
+
+/* 惑星分析セクション */
+.planet-analysis {
+    padding: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    background: rgba(201, 169, 97, 0.03);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(201, 169, 97, 0.15);
+}
+
+.planet-title {
+    font-size: var(--text-lg);
+    color: var(--primary-gold);
+    margin-bottom: var(--space-sm);
+    font-weight: 600;
+}
+
+.planet-info {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    padding: var(--space-sm);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+}
+
+/* コンテンツテキスト */
+.content-text {
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-md);
+    text-align: justify;
+}
+
+.content-text:last-child {
+    margin-bottom: 0;
+}
+
+/* サブセクションタイトル */
+.subsection-title {
+    font-size: var(--text-lg);
+    color: var(--primary-gold);
+    margin: var(--space-lg) 0 var(--space-md) 0;
+    font-weight: 600;
+    padding-left: var(--space-sm);
+    border-left: 3px solid var(--primary-gold);
+}
+
+/* サビアンシンボルボックス */
+.sabian-box {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.1), rgba(201, 169, 97, 0.05));
+    border: 1px solid var(--primary-gold);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
+    margin: var(--space-md) 0;
+}
+
+.sabian-title {
+    color: var(--primary-gold);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+    font-size: var(--text-base);
+}
+
+.sabian-text {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--space-sm);
+}
+
+.sabian-list {
+    margin: var(--space-sm) 0;
+    padding-left: var(--space-lg);
+    color: var(--text-secondary);
+}
+
+.sabian-list li {
+    margin-bottom: var(--space-xs);
+    line-height: 1.6;
+}
+
+.sabian-note {
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: var(--space-sm);
+    font-size: var(--text-sm);
+}
+
+/* 番号付きリスト */
+.numbered-list {
+    counter-reset: item;
+    padding-left: 0;
+    list-style: none;
+}
+
+.numbered-list li {
+    counter-increment: item;
+    margin-bottom: var(--space-md);
+    padding-left: 2.5rem;
+    position: relative;
+    line-height: 1.8;
+}
+
+.numbered-list li::before {
+    content: counter(item) ".";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--primary-gold);
+    font-weight: 600;
+    font-size: var(--text-lg);
+}
+
+/* フェーズリスト */
+.phase-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.phase-list li {
+    margin-bottom: var(--space-md);
+    padding-left: var(--space-lg);
+    position: relative;
+    line-height: 1.8;
+}
+
+.phase-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: var(--primary-gold);
+    font-weight: 600;
+}
+
+.planet-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    background: rgba(201, 169, 97, 0.1);
+    border-bottom: 1px solid var(--primary-gold);
+}
+
+.planet-symbol {
+    font-size: 2rem;
+    color: var(--primary-gold);
+}
+
+.planet-content {
+    padding: var(--space-lg);
+}
+
+.sabian-degree {
+    color: var(--primary-gold);
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.sabian-symbol {
+    font-size: var(--text-lg);
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
+    font-style: italic;
+}
+
+/* ----------------------------------------
+   フッター
+   ---------------------------------------- */
+.detailed-footer {
+    margin-top: var(--space-xxl);
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--card-bg);
+    border-top: 1px solid var(--card-border);
+    text-align: center;
+}
+
+.footer-text {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+}
+
+.footer-copyright {
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+}
+
+/* ----------------------------------------
+   表紙ページ（印刷専用）
+   ---------------------------------------- */
+.cover-page {
+    display: none; /* 通常は非表示 */
+}
+
+.print-only {
+    display: none;
+}
+
+.screen-only {
+    display: block;
+}
+
+/* 印刷時の表紙デザイン */
+@media print {
+    .print-only {
+        display: block !important;
+    }
+    
+    .screen-only {
+        display: none !important;
+    }
+    
+    .cover-page {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        min-height: 297mm; /* A4の高さ */
+        page-break-after: always;
+        position: relative;
+    }
+    
+    .cover-content {
+        text-align: center;
+        width: 100%;
+        padding: 0 20mm;
+    }
+    
+    .cover-header {
+        position: absolute;
+        top: 40mm;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+    
+    .cover-badge {
+        font-family: 'Noto Serif JP', serif;
+        font-size: 14pt;
+        letter-spacing: 0.2em;
+        color: #333;
+        margin-bottom: 10mm;
+    }
+    
+    .cover-line {
+        width: 60mm;
+        height: 1px;
+        background: #333;
+        margin: 0 auto;
+    }
+    
+    .cover-main {
+        margin-top: 80mm;
+    }
+    
+    .cover-title {
+        font-family: 'Noto Serif JP', serif;
+        font-size: 28pt;
+        line-height: 1.5;
+        color: #000;
+        font-weight: 700;
+        margin-bottom: 15mm;
+    }
+    
+    .cover-divider {
+        width: 40mm;
+        height: 2px;
+        background: #000;
+        margin: 0 auto 15mm;
+    }
+    
+    .cover-recipient {
+        margin-bottom: 30mm;
+    }
+    
+    .cover-for {
+        font-family: 'Noto Serif JP', serif;
+        font-size: 12pt;
+        color: #666;
+        font-style: italic;
+        margin-bottom: 5mm;
+    }
+    
+    .cover-name {
+        font-family: 'Noto Serif JP', serif;
+        font-size: 20pt;
+        color: #000;
+        font-weight: 400;
+        border-bottom: 2px solid #000;
+        display: inline-block;
+        padding-bottom: 3mm;
+    }
+    
+    .cover-footer {
+        position: absolute;
+        bottom: 40mm;
+        left: 0;
+        right: 0;
+        text-align: center;
+    }
+    
+    .cover-date,
+    .cover-pages {
+        font-size: 10pt;
+        color: #666;
+        margin-bottom: 3mm;
+    }
+    
+    .cover-footer .cover-line {
+        margin: 8mm auto;
+        width: 40mm;
+    }
+    
+    .cover-supervisor,
+    .cover-system {
+        font-size: 9pt;
+        color: #333;
+        margin-bottom: 2mm;
+    }
+    
+    .cover-supervisor {
+        font-weight: 600;
+    }
+}
+
+/* ----------------------------------------
+   印刷ボタン
+   ---------------------------------------- */
+.print-button {
+    position: fixed;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    background: var(--primary-gold);
+    color: var(--darker-bg);
+    border: none;
+    border-radius: var(--radius-full);
+    padding: var(--space-sm) var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+    z-index: 100;
+    font-weight: 600;
+}
+
+.print-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.4);
+}
+
+.print-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ----------------------------------------
+   エピローグセクション
+   ---------------------------------------- */
+.epilogue {
+    margin-top: var(--space-xxl);
+    padding: var(--space-xxl) 0;
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.05), rgba(201, 169, 97, 0.02));
+}
+
+.epilogue-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: var(--space-xl);
+    text-align: center;
+}
+
+.epilogue-title {
+    font-size: var(--text-2xl);
+    color: var(--primary-gold);
+    margin-bottom: var(--space-xl);
+    font-family: var(--font-serif);
+}
+
+.epilogue-text {
+    font-size: var(--text-base);
+    line-height: 2;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    text-align: justify;
+}
+
+.epilogue-footer {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-xl);
+}
+
+.divider-line {
+    width: 100px;
+    height: 2px;
+    background: var(--primary-gold);
+    margin: var(--space-md) auto;
+}
+
+.footer-text {
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    margin: var(--space-xs) 0;
+}
+
+/* ----------------------------------------
+   レポートフッター
+   ---------------------------------------- */
+.report-footer {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    border-top: 1px solid var(--card-border);
+    margin-top: var(--space-xxl);
+}
+
+/* ----------------------------------------
+   レスポンシブデザイン
+   ---------------------------------------- */
+@media (max-width: 768px) {
+    .container-narrow {
+        padding: 0 var(--space-md);
+    }
+    
+    .chapter-content {
+        padding: var(--space-md);
+    }
+    
+    .element-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .nav-menu {
+        font-size: var(--text-sm);
+    }
+    
+    .chapter-title {
+        font-size: var(--text-xl);
+    }
+    
+    .section-title {
+        font-size: var(--text-lg);
+    }
+    
+    .planet-analysis {
+        padding: var(--space-md);
+    }
+}
+
+/* 印刷時は印刷ボタンを非表示 */
+@media print {
+    .print-button {
+        display: none !important;
+    }
+}
+
+/* ----------------------------------------
+   レスポンシブデザイン
+   ---------------------------------------- */
+@media (max-width: 768px) {
+    .nav-menu {
+        gap: var(--space-sm);
+    }
+    
+    .nav-link {
+        font-size: var(--text-xs);
+        padding: var(--space-xs);
+    }
+    
+    .chapter-content {
+        padding: var(--space-md);
+    }
+    
+    .container-narrow {
+        padding: 0 var(--space-md);
+    }
+    
+    .detailed-title {
+        font-size: var(--text-2xl);
+    }
+    
+    .element-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-brand {
+        display: none;
+    }
+    
+    .nav-menu {
+        width: 100%;
+        justify-content: space-around;
+    }
+}
+
+/* ----------------------------------------
+   印刷用スタイル - 美しい印刷レイアウト
+   ---------------------------------------- */
+@media print {
+    /* ページ設定 */
+    @page {
+        size: A4;
+        margin: 30mm 20mm 35mm 20mm; /* 上下左右の余白（フッター分下を広く） */
+        
+        /* ページ番号をフッターに追加 */
+        @bottom-center {
+            content: counter(page);
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 10pt;
+            color: #666;
+        }
+        
+        /* ヘッダーにレポートタイトル */
+        @top-center {
+            content: "ASTRO BODY TYPE REPORT";
+            font-family: 'Noto Serif JP', serif;
+            font-size: 9pt;
+            color: #999;
+            letter-spacing: 0.05em;
+        }
+    }
+    
+    @page :first {
+        margin-top: 0; /* 表紙は上余白なし */
+        
+        /* 表紙ページはヘッダー/フッターなし */
+        @top-center {
+            content: none;
+        }
+        @bottom-center {
+            content: none;
+        }
+    }
+    
+    @page chapter {
+        /* 章の最初のページ */
+        @top-center {
+            content: none; /* 章タイトルページはヘッダーなし */
+        }
+    }
+    
+    /* 不要な要素を非表示 */
+    .report-nav,
+    .elegant-bg,
+    .toc-link:hover {
+        display: none !important;
+    }
+    
+    /* 全体的なスタイル調整 */
+    body {
+        background: white;
+        color: #000;
+        font-size: 11pt;
+        line-height: 1.6;
+    }
+    
+    .report-wrapper {
+        padding-top: 0;
+    }
+    
+    /* ヘッダーの印刷用調整 */
+    .detailed-header {
+        background: none;
+        border-bottom: 2px solid #000;
+        padding: 20mm 0 10mm 0;
+        page-break-after: always; /* ヘッダー後で改ページ */
+    }
+    
+    .report-badge-large {
+        background: #000;
+        color: #fff;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .detailed-title {
+        color: #000;
+        font-size: 24pt;
+        margin-bottom: 5mm;
+    }
+    
+    /* 目次の印刷用調整 */
+    .toc-section {
+        page-break-after: always; /* 目次後で改ページ */
+    }
+    
+    .toc-card {
+        background: none;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+    
+    .toc-link {
+        background: none;
+        border: 1px solid #ddd;
+        color: #000;
+        text-decoration: none;
+    }
+    
+    .toc-number {
+        color: #000;
+        font-weight: bold;
+    }
+    
+    /* 章ごとの改ページ設定 */
+    .chapter {
+        page-break-before: always; /* 各章の前で必ず改ページ */
+        page-break-inside: auto; /* 章内では自動改ページ */
+        page: chapter; /* 章用のページスタイルを適用 */
+    }
+    
+    .chapter:first-of-type {
+        page-break-before: always; /* 最初の章も改ページ（表紙・目次の後） */
+    }
+    
+    /* ページカウンターのリセット */
+    .cover-page {
+        counter-reset: page; /* 表紙でページ番号リセット */
+    }
+    
+    .toc-section {
+        counter-reset: page 1; /* 目次から1ページ開始 */
+    }
+    
+    /* 章ヘッダーの印刷用調整 */
+    .chapter-header {
+        margin-bottom: 10mm;
+        page-break-after: avoid; /* 章タイトル直後での改ページを避ける */
+    }
+    
+    .chapter-number {
+        background: #000;
+        color: #fff;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .chapter-title {
+        color: #000;
+        font-size: 18pt;
+        border-bottom: 2px solid #000;
+        padding-bottom: 3mm;
+    }
+    
+    .chapter-divider {
+        display: none; /* 印刷時は装飾線を非表示 */
+    }
+    
+    /* コンテンツの印刷用調整 */
+    .chapter-content {
+        background: none;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+    
+    .content-section {
+        margin-bottom: 8mm;
+        page-break-inside: avoid; /* セクション内での改ページを避ける */
+    }
+    
+    /* テキストスタイルの印刷用調整 */
+    .lead-paragraph {
+        background: #f5f5f5;
+        border-left: 4px solid #000;
+        padding: 5mm;
+        margin-bottom: 8mm;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+        page-break-inside: avoid;
+    }
+    
+    .section-title {
+        color: #000;
+        font-size: 14pt;
+        font-weight: bold;
+        margin-top: 8mm;
+        margin-bottom: 4mm;
+        page-break-after: avoid; /* タイトル直後の改ページを避ける */
+    }
+    
+    .section-title::after {
+        background: #000;
+    }
+    
+    /* 段落の調整 */
+    .chapter-content p {
+        color: #000;
+        text-align: justify;
+        margin-bottom: 4mm;
+        orphans: 3; /* 段落の最後に残す最小行数 */
+        widows: 3;  /* 段落の最初に残す最小行数 */
+    }
+    
+    /* 特別なボックスの印刷用調整 */
+    .content-card {
+        background: #fafafa;
+        border: 1px solid #ccc;
+        padding: 5mm;
+        margin-bottom: 5mm;
+        page-break-inside: avoid;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .highlight-box {
+        background: #fff;
+        border: 2px solid #000;
+        padding: 5mm;
+        margin: 8mm 0;
+        page-break-inside: avoid;
+    }
+    
+    .highlight-title {
+        color: #000;
+        font-weight: bold;
+    }
+    
+    /* 要素詳細グリッドの印刷用調整 */
+    .element-detail-grid {
+        display: block; /* 印刷時は縦並びに */
+    }
+    
+    .element-detail-card {
+        background: #f9f9f9;
+        border-left: 3px solid #000;
+        margin-bottom: 5mm;
+        page-break-inside: avoid;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .element-detail-card h4 {
+        color: #000;
+        font-weight: bold;
+    }
+    
+    /* 天体分析カードの印刷用調整 */
+    .planet-analysis-card {
+        background: #fff;
+        border: 1px solid #000;
+        margin-bottom: 8mm;
+        page-break-inside: avoid;
+    }
+    
+    .planet-header {
+        background: #f0f0f0;
+        border-bottom: 1px solid #000;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    .planet-symbol {
+        color: #000;
+        font-weight: bold;
+    }
+    
+    .sabian-degree,
+    .sabian-symbol {
+        color: #000;
+    }
+    
+    /* フッターの印刷用調整 */
+    .detailed-footer {
+        margin-top: 10mm;
+        padding: 5mm 0;
+        border-top: 1px solid #000;
+        page-break-before: avoid;
+    }
+    
+    .footer-text,
+    .footer-copyright {
+        color: #000;
+    }
+    
+    /* カラー要素の印刷対応 */
+    .text-gold {
+        color: #000;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    
+    .accent-line {
+        display: none;
+    }
+    
+    /* リンクの印刷用調整 */
+    a {
+        color: #000;
+        text-decoration: none;
+    }
+    
+    /* ページ番号の表示位置を確保 */
+    .chapter-content {
+        margin-bottom: 15mm;
+    }
+}

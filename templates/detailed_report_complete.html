@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRO BODY TYPE REPORT - {{ name }}様 完全版</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_unified.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/detailed_report_unified.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="elegant-bg"></div>
+    
+    <!-- 固定ナビゲーション -->
+    <nav class="report-nav">
+        <div class="nav-container">
+            <div class="nav-brand">ASTRO BODY TYPE REPORT</div>
+            <ul class="nav-menu">
+                <li><a href="#chapter1" class="nav-link">第1章</a></li>
+                <li><a href="#chapter2" class="nav-link">第2章</a></li>
+                <li><a href="#chapter3" class="nav-link">第3章</a></li>
+                <li><a href="#chapter4" class="nav-link">第4章</a></li>
+                <li><a href="#chapter5" class="nav-link">第5章</a></li>
+                <li class="nav-divider"></li>
+                <li><button onclick="window.print()" class="print-button">印刷する</button></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="report-wrapper">
+        <!-- 印刷用表紙ページ -->
+        <div class="cover-page print-only">
+            <div class="cover-content">
+                <div class="cover-header">
+                    <div class="cover-badge">ASTRO-MEDICAL REPORT</div>
+                    <div class="cover-line"></div>
+                </div>
+                
+                <div class="cover-main">
+                    <h1 class="cover-title">
+                        完全版<br>
+                        占星医学体質分析書
+                    </h1>
+                    
+                    <div class="cover-divider"></div>
+                    
+                    <div class="cover-recipient">
+                        <p class="cover-for">for</p>
+                        <h2 class="cover-name">{{ name }} 様</h2>
+                    </div>
+                    
+                    <div class="archetype-badge">{{ archetype.name }}（{{ archetype.name_en }}）</div>
+                </div>
+                
+                <div class="cover-footer">
+                    <p class="cover-date">作成日: {{ report_date }}</p>
+                    <p class="cover-pages">12,000文字 完全版</p>
+                    <div class="cover-line"></div>
+                    <p class="cover-supervisor">監修：織田剛</p>
+                    <p class="cover-system">ASTRO-MEDICAL SYSTEM</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 通常のヘッダー -->
+        <header class="detailed-header screen-only">
+            <div class="header-content">
+                <div class="report-badge-large">COMPLETE REPORT</div>
+                <h1 class="detailed-title">{{ name }}様の完全版レポート</h1>
+                <div class="accent-line"></div>
+                <p class="detailed-subtitle">12,000文字による包括的占星医学分析</p>
+            </div>
+        </header>
+
+        <!-- 目次セクション -->
+        <section class="toc-section">
+            <div class="container-narrow">
+                <div class="card toc-card">
+                    <h2 class="toc-title">目次</h2>
+                    <ol class="toc-list">
+                        <li class="toc-item">
+                            <a href="#chapter1" class="toc-link">
+                                <span class="toc-number">第1章</span>
+                                <span class="toc-text">{{ archetype.name }}というアーキタイプの深層分析</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter2" class="toc-link">
+                                <span class="toc-number">第2章</span>
+                                <span class="toc-text">天体配置が示す多層的な個性の解読</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter3" class="toc-link">
+                                <span class="toc-number">第3章</span>
+                                <span class="toc-text">ASTRO-MEDICAL体質論による包括的健康分析</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter4" class="toc-link">
+                                <span class="toc-number">第4章</span>
+                                <span class="toc-text">{{ name }}様のためのホリスティック処方箋</span>
+                            </a>
+                        </li>
+                        <li class="toc-item">
+                            <a href="#chapter5" class="toc-link">
+                                <span class="toc-number">第5章</span>
+                                <span class="toc-text">天命を生きるためのライフプランニング</span>
+                            </a>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- メインコンテンツ -->
+        <main class="report-content">
+            
+            <!-- 第1章 -->
+            <article id="chapter1" class="chapter">
+                <div class="container-narrow">
+                    <div class="chapter-header">
+                        <span class="chapter-number">第1章</span>
+                        <h2 class="chapter-title">{{ archetype.name }}というアーキタイプの深層分析</h2>
+                        <div class="chapter-divider"></div>
+                    </div>
+
+                    <div class="chapter-content">
+                        <div class="content-section">
+                            <h3 class="section-title">【第1章：{{ archetype.name }}（{{ archetype.name_en|default('') }}）というアーキタイプの深層分析】</h3>
+                            
+                            <p class="content-text">
+                                {{ name }}様の本質を形作る「{{ archetype.name }}（{{ archetype.name_en|default('') }}）」というアーキタイプは、太陽の{{ celestial_data.sun.element }}エレメントと月の{{ celestial_data.moon.element }}エレメントが織りなす、極めて独特な存在様式を表しています。このアーキタイプは、言うなれば「{{ archetype.tagline }}」です。
+                            </p>
+
+                            <h4 class="subsection-title">■ 原型の核心的性質</h4>
+                            <div class="content-card">
+                                <p class="content-text">
+                                    {{ archetype.name }}の本質は、{{ archetype.core }}このような性質を持つ{{ name }}様は、人生において独自の道を切り開いていく運命にあります。太陽が示す意識的な自己表現は{% if celestial_data.sun.element == '火' %}情熱と創造性、直感的な行動力、開拓精神{% elif celestial_data.sun.element == '地' %}現実性と安定感、着実な成長力、物質的豊かさ{% elif celestial_data.sun.element == '風' %}知性と社交性、柔軟な思考力、コミュニケーション能力{% else %}感情と共感性、深い洞察力、癒しの力{% endif %}を通じて現れ、月が示す無意識的な感情反応は{% if celestial_data.moon.element == '火' %}情熱と創造性、直感的な行動力、開拓精神{% elif celestial_data.moon.element == '地' %}現実性と安定感、着実な成長力、物質的豊かさ{% elif celestial_data.moon.element == '風' %}知性と社交性、柔軟な思考力、コミュニケーション能力{% else %}感情と共感性、深い洞察力、癒しの力{% endif %}として内在しています。
+                                </p>
+                                
+                                <p class="content-text">
+                                    この二つのエレメントの組み合わせ「{{ archetype.element_combination }}」は、単なる性格的特徴を超えて、{{ name }}様の生命エネルギーの根本的な流れ方を規定しています。古代ギリシャの四体液説に基づく{{ archetype.body_type }}という体質分類は、現代医学における心身相関の観点からも重要な示唆を与えています。
+                                </p>
+                            </div>
+
+                            <h4 class="subsection-title">■ 才能と可能性の展開</h4>
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">{{ archetype.name }}が持つ主要な才能</h5>
+                                <p class="content-text">
+                                    {{ archetype.talents }}
+                                </p>
+                            </div>
+                            
+                            <p class="content-text">
+                                これらの才能は、{{ name }}様が生まれながらに持っている宝物です。しかし、これらの才能が完全に開花するためには、意識的な育成と適切な環境が必要となります。特に、{{ celestial_data.sun.element }}の要素が強く現れる場面では、驚くほどの能力を発揮することができるでしょう。
+                            </p>
+                            
+                            <p class="content-text">
+                                日常生活において、これらの才能は以下のような形で現れることが多いです：
+                            </p>
+                            
+                            <ol class="numbered-list">
+                                <li><strong>仕事や創造活動において：</strong>{{ celestial_data.sun.element }}の性質が前面に出て、革新的なアイデアや独創的な解決策を生み出します。特にプレッシャーがかかる状況では、通常では考えられないような突破力を示すことがあります。</li>
+                                <li><strong>人間関係において：</strong>{{ celestial_data.moon.element }}の要素が対人関係の質を決定づけます。親密な関係では特にこの傾向が強く現れ、深い理解と共感を基盤とした関係性を築くことができます。</li>
+                                <li><strong>自己実現の過程において：</strong>{{ archetype.element_combination }}という組み合わせは、一般的な成功の定義にとらわれない、独自の価値観と生き方を追求する力を与えています。</li>
+                            </ol>
+
+                            <h4 class="subsection-title">■ 成長への課題と超越の道</h4>
+                            <div class="content-card">
+                                <p class="content-text">
+                                    <strong>{{ archetype.name }}が直面する主な課題：</strong>{{ archetype.challenges }}
+                                </p>
+                                
+                                <p class="content-text">
+                                    これらの課題は、{{ name }}様の成長にとって避けては通れない重要なテーマです。しかし、これらは決して弱点ではなく、むしろ人生を通じて磨き上げていくべき「成長の種」なのです。
+                                </p>
+                                
+                                <p class="content-text">
+                                    特に注意すべきは、{{ celestial_data.sun.element }}と{{ celestial_data.moon.element }}のバランスが崩れやすい状況です。ストレスが高まると、どちらか一方の要素が過剰に働き、もう一方が抑圧される傾向があります。このアンバランスは、身体的には{{ archetype.body_type }}特有の症状として現れ、精神的には内的葛藤や決断の困難さとして表面化することがあります。
+                                </p>
+                            </div>
+
+                            <h4 class="subsection-title">■ アーキタイプの進化段階</h4>
+                            <p class="content-text">
+                                {{ archetype.name }}というアーキタイプは、人生の各段階で異なる表現をします：
+                            </p>
+                            
+                            <ul class="phase-list">
+                                <li><strong>若年期（〜30歳）：</strong>{{ celestial_data.sun.element }}の要素が強く、外向的で挑戦的な姿勢が目立ちます。この時期は多くの経験を積み、自己の可能性を探求する重要な時期です。</li>
+                                <li><strong>中年期（30〜50歳）：</strong>{{ celestial_data.moon.element }}の要素が成熟し、内面的な充実と外的活動のバランスを見出し始めます。キャリアと個人生活の統合が主要テーマとなります。</li>
+                                <li><strong>円熟期（50歳〜）：</strong>両方の要素が統合され、独自の wisdom（知恵）を獲得します。他者への貢献と自己実現が自然に一致する境地に至ります。</li>
+                            </ul>
+
+                            <h4 class="subsection-title">■ 太陽と月のサビアンシンボルが示す核心的才能</h4>
+                            <p class="content-text">
+                                {{ name }}様の太陽と月の正確な位置が示すサビアンシンボルは、最も重要な才能の指標です：
+                            </p>
+                            
+                            <div class="sabian-box">
+                                <h5 class="sabian-title">★ 太陽のサビアンシンボル：{{ celestial_data.sun.sign }}{{ (celestial_data.sun.degree|round)|int }}度</h5>
+                                <p class="sabian-text">
+                                    「サビアンシンボルのタイトル」<br>
+                                    キーワード：特別な才能のキーワード
+                                </p>
+                                <p class="content-text">
+                                    このシンボルは、{{ name }}様の意識的な自己表現と人生の目的において、特別な才能を示しています。
+                                    これは{{ celestial_data.sun.element }}のエネルギーを通して、特にキャリアや社会的活動において顕著に現れます。
+                                </p>
+                            </div>
+                            
+                            <div class="sabian-box">
+                                <h5 class="sabian-title">★ 月のサビアンシンボル：{{ celestial_data.moon.sign }}{{ (celestial_data.moon.degree|round)|int }}度</h5>
+                                <p class="sabian-text">
+                                    「サビアンシンボルのタイトル」<br>
+                                    キーワード：特別な才能のキーワード
+                                </p>
+                                <p class="content-text">
+                                    このシンボルは、{{ name }}様の無意識的な感情パターンと内的才能において、潜在力を示しています。
+                                    これは{{ celestial_data.moon.element }}の性質を通して、特に対人関係や内的な創造活動において発揮されます。
+                                </p>
+                            </div>
+                            
+                            <p class="content-text">
+                                これらのサビアンシンボルが示す才能は、{{ archetype.name }}というアーキタイプを通して統合され、
+                                {{ name }}様独自の才能プロフィールを形成しています。これらは訓練と経験によってさらに洗練され、
+                                専門的なスキルや独創的な表現へと発展する可能性を秘めています。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 第2章 -->
+            <article id="chapter2" class="chapter">
+                <div class="container-narrow">
+                    <div class="chapter-header">
+                        <span class="chapter-number">第2章</span>
+                        <h2 class="chapter-title">天体配置が示す多層的な個性の解読</h2>
+                        <div class="chapter-divider"></div>
+                    </div>
+
+                    <div class="chapter-content">
+                        <div class="content-section">
+                            <h3 class="section-title">【第2章：天体配置とサビアンシンボルが示す才能の宝庫】</h3>
+                            
+                            <p class="content-text">
+                                {{ name }}様の出生時の天体配置は、宇宙的な観点から見た個性の青写真です。各惑星が特定の星座の特定の度数に位置することで、それぞれ固有のエネルギーパターンと特別な才能を形成しています。特に注目すべきは、各惑星の正確な度数が示すサビアンシンボルです。これらは{{ name }}様の隠された才能と可能性を具体的に示しています。
+                            </p>
+
+                            <h4 class="subsection-title">■ 7惑星の詳細分析とサビアンシンボルが示す才能</h4>
+                            
+                            {% for planet_key, planet_data in celestial_data.items() %}
+                                {% if planet_key in ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn'] %}
+                                    {% set planet_names = {'sun': '太陽', 'moon': '月', 'mercury': '水星', 'venus': '金星', 'mars': '火星', 'jupiter': '木星', 'saturn': '土星'} %}
+                                    {% set planet_domains = {
+                                        'sun': '本質的自己、生命力、創造性',
+                                        'moon': '感情、無意識、養育',
+                                        'mercury': '知性、コミュニケーション、学習',
+                                        'venus': '愛情、美、価値観',
+                                        'mars': '行動力、情熱、闘争',
+                                        'jupiter': '拡大、幸運、哲学',
+                                        'saturn': '制限、責任、成熟'
+                                    } %}
+                                    {% set planet_medical = {
+                                        'sun': '心臓、背骨、目',
+                                        'moon': '胃、乳房、体液',
+                                        'mercury': '神経系、呼吸器、手',
+                                        'venus': '腎臓、喉、皮膚',
+                                        'mars': '筋肉、血液、頭部',
+                                        'jupiter': '肝臓、大腿部、成長',
+                                        'saturn': '骨格、歯、関節'
+                                    } %}
+                                    
+                                    <div class="planet-analysis">
+                                        <h5 class="planet-title">◆ {{ planet_names[planet_key] }}（{{ planet_data.sign }} {{ planet_data.degree|round(1) }}度）</h5>
+                                        <div class="planet-info">
+                                            支配領域：{{ planet_domains[planet_key] }}<br>
+                                            医学的対応：{{ planet_medical[planet_key] }}<br>
+                                            エレメント：{{ planet_data.element }}／クオリティ：{{ planet_data.quality|default('不明') }}
+                                        </div>
+                                        
+                                        <p class="content-text">
+                                            {{ planet_names[planet_key] }}が{{ planet_data.sign }}に位置していることは、{{ name }}様の{{ planet_domains[planet_key] }}に関して、{{ planet_data.element }}の性質が強く現れることを示しています。{{ planet_data.sign }}の{{ planet_data.degree|round(1) }}度という具体的な位置は、この星座の{% if planet_data.degree < 10 %}初期段階のエネルギー{% elif planet_data.degree < 20 %}中期の安定したエネルギー{% else %}成熟した完成段階のエネルギー{% endif %}を強調しています。
+                                        </p>
+                                        
+                                        <p class="content-text">
+                                            医学的観点から見ると、{{ planet_names[planet_key] }}は{{ planet_medical[planet_key] }}と関連しており、これらの器官や機能に{{ planet_data.element }}的な特徴が現れやすいことを示唆しています。例えば、{% if planet_data.element == '火' %}炎症や熱性の症状が出やすく、エネルギーの燃焼が激しい{% elif planet_data.element == '地' %}慢性的な症状や構造的な問題が生じやすく、回復に時間がかかる{% elif planet_data.element == '風' %}神経性の症状や循環の問題が生じやすく、変動が激しい{% else %}浮腫や分泌物の異常が生じやすく、感情と連動しやすい{% endif %}といった傾向が考えられます。
+                                        </p>
+                                        
+                                        <div class="sabian-box">
+                                            <h6 class="sabian-title">★ サビアンシンボルが示す特別な才能：</h6>
+                                            <p class="sabian-text">
+                                                {{ planet_data.sign }}{{ (planet_data.degree|round)|int }}度のサビアンシンボルは、
+                                                {{ planet_names[planet_key] }}が司る領域において、特別な才能を示しています。
+                                            </p>
+                                            <p class="content-text">
+                                                これは{% if planet_data.element == '火' %}直感的で創造的な{% elif planet_data.element == '地' %}実践的で具体的な{% elif planet_data.element == '風' %}知的で革新的な{% else %}感受性豊かで洞察力のある{% endif %}方法で発揮され、以下のような具体的な能力として現れます：
+                                            </p>
+                                            <ul class="sabian-list">
+                                                <li>職業的には、独自の視点から価値を創造し、新たな可能性を開く能力</li>
+                                                <li>対人関係では、{% if planet_data.element == '火' %}情熱的で励ましに満ちたアプローチ{% elif planet_data.element == '地' %}信頼と安定を提供する堅実なサポート{% elif planet_data.element == '風' %}知的な刺激と新鮮な視点の提供{% else %}深い共感と感情的な理解{% endif %}により、関係性を構築する力</li>
+                                                <li>創造活動では、独創的な作品や解決策を生み出す力</li>
+                                            </ul>
+                                            <p class="sabian-note">
+                                                この才能は訓練と経験によってさらに洗練され、専門的なスキルへと発展する可能性を秘めています。
+                                            </p>
+                                        </div>
+                                        
+                                        <p class="content-text">
+                                            日常生活では、この配置は{{ planet_data.sign }}の特性と{{ planet_data.element }}のエネルギーが組み合わさり、独特な表現パターンを生み出すとして現れることが多いでしょう。
+                                        </p>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <h4 class="subsection-title">■ エレメントバランスの総合評価</h4>
+                            <p class="content-text">
+                                {{ name }}様の7惑星のエレメント分布を分析すると、独特なエネルギーパターンが浮かび上がります。このバランスは、単なる性格分析を超えて、生命エネルギーの流れ方そのものを示しています。
+                            </p>
+                            
+                            <p class="content-text">
+                                最も強調されているエレメントは、{{ name }}様の人生において主導的な役割を果たし、逆に不足しているエレメントは、意識的に補う必要がある領域を示しています。このアンバランスは弱点ではなく、むしろ{{ name }}様の個性を際立たせる特徴なのです。
+                            </p>
+
+                            <h4 class="subsection-title">■ アスペクトパターンが創る独自の才能</h4>
+                            <p class="content-text">
+                                惑星同士の角度関係（アスペクト）は、異なるエネルギーがどのように相互作用するかを示しています。{{ name }}様の場合、特に注目すべきは太陽と月の関係性で、これが意識と無意識の統合度を表しています。
+                            </p>
+                            
+                            <p class="content-text">
+                                これらの天体配置は、静的なものではなく、人生の各段階で異なる形で活性化されます。現在の天体の動き（トランジット）と出生図の関係を理解することで、最適なタイミングでの行動が可能になります。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 第3章 -->
+            <article id="chapter3" class="chapter">
+                <div class="container-narrow">
+                    <div class="chapter-header">
+                        <span class="chapter-number">第3章</span>
+                        <h2 class="chapter-title">ASTRO-MEDICAL体質論による包括的健康分析</h2>
+                        <div class="chapter-divider"></div>
+                    </div>
+
+                    <div class="chapter-content">
+                        <div class="content-section">
+                            <h3 class="section-title">【第3章：ASTRO-MEDICAL体質論による包括的健康分析】</h3>
+                            
+                            <p class="content-text">
+                                {{ name }}様の体質は、{{ archetype.body_type }}として分類され、これは古代医学と現代の統合医療の両方の観点から重要な意味を持ちます。
+                            </p>
+
+                            <h4 class="subsection-title">■ 四体液説に基づく体質分析</h4>
+                            <div class="content-card">
+                                <p class="content-text">
+                                    {{ archetype.body_type }}は、体内の液体バランスと密接に関連しています：
+                                </p>
+                                
+                                <ol class="numbered-list">
+                                    <li><strong>優勢な体液：</strong>{% if '胆汁質' in archetype.body_type %}黄胆汁（火のエネルギー）{% elif '憂鬱質' in archetype.body_type %}黒胆汁（地のエネルギー）{% elif '多血質' in archetype.body_type %}血液（風のエネルギー）{% else %}粘液（水のエネルギー）{% endif %}<br>
+                                    この体液の過剰は、{% if '胆汁質' in archetype.body_type %}過度の熱感、炎症、興奮性{% elif '憂鬱質' in archetype.body_type %}停滞感、重さ、憂うつ{% elif '多血質' in archetype.body_type %}落ち着きのなさ、散漫、過度の楽観{% else %}浮腫、倦怠感、鈍重さ{% endif %}といった症状を引き起こす可能性があります。</li>
+                                    
+                                    <li><strong>不足しやすい体液：</strong>{% if '胆汁質' in archetype.body_type %}粘液（水のエネルギー）{% elif '憂鬱質' in archetype.body_type %}血液（風のエネルギー）{% elif '多血質' in archetype.body_type %}黒胆汁（地のエネルギー）{% else %}黄胆汁（火のエネルギー）{% endif %}<br>
+                                    この不足は、活力低下、免疫力の低下、回復力の遅延として現れることがあります。</li>
+                                </ol>
+                            </div>
+
+                            <h4 class="subsection-title">■ 臓器システムの特徴</h4>
+                            <p class="content-text">
+                                {{ name }}様の天体配置から、以下の臓器システムに特別な注意が必要です：
+                            </p>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 心臓血管系（太陽の影響）</h5>
+                                <p class="content-text">
+                                    太陽が{{ celestial_data.sun.sign }}にあることから、心臓のリズムと活力に{{ celestial_data.sun.element }}的な特徴が現れます。定期的な有酸素運動と、情熱を注げる活動が心臓の健康を保つ鍵となります。
+                                </p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 消化器系（月の影響）</h5>
+                                <p class="content-text">
+                                    月が{{ celestial_data.moon.sign }}に位置することは、消化器系が感情状態に敏感であることを示しています。ストレス管理と規則正しい食事時間が特に重要です。
+                                </p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 神経系（水星の影響）</h5>
+                                <p class="content-text">
+                                    水星の配置は、神経系の反応パターンを決定づけます。{{ celestial_data.mercury.element }}の影響により、情報処理が活発で、過度の刺激に注意が必要です。
+                                </p>
+                            </div>
+
+                            <h4 class="subsection-title">■ 季節と生体リズム</h4>
+                            <p class="content-text">
+                                {{ archetype.element_combination }}の組み合わせは、特定の季節に強さと弱さを示します：
+                            </p>
+                            
+                            <ul class="phase-list">
+                                <li><strong>春：</strong>再生と成長のエネルギーが高まり、新しいことを始めるのに適した時期</li>
+                                <li><strong>夏：</strong>活動性がピークに達し、社交的な活動が活発になる時期</li>
+                                <li><strong>秋：</strong>内省と整理の時期で、不要なものを手放すのに適している</li>
+                                <li><strong>冬：</strong>休息と充電の時期で、内的な成長に焦点を当てるべき時期</li>
+                            </ul>
+
+                            <h4 class="subsection-title">■ 体質改善のための具体的指針</h4>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">1. 栄養学的アプローチ</h5>
+                                <p class="content-text">
+                                    {{ archetype.body_type }}の体質には、以下の栄養素が特に重要です：
+                                </p>
+                                <ul class="sabian-list">
+                                    <li>タンパク質：体重1kgあたり1.2-1.5gを目安に</li>
+                                    <li>ビタミンB群：神経系の健康維持に必須</li>
+                                    <li>ミネラル：特に{% if '火' in archetype.element_combination %}マグネシウム、鉄分{% elif '地' in archetype.element_combination %}カルシウム、亜鉛{% elif '風' in archetype.element_combination %}カリウム、マンガン{% else %}ナトリウム、ヨウ素{% endif %}が重要</li>
+                                    <li>水分：1日2-2.5リットルの清潔な水</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">2. 運動療法</h5>
+                                <p class="content-text">
+                                    {{ archetype.temperament }}の気質に適した運動：
+                                </p>
+                                <ul class="sabian-list">
+                                    <li>有酸素運動：週3-4回、30-45分</li>
+                                    <li>筋力トレーニング：週2回、主要筋群をカバー</li>
+                                    <li>柔軟性：毎日10-15分のストレッチ</li>
+                                    <li>マインドフルネス：瞑想やヨガを週2-3回</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">3. 睡眠と休息</h5>
+                                <ul class="sabian-list">
+                                    <li>最適な睡眠時間：7-8時間</li>
+                                    <li>理想的な就寝時間：{% if '火' in archetype.element_combination %}22:00-23:00{% elif '地' in archetype.element_combination %}22:30-23:30{% elif '風' in archetype.element_combination %}23:00-24:00{% else %}21:30-22:30{% endif %}</li>
+                                    <li>起床時間：日の出前後が理想的</li>
+                                </ul>
+                            </div>
+
+                            <h4 class="subsection-title">■ 予防医学的観点</h4>
+                            <p class="content-text">
+                                {{ name }}様の体質から、以下の健康問題に注意が必要です：
+                            </p>
+                            
+                            <ol class="numbered-list">
+                                <li><strong>30代で注意すべきこと：</strong>エネルギー管理と初期の慢性疾患予防</li>
+                                <li><strong>40代で注意すべきこと：</strong>ホルモンバランスと代謝の変化</li>
+                                <li><strong>50代以降：</strong>骨密度と認知機能の維持</li>
+                            </ol>
+                            
+                            <div class="highlight-box">
+                                <p class="content-text">
+                                    定期的な健康診断では、特に{% if '胆汁質' in archetype.body_type %}肝機能、炎症マーカー、血圧{% elif '憂鬱質' in archetype.body_type %}ホルモンバランス、骨密度、消化機能{% elif '多血質' in archetype.body_type %}血糖値、甲状腺機能、神経伝達物質{% else %}リンパ機能、水分代謝、免疫系{% endif %}の項目に注目してください。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 第4章 -->
+            <article id="chapter4" class="chapter">
+                <div class="container-narrow">
+                    <div class="chapter-header">
+                        <span class="chapter-number">第4章</span>
+                        <h2 class="chapter-title">{{ name }}様のためのホリスティック処方箋</h2>
+                        <div class="chapter-divider"></div>
+                    </div>
+
+                    <div class="chapter-content">
+                        <div class="content-section">
+                            <h3 class="section-title">【第4章：{{ name }}様のための食養生とアロマテラピー処方箋】</h3>
+                            
+                            <p class="content-text">
+                                {{ name }}様の{{ archetype.name }}というアーキタイプと{{ archetype.body_type }}の体質に基づき、日本の風土に適した食養生とアロマテラピーを中心とした、実践的な健康増進プログラムをご提案いたします。
+                            </p>
+
+                            <h4 class="subsection-title">■ 食養生プログラム - 四大元素に基づく体質別食事療法</h4>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">◆ 陰陽バランスの基本原則</h5>
+                                <p class="content-text">
+                                    {% if '火' in archetype.element_combination %}陽性が強いため、陰性食材（葉物野菜、夏野菜、果物）でバランスを取ることが重要です。{% elif '地' in archetype.element_combination %}陰性がやや強いため、陽性食材（根菜類、肉類、スパイス）で温めることが大切です。{% elif '風' in archetype.element_combination %}軽やかさが過剰になりやすいため、グラウンディング効果のある根菜類を中心に。{% else %}水分が停滞しやすいため、温性スパイスと利尿作用のある食材で代謝を促進。{% endif %}
+                                </p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 推奨食材と調理法</h5>
+                                <ul class="sabian-list">
+                                    <li><strong>推奨食材：</strong>{% if '火' in archetype.element_combination %}きゅうり、すいか、トマト、緑豆、ミント、梨、豆腐{% elif '地' in archetype.element_combination %}生姜、ごぼう、人参、羊肉、シナモン、黒ゴマ{% elif '風' in archetype.element_combination %}根菜類、全粒穀物、甘みのある食材（人参、りんご、米）{% else %}温性スパイス（生姜、シナモン）、小豆、はと麦、海藻{% endif %}</li>
+                                    <li><strong>調理法：</strong>{% if '火' in archetype.element_combination %}生食、茹でる、蒸す（涼性・寒性の性質を活かす）{% elif '地' in archetype.element_combination %}煮る、炒める、シチュー、煮込み（温性・熱性を引き出す）{% elif '風' in archetype.element_combination %}煮る、蒸す、グラウンディング効果のある調理{% else %}炒める、スパイス使用、温かい調理{% endif %}</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">◆ 1日の食事リズム</h5>
+                                <ul class="phase-list">
+                                    <li><strong>朝食（7:00-8:00）：</strong>{% if '火' in archetype.element_combination %}フルーツ、ヨーグルト、グリーンスムージーで体内の熱を冷ます{% elif '地' in archetype.element_combination %}温かいお粥やスープで消化器を温める{% elif '風' in archetype.element_combination %}玄米やオートミールでグラウンディング{% else %}スパイスティーと温かい食事で代謝を促進{% endif %}</li>
+                                    <li><strong>昼食（12:00-13:00）：</strong>{% if '火' in archetype.element_combination %}サラダボウルや冷製パスタでクールダウン{% elif '地' in archetype.element_combination %}根菜の煮物やシチューでエネルギー補給{% elif '風' in archetype.element_combination %}バランスの取れた定食で安定感を{% else %}スパイシーなカレーやエスニック料理{% endif %}</li>
+                                    <li><strong>夕食（18:00-19:00）：</strong>{% if '火' in archetype.element_combination %}豆腐や白身魚のさっぱりした料理{% elif '地' in archetype.element_combination %}温かいポトフや鶏肉の煮込み{% elif '風' in archetype.element_combination %}消化に優しいスープや蒸し料理{% else %}生姜を使った炒め物や焼き魚{% endif %}</li>
+                                </ul>
+                            </div>
+
+                            <h4 class="subsection-title">■ アロマテラピー処方 - エレメント別精油プログラム</h4>
+                            
+                            <div class="sabian-box">
+                                <h5 class="sabian-title">{{ archetype.element_combination }}のバランスを整える精油処方</h5>
+                                {% if '火' in archetype.element_combination %}
+                                <div class="content-text">
+                                    <strong>火のエネルギー調整ブレンド：</strong>
+                                    <ul class="sabian-list">
+                                        <li>鎮静：ラベンダー（3滴）、カモミール（2滴） - 過剰な熱を鎮める</li>
+                                        <li>心の平和：サンダルウッド（2滴） - 内なる平和と瞑想</li>
+                                        <li>愛の火：ローズ（1滴） - 怒りを愛に変容</li>
+                                    </ul>
+                                    <p class="sabian-note">使用例：イライラした時にハンカチに垂らして深呼吸</p>
+                                </div>
+                                {% elif '地' in archetype.element_combination %}
+                                <div class="content-text">
+                                    <strong>地のエネルギー活性化ブレンド：</strong>
+                                    <ul class="sabian-list">
+                                        <li>軽やかさ：ペパーミント（2滴）、レモン（2滴） - 重さを解放</li>
+                                        <li>浄化：ユーカリ（2滴） - 新鮮さと変化</li>
+                                        <li>代謝促進：グレープフルーツ（1滴） - 軽やかな変化</li>
+                                    </ul>
+                                    <p class="sabian-note">使用例：朝のディフューザーで活力を高める</p>
+                                </div>
+                                {% elif '風' in archetype.element_combination %}
+                                <div class="content-text">
+                                    <strong>風のエネルギー鎮静ブレンド：</strong>
+                                    <ul class="sabian-list">
+                                        <li>グラウンディング：ベチバー（3滴）、シダーウッド（2滴） - 大地との繋がり</li>
+                                        <li>神経鎮静：ラベンダー（2滴）、カモミール（1滴） - 穏やかさ</li>
+                                        <li>感情との繋がり：イランイラン（1滴） - 感情調整</li>
+                                    </ul>
+                                    <p class="sabian-note">使用例：足裏にベチバーを塗布して安定感を得る</p>
+                                </div>
+                                {% else %}
+                                <div class="content-text">
+                                    <strong>水のエネルギー調整ブレンド：</strong>
+                                    <ul class="sabian-list">
+                                        <li>デトックス：ジュニパー（2滴）、サイプレス（2滴） - 流れの促進</li>
+                                        <li>軽やかさ：グレープフルーツ（2滴）、レモン（1滴） - 浄化</li>
+                                        <li>明晰さ：ローズマリー（1滴） - 論理性と集中</li>
+                                    </ul>
+                                    <p class="sabian-note">使用例：入浴時に加えてデトックスを促進</p>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <h4 class="subsection-title">■ ライフスタイル医学的アプローチ</h4>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">◆ 運動処方</h5>
+                                <p class="content-text">
+                                    {{ archetype.temperament }}に最適な運動メニュー：
+                                </p>
+                                <ul class="phase-list">
+                                    <li>月曜：ヨガ45分（柔軟性と呼吸）</li>
+                                    <li>火曜：有酸素運動30分（心肺機能）</li>
+                                    <li>水曜：筋トレ30分（上半身）</li>
+                                    <li>木曜：太極拳またはピラティス45分（バランス）</li>
+                                    <li>金曜：筋トレ30分（下半身）</li>
+                                    <li>土曜：好きなスポーツ60分（楽しみ）</li>
+                                    <li>日曜：散歩30分（回復）</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">◆ 環境調整</h5>
+                                <ul class="sabian-list">
+                                    <li><strong>寝室：</strong>{% if '火' in archetype.element_combination %}暖色系の照明、南向きの配置{% elif '地' in archetype.element_combination %}アースカラーの装飾、低めのベッド{% elif '風' in archetype.element_combination %}風通しの良い配置、軽やかなカーテン{% else %}ブルー系の色調、加湿器の設置{% endif %}</li>
+                                    <li><strong>仕事場：</strong>自然光、植物、整理整頓された空間</li>
+                                    <li><strong>リビング：</strong>観葉植物と自然光を重視</li>
+                                </ul>
+                            </div>
+                            
+                            <p class="content-text">
+                                これらの処方は、{{ name }}様の個性に合わせてカスタマイズ可能です。無理なく、楽しみながら実践することが最も重要です。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 第5章 -->
+            <article id="chapter5" class="chapter">
+                <div class="container-narrow">
+                    <div class="chapter-header">
+                        <span class="chapter-number">第5章</span>
+                        <h2 class="chapter-title">天命を生きるためのライフプランニング</h2>
+                        <div class="chapter-divider"></div>
+                    </div>
+
+                    <div class="chapter-content">
+                        <div class="content-section">
+                            <h3 class="section-title">【第5章：{{ name }}様の天命を生きるためのライフプランニング】</h3>
+                            
+                            <p class="content-text">
+                                {{ archetype.name }}というアーキタイプを持つ{{ name }}様の人生は、独自の時間軸とリズムで展開します。占星医学の観点から、最適な人生設計をご提案いたします。
+                            </p>
+
+                            <h4 class="subsection-title">■ ライフサイクルと重要な転換期</h4>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 29-30歳：土星回帰（Saturn Return）</h5>
+                                <p class="content-text">
+                                    最初の大きな成熟期。{{ archetype.element_combination }}の統合が始まり、真の個性が確立される時期。キャリアの方向性を定め、人生の基盤を築く重要な時期です。
+                                </p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 36-37歳：ノードの2回目の回帰</h5>
+                                <p class="content-text">
+                                    運命的な出会いや転機が訪れやすい時期。{{ name }}様の{{ archetype.name }}としての使命が明確になり、社会的な役割が確立されます。
+                                </p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 42-44歳：天王星対衝（Uranus Opposition）</h5>
+                                <p class="content-text">
+                                    「中年の危機」とも呼ばれる革新の時期。従来の価値観を見直し、後半生に向けた新しい方向性を模索します。{{ archetype.temperament }}の深い部分が活性化されます。
+                                </p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 50-51歳：キロン回帰（Chiron Return）</h5>
+                                <p class="content-text">
+                                    「傷ついた治療者」の帰還。人生の傷や課題が癒しの源泉となり、他者への貢献が始まる時期です。
+                                </p>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">◆ 58-60歳：第2土星回帰</h5>
+                                <p class="content-text">
+                                    真の円熟期。蓄積された知恵が結実し、{{ archetype.name }}としての完成形に近づきます。
+                                </p>
+                            </div>
+
+                            <h4 class="subsection-title">■ キャリアデザインと適職</h4>
+                            
+                            <p class="content-text">
+                                {{ archetype.name }}の特性を活かせる職業領域：
+                            </p>
+                            
+                            <ol class="numbered-list">
+                                <li><strong>創造的リーダーシップ</strong><br>
+                                    {{ archetype.talents }}を活かし、革新的なプロジェクトを推進する役割。起業家、プロデューサー、クリエイティブディレクターなど。
+                                </li>
+                                
+                                <li><strong>癒しと変容の仕事</strong><br>
+                                    {{ archetype.body_type }}の理解を活かし、他者の成長を支援する役割。セラピスト、コーチ、医療従事者など。
+                                </li>
+                                
+                                <li><strong>知識と教育</strong><br>
+                                    {{ celestial_data.mercury.element }}の影響を活かし、知識を伝える役割。教育者、作家、研究者など。
+                                </li>
+                                
+                                <li><strong>美と調和の創造</strong><br>
+                                    {{ celestial_data.venus.element }}のエネルギーを表現する役割。アーティスト、デザイナー、音楽家など。
+                                </li>
+                            </ol>
+
+                            <h4 class="subsection-title">■ 人間関係のダイナミクス</h4>
+                            
+                            <p class="content-text">
+                                {{ archetype.element_combination }}の組み合わせは、特定のタイプの人々を引き寄せます：
+                            </p>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">◆ 相性の良いパートナー</h5>
+                                <ul class="sabian-list">
+                                    <li>補完的エレメントを持つ人：{% if '火' in archetype.element_combination %}風（刺激と拡大）、地（安定と具現化）{% elif '地' in archetype.element_combination %}水（感情の潤い）、火（活性化）{% elif '風' in archetype.element_combination %}火（情熱）、水（深み）{% else %}地（構造）、風（流通）{% endif %}</li>
+                                    <li>同じ価値観を共有しながらも、異なる表現方法を持つ人</li>
+                                    <li>{{ name }}様の成長を促進し、同時に安定感を提供できる人</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="content-card">
+                                <h5 class="highlight-title">◆ ビジネスパートナーシップ</h5>
+                                <ul class="sabian-list">
+                                    <li>{{ archetype.challenges }}を補完できる能力を持つ人</li>
+                                    <li>実務能力と創造性のバランスが取れている人</li>
+                                    <li>長期的なビジョンを共有できる人</li>
+                                </ul>
+                            </div>
+
+                            <h4 class="subsection-title">■ 富と豊かさの創造</h4>
+                            
+                            <p class="content-text">
+                                {{ archetype.name }}にとっての真の豊かさ：
+                            </p>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">1. 経済的側面</h5>
+                                <ul class="sabian-list">
+                                    <li>収入源の多様化：{{ archetype.talents }}を複数の形で収益化</li>
+                                    <li>投資戦略：{% if '火' in archetype.element_combination %}成長株、ベンチャー投資、短期的なリターン重視{% elif '地' in archetype.element_combination %}不動産、配当株、長期保有戦略{% elif '風' in archetype.element_combination %}分散投資、テクノロジー株、情報重視{% else %}ESG投資、社会的インパクト投資、直感重視{% endif %}</li>
+                                    <li>金銭管理：{{ archetype.temperament }}に適した管理方法の確立</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">2. 時間の豊かさ</h5>
+                                <ul class="sabian-list">
+                                    <li>創造的な時間：1日2時間以上確保</li>
+                                    <li>回復の時間：週1日は完全休養</li>
+                                    <li>成長の時間：月10時間以上の学習</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="highlight-box">
+                                <h5 class="highlight-title">3. 関係性の豊かさ</h5>
+                                <ul class="sabian-list">
+                                    <li>深い絆を持つ人々との定期的な交流</li>
+                                    <li>新しい出会いへの開放性</li>
+                                    <li>孤独な時間の大切さも認識</li>
+                                </ul>
+                            </div>
+
+                            <h4 class="subsection-title">■ スピリチュアルな成長の道</h4>
+                            
+                            <p class="content-text">
+                                {{ archetype.name }}の霊的進化：
+                            </p>
+                            
+                            <ul class="phase-list">
+                                <li><strong>第1段階：自己認識（20-35歳）</strong><br>
+                                    自分が何者かを理解する<br>
+                                    才能と課題を受け入れる<br>
+                                    個人的な力を確立する
+                                </li>
+                                
+                                <li><strong>第2段階：他者との関係（35-50歳）</strong><br>
+                                    深い絆を形成する<br>
+                                    社会的な貢献を始める<br>
+                                    カルマ的な関係を癒す
+                                </li>
+                                
+                                <li><strong>第3段階：宇宙との一体（50歳以降）</strong><br>
+                                    より大きな目的を理解する<br>
+                                    無条件の愛を体現する<br>
+                                    次元を超えた意識へ
+                                </li>
+                            </ul>
+
+                            <h4 class="subsection-title">■ 人生の最終章に向けて</h4>
+                            
+                            <p class="content-text">
+                                {{ name }}様の{{ archetype.name }}としての完成は、単なる個人的な達成を超えて、集合意識への貢献となります。あなたが体現する{{ archetype.element_combination }}のエネルギーは、周囲の人々にも影響を与え、より大きな調和の一部となっていきます。
+                            </p>
+                            
+                            <p class="content-text">
+                                人生の各段階で得た智慧を統合し、次世代へ伝えることが、{{ archetype.name }}としての究極の使命となるでしょう。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- エピローグ -->
+            <article class="epilogue">
+                <div class="container-narrow">
+                    <div class="epilogue-content">
+                        <h2 class="epilogue-title">エピローグ：{{ name }}様へのメッセージ</h2>
+                        
+                        <p class="epilogue-text">
+                            このASTRO-MEDICAL REPORTは、{{ name }}様の持つ無限の可能性を解き明かすための地図です。
+                        </p>
+                        
+                        <p class="epilogue-text">
+                            しかし、地図は道そのものではありません。実際の旅路は、ご自身が一歩一歩歩んでいくものです。このレポートで示された指針は、あくまでも可能性であり、運命はご自身の選択と行動によって創造されていきます。
+                        </p>
+                        
+                        <p class="epilogue-text">
+                            {{ archetype.tagline }}という本質を生きることは、時に困難を伴うかもしれません。しかし、その困難こそがあなたを成長させ、真の自己実現へと導く貴重な機会となります。
+                        </p>
+                        
+                        <p class="epilogue-text">
+                            宇宙は{{ name }}様の存在を祝福しています。太陽と月、そして全ての惑星たちが、人生という壮大な交響曲を奏でています。その音楽に耳を傾け、自分のリズムで踊ることを恐れないでください。
+                        </p>
+                        
+                        <p class="epilogue-text">
+                            あなたの才能を生きることは、世界に独自の贈り物をすることです。その贈り物を惜しみなく分かち合うことで、想像を超える豊かさを受け取ることになるでしょう。
+                        </p>
+                        
+                        <p class="epilogue-text">
+                            願わくば、この占星医学的な洞察が、{{ name }}様の人生により深い意味と方向性をもたらし、健康と幸福、そして魂の充足への道を照らす光となりますように。
+                        </p>
+                        
+                        <div class="epilogue-footer">
+                            <div class="divider-line"></div>
+                            <p class="footer-text">監修：織田剛</p>
+                            <p class="footer-text">ASTRO-MEDICAL SYSTEM © 2024</p>
+                            <div class="divider-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </main>
+
+        <!-- フッター -->
+        <footer class="report-footer">
+            <p>© 2024 ASTRO-MEDICAL SYSTEM</p>
+            <p>生成日時: {{ report_date }}</p>
+        </footer>
+    </div>
+
+    <!-- JavaScriptセクション -->
+    <script>
+        // スムーススクロール
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80; // ナビゲーションの高さを考慮
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // アクティブなセクションをハイライト
+        window.addEventListener('scroll', function() {
+            const scrollPos = window.scrollY + 100;
+            const sections = document.querySelectorAll('.chapter');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            sections.forEach((section, index) => {
+                if (section.offsetTop <= scrollPos && 
+                    section.offsetTop + section.offsetHeight > scrollPos) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    if (navLinks[index]) {
+                        navLinks[index].classList.add('active');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

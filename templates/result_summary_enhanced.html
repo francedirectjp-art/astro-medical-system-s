@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASTRO BODY TYPE REPORT - {{ name }}様</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_unified.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result_unified.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="elegant-bg"></div>
+    <div class="container">
+        <!-- レポートヘッダー -->
+        <header class="report-header card fade-in">
+            <div class="report-badge">ASTRO BODY TYPE REPORT</div>
+            <h1 class="report-title">{{ name }}様の体質診断レポート</h1>
+            <div class="accent-line"></div>
+            <p class="report-subtitle text-secondary">伝統的占星術による基礎分析</p>
+            <button onclick="window.print()" class="print-btn-summary">印刷する</button>
+            
+            <div class="birth-info-elegant">
+                <div class="birth-item">
+                    <span class="birth-label">生年月日</span>
+                    <span class="birth-value">{{ info.jst_datetime }}</span>
+                </div>
+                <div class="birth-item">
+                    <span class="birth-label">出生地</span>
+                    <span class="birth-value">{{ info.location }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- メインレポート -->
+        <section class="section fade-in">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">あなたの原型：{{ info.archetype.name }}（{{ info.archetype.name_en }}）</h2>
+                </div>
+                <div class="report-content">
+                    <div class="archetype-overview">
+                        <p class="element-combination text-gold">
+                            元素の組み合わせ：{{ info.archetype.element_combination }} - {{ info.archetype.temperament }}な性質
+                        </p>
+                        
+                        <div class="archetype-intro">
+                            <p>
+                                {{ name }}様の太陽は{{ data['太陽'].zodiac }}（{{ data['太陽'].element }}の元素）に位置し、
+                                月は{{ data['月'].zodiac }}（{{ data['月'].element }}の元素）に位置しています。
+                                この配置により、あなたは「{{ info.archetype.name }}（{{ info.archetype.name_en }}）」という原型に分類されます。
+                                この原型は{{ info.archetype.body_type }}の体質を持ち、独特な生命エネルギーのパターンを示しています。
+                            </p>
+                            
+                            <p>
+                                太陽が{{ data['太陽'].zodiac }}の{{ data['太陽'].degrees }}.{{ data['太陽'].minutes }}度に位置することは、
+                                {% if data['太陽'].degrees < 10 %}初期段階{% elif data['太陽'].degrees < 20 %}中期段階{% else %}完成の段階{% endif %}
+                                にあることを示しており、これはあなたの基本的な生命力の表現方法に影響を与えています。
+                            </p>
+                            
+                            <p>
+                                月が{{ data['月'].zodiac }}の{{ data['月'].degrees }}.{{ data['月'].minutes }}度にあることは、
+                                あなたの感情の本質と無意識の反応パターンを示しています。
+                                {% if data['月'].degrees < 10 %}初期段階{% elif data['月'].degrees < 20 %}中期段階{% else %}後期段階{% endif %}
+                                の月は、感情的な成熟度と内的な安定性に関する重要な示唆を与えています。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="constitution-section">
+                        <h3 class="section-subtitle">体質の特徴</h3>
+                        <p>
+                            太陽が{{ data['太陽'].zodiac }}にあることから、
+                            <span class="text-gold">{{ info.sun_quality|default('知的で社交的な') }}</span>
+                            基本体質を持っています。
+                            月が{{ data['月'].zodiac }}にあることで、
+                            <span class="text-gold">{{ info.moon_quality|default('柔軟で適応力のある') }}</span>
+                            感情的反応が加わります。
+                        </p>
+                        
+                        <p>
+                            {{ name }}様の主要な特質として、<span class="text-gold">{{ info.archetype.strength }}</span>が挙げられます。
+                            これらの特質は、日常生活や人間関係において重要な役割を果たし、あなたの独自性を形成しています。
+                        </p>
+                    </div>
+
+                    <div class="planets-analysis">
+                        <h3 class="section-subtitle">7天体の詳細分析</h3>
+                        
+                        <div class="planet-description">
+                            <h4>☉ 太陽 - {{ data['太陽'].zodiac }} {{ data['太陽'].degrees }}.{{ data['太陽'].minutes }}度</h4>
+                            <p>
+                                <strong>生命力と自己表現：</strong>{{ name }}様の中核的なアイデンティティは
+                                <span class="text-gold">{{ info.sun_identity|default('知的でコミュニケーション能力に優れ') }}</span>あります。
+                                {% if data['太陽'].degrees > 25 %}後期度数は成熟と統合{% elif data['太陽'].degrees > 15 %}中期度数は発展と表現{% else %}初期度数は新鮮な始まり{% endif %}を示しています。
+                            </p>
+                        </div>
+                        
+                        <div class="planet-description">
+                            <h4>☽ 月 - {{ data['月'].zodiac }} {{ data['月'].degrees }}.{{ data['月'].minutes }}度</h4>
+                            <p>
+                                <strong>感情と無意識：</strong>
+                                <span class="text-gold">{{ info.moon_emotion|default('感情を理性化し、客観的な視点を保持') }}</span>する傾向があります。
+                            </p>
+                        </div>
+                        
+                        <div class="planet-description">
+                            <h4>☿ 水星 - {{ data['水星'].zodiac }} {{ data['水星'].degrees }}.{{ data['水星'].minutes }}度</h4>
+                            <p>
+                                <strong>思考とコミュニケーション：</strong>{{ data['水星'].element }}の元素により、
+                                <span class="text-gold">
+                                    {% if data['水星'].element == '火' %}直感的で即座の理解
+                                    {% elif data['水星'].element == '地' %}実践的で具体的な思考
+                                    {% elif data['水星'].element == '風' %}論理的で分析的な表現
+                                    {% else %}感情的で想像力豊かな表現{% endif %}
+                                </span>が特徴です。
+                            </p>
+                        </div>
+                        
+                        <div class="planet-description">
+                            <h4>♀ 金星 - {{ data['金星'].zodiac }} {{ data['金星'].degrees }}.{{ data['金星'].minutes }}度</h4>
+                            <p>
+                                <strong>愛と美：</strong>{{ data['金星'].element }}の元素は、
+                                <span class="text-gold">
+                                    {% if data['金星'].element == '火' %}情熱的で冒険的な愛情表現
+                                    {% elif data['金星'].element == '地' %}安定した誠実な関係性
+                                    {% elif data['金星'].element == '風' %}知的で洗練された美意識
+                                    {% else %}深い共感と情緒的な結びつき{% endif %}
+                                </span>を求めます。
+                            </p>
+                        </div>
+                        
+                        <div class="planet-description">
+                            <h4>♂ 火星 - {{ data['火星'].zodiac }} {{ data['火星'].degrees }}.{{ data['火星'].minutes }}度</h4>
+                            <p>
+                                <strong>行動とエネルギー：</strong>{{ data['火星'].element }}の元素により、
+                                <span class="text-gold">
+                                    {% if data['火星'].element == '火' %}直接的で積極的なアプローチ
+                                    {% elif data['火星'].element == '地' %}着実で忍耐強い実行力
+                                    {% elif data['火星'].element == '風' %}戦略的で知的なアプローチ
+                                    {% else %}直感的で流動的な行動{% endif %}
+                                </span>を取ります。
+                            </p>
+                        </div>
+                        
+                        <div class="planet-description">
+                            <h4>♃ 木星 - {{ data['木星'].zodiac }} {{ data['木星'].degrees }}.{{ data['木星'].minutes }}度</h4>
+                            <p>
+                                <strong>成長と拡大：</strong>{{ data['木星'].element }}の元素は、
+                                <span class="text-gold">
+                                    {% if data['木星'].element == '火' %}冒険と挑戦による成長
+                                    {% elif data['木星'].element == '地' %}着実な積み重ねによる発展
+                                    {% elif data['木星'].element == '風' %}知識と交流による拡大
+                                    {% else %}感情的な深まりによる成熟{% endif %}
+                                </span>を促進します。
+                            </p>
+                        </div>
+                        
+                        <div class="planet-description">
+                            <h4>♄ 土星 - {{ data['土星'].zodiac }} {{ data['土星'].degrees }}.{{ data['土星'].minutes }}度</h4>
+                            <p>
+                                <strong>責任と構造：</strong>{{ data['土星'].element }}の元素により、
+                                <span class="text-gold">
+                                    {% if data['土星'].element == '火' %}自己主張と独立の課題
+                                    {% elif data['土星'].element == '地' %}物質的安定と実践の課題
+                                    {% elif data['土星'].element == '風' %}コミュニケーションと理解の課題
+                                    {% else %}感情的な成熟と共感の課題{% endif %}
+                                </span>に取り組みます。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="element-analysis">
+                        <h3 class="section-subtitle">四元素バランス分析</h3>
+                        
+                        <div class="element-breakdown">
+                            <div class="element-item">
+                                <strong>火の元素:</strong> {{ info.elements.fire_count }}個
+                                <span class="planet-list text-muted">{{ info.fire_planets|default('') }}</span>
+                            </div>
+                            <div class="element-item">
+                                <strong>地の元素:</strong> {{ info.elements.earth_count }}個
+                                <span class="planet-list text-muted">{{ info.earth_planets|default('') }}</span>
+                            </div>
+                            <div class="element-item">
+                                <strong>風の元素:</strong> {{ info.elements.air_count }}個
+                                <span class="planet-list text-muted">{{ info.air_planets|default('') }}</span>
+                            </div>
+                            <div class="element-item">
+                                <strong>水の元素:</strong> {{ info.elements.water_count }}個
+                                <span class="planet-list text-muted">{{ info.water_planets|default('') }}</span>
+                            </div>
+                        </div>
+                        
+                        <p>
+                            {{ name }}様の天体配置において、最も強い元素は<span class="text-gold">{{ info.dominant_element }}</span>（{{ info.dominant_count|default('3') }}個の天体）です。
+                            これは{{ info.dominant_planets|default('太陽、月、火星') }}が該当し、あなたの性格と体質の基調を形成しています。
+                        </p>
+                        
+                        <p>
+                            この四元素バランスから、{{ info.archetype.name }}タイプとしての特徴がより明確になります。
+                            太陽の{{ data['太陽'].element }}と月の{{ data['月'].element }}の組み合わせは、
+                            <span class="text-gold">意識と無意識の{% if data['太陽'].element == data['月'].element %}調和{% else %}創造的緊張{% endif %}</span>を示し、
+                            <span class="text-gold">{{ info.element_insight|default('多面的な才能の開花') }}</span>を可能にしています。
+                        </p>
+                    </div>
+
+                    <div class="health-section">
+                        <h3 class="section-subtitle">健康と体質への示唆</h3>
+                        <p>
+                            {{ name }}様の体質は{{ info.archetype.temperament }}であり、
+                            <span class="text-gold">{{ info.archetype.physical }}</span>に特徴があります。
+                            日常的な健康管理では、これらの系統に特に注意を払うことが重要です。
+                        </p>
+                        
+                        <p class="caution-text">
+                            <strong>注意すべき点：</strong>{{ info.archetype.caution }}
+                        </p>
+                        
+                        <p class="lifestyle-text">
+                            <strong>推奨される生活習慣：</strong>{{ info.archetype.lifestyle }}
+                        </p>
+                    </div>
+
+                    <div class="direction-section">
+                        <h3 class="section-subtitle">人生の方向性</h3>
+                        <p>
+                            {{ name }}様の「{{ info.archetype.name }}」という原型は、人生において
+                            <span class="text-gold">{{ info.life_theme|default('多様な視点と知的な探求') }}</span>を追求することが重要です。
+                        </p>
+                        
+                        <p>
+                            金星が{{ data['金星'].zodiac }}の{{ data['金星'].degrees }}度にあることは、
+                            <span class="text-gold">
+                                {% if data['金星'].element == '火' %}情熱的で冒険的な
+                                {% elif data['金星'].element == '地' %}実直で信頼できる
+                                {% elif data['金星'].element == '風' %}洗練された知的な
+                                {% else %}深い共感性のある{% endif %}
+                            </span>価値観と美意識を示しています。
+                            これは人間関係において
+                            <span class="text-gold">
+                                {% if data['金星'].element == '火' %}率直で熱意ある交流
+                                {% elif data['金星'].element == '地' %}誠実で長続きする関係
+                                {% elif data['金星'].element == '風' %}刺激的な知的交流
+                                {% else %}深い感情的な結びつき{% endif %}
+                            </span>を求める傾向を生み出します。
+                        </p>
+                        
+                        <p>
+                            {{ info.archetype.temperament }}な気質は、
+                            火星が{{ data['火星'].zodiac }}の{{ data['火星'].degrees }}度、
+                            土星が{{ data['土星'].zodiac }}の{{ data['土星'].degrees }}度にあることで、
+                            <span class="text-gold">{{ info.mars_saturn_combo|default('多様なアプローチと柔軟な対応') }}</span>を可能にしています。
+                        </p>
+                    </div>
+
+                    <div class="conclusion">
+                        <h3 class="section-subtitle">まとめ</h3>
+                        <p>
+                            {{ name }}様は「{{ info.archetype.name }}（{{ info.archetype.name_en }}）」として、{{ info.archetype.temperament }}な性質と
+                            {{ info.archetype.element_combination }}の独特な組み合わせを持っています。
+                            この原型は<span class="text-gold">{{ info.archetype.core|default('純粋な知性') }}</span>を体現しています。
+                        </p>
+                        
+                        <p>
+                            この基本レポートで示された傾向と特質を理解することで、あなたは自己の潜在能力を最大限に活かし、
+                            より充実した人生を送ることができるでしょう。
+                        </p>
+                        
+                        <p class="final-message">
+                            <strong>より詳細な分析を知りたい方は、完全版レポートへと進んでください。</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- アクションボタン -->
+        <section class="section action-section fade-in">
+            <div class="action-buttons-elegant">
+                <a href="/detailed_report" class="btn btn-primary btn-large">
+                    <span>完全版レポートを読む</span>
+                    <small class="btn-subtitle">12,000文字の包括的分析</small>
+                </a>
+                
+                <div class="secondary-actions">
+                    <button onclick="window.print()" class="btn btn-secondary">
+                        レポートを印刷
+                    </button>
+                    <a href="/" class="btn btn-secondary">
+                        新規診断
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- フッター -->
+        <footer class="report-footer text-center">
+            <div class="divider"></div>
+            <p class="text-muted">監修：織田剛 | ASTRO-MEDICAL REPORT SYSTEM</p>
+        </footer>
+    </div>
+
+    <script>
+        // フェードインアニメーション
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(20px)';
+                    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    
+                    setTimeout(() => {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, 50);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -401,6 +401,117 @@ def get_element(zodiac_name):
     }
     return elements.get(zodiac_name, '不明')
 
+def _get_archetype_details(archetype_name):
+    """体質原型に基づく詳細な特徴を生成"""
+    archetype_features = {
+        "火のカリスマ": {
+            "strength": "強力なリーダーシップ、決断力、行動力",
+            "physical": "高い基礎代謝、筋肉質な体質、熱産生が活発",
+            "caution": "過労、ストレス性疾患、炎症性疾患への注意",
+            "lifestyle": "定期的なクールダウン、瞑想、十分な水分補給"
+        },
+        "マグマ": {
+            "strength": "爆発的な創造力、情熱、カリスマ性",
+            "physical": "非常に高い体温、活発な循環系、強い消化力",
+            "caution": "怒りのコントロール、血圧管理、熱性疾患",
+            "lifestyle": "冷却食品の摂取、水泳、定期的な休息"
+        },
+        "聖火": {
+            "strength": "持続的な情熱、理想主義、インスピレーション",
+            "physical": "安定した熱産生、良好な代謝、強い免疫力",
+            "caution": "理想と現実のギャップによるストレス",
+            "lifestyle": "創造的活動、芸術療法、自然との触れ合い"
+        },
+        "野火": {
+            "strength": "瞬発力、適応力、直感的判断力",
+            "physical": "変動しやすい体温、敏感な神経系",
+            "caution": "エネルギーの浪費、神経過敏",
+            "lifestyle": "規則的な生活リズム、グラウンディング"
+        },
+        "竈の火": {
+            "strength": "忍耐力、実務能力、安定性",
+            "physical": "安定した消化機能、堅実な体格",
+            "caution": "柔軟性の欠如、関節の硬化",
+            "lifestyle": "ストレッチ、ヨガ、柔軟性を高める運動"
+        },
+        "鉱床": {
+            "strength": "分析力、計画性、持久力",
+            "physical": "強固な骨格、ゆっくりとした代謝",
+            "caution": "循環不良、冷え性、消化不良",
+            "lifestyle": "有酸素運動、温かい食事、マッサージ"
+        },
+        "山": {
+            "strength": "安定性、信頼性、保守力",
+            "physical": "強靭な体格、ゆったりとした動作",
+            "caution": "変化への抵抗、頑固さ",
+            "lifestyle": "新しい経験、旅行、社交活動"
+        },
+        "流砂": {
+            "strength": "柔軟性、適応力、受容力",
+            "physical": "変化しやすい体調、敏感な消化器",
+            "caution": "境界の曖昧さ、依存傾向",
+            "lifestyle": "境界設定の練習、自己主張トレーニング"
+        },
+        "山火事": {
+            "strength": "コミュニケーション力、情熱、発信力",
+            "physical": "活発な代謝、敏感な呼吸器系",
+            "caution": "オーバーワーク、呼吸器疾患",
+            "lifestyle": "呼吸法、休息、森林浴"
+        },
+        "砂岩の彫刻家": {
+            "strength": "論理性、創造性、実用性の融合",
+            "physical": "バランスの取れた体質、安定した神経系",
+            "caution": "感情表現の抑制、緊張性頭痛",
+            "lifestyle": "感情解放、アート活動、音楽療法"
+        },
+        "サイクロン": {
+            "strength": "知的好奇心、多才、社交性",
+            "physical": "敏感な神経系、変動しやすいエネルギー",
+            "caution": "散漫、不眠、神経疲労",
+            "lifestyle": "瞑想、集中力トレーニング、十分な睡眠"
+        },
+        "霧": {
+            "strength": "共感力、想像力、柔軟な思考",
+            "physical": "繊細な体質、敏感な感覚器官",
+            "caution": "境界の喪失、エネルギー枯渇",
+            "lifestyle": "エネルギー管理、境界設定、グラウンディング"
+        },
+        "温泉": {
+            "strength": "癒しの力、情熱的な共感、行動力",
+            "physical": "温かい体質、活発な循環",
+            "caution": "感情の起伏、エネルギーの消耗",
+            "lifestyle": "感情調整、定期的な休息、水分補給"
+        },
+        "粘土": {
+            "strength": "創造性、実用性、育成力",
+            "physical": "しっとりとした体質、ゆったりとした代謝",
+            "caution": "停滞、むくみ、消化不良",
+            "lifestyle": "定期的な運動、リンパマッサージ、軽い食事"
+        },
+        "霧雨": {
+            "strength": "繊細さ、直感力、芸術性",
+            "physical": "敏感な体質、変動しやすい体調",
+            "caution": "過敏性、不安、エネルギー不足",
+            "lifestyle": "規則正しい生活、栄養管理、創作活動"
+        },
+        "海": {
+            "strength": "深い感受性、包容力、直感",
+            "physical": "流動的な体質、リンパ系が活発",
+            "caution": "感情の波、水分代謝の問題",
+            "lifestyle": "感情日記、水中運動、月のリズムに合わせた生活"
+        }
+    }
+    
+    # デフォルト値
+    default_features = {
+        "strength": "バランスの取れた資質、適応力",
+        "physical": "標準的な体質、安定した健康状態",
+        "caution": "ストレス管理、生活習慣の維持",
+        "lifestyle": "規則正しい生活、適度な運動、バランスの取れた食事"
+    }
+    
+    return archetype_features.get(archetype_name, default_features)
+
 def calculate_celestial_positions(birth_year, birth_month, birth_day, birth_hour, birth_minute, prefecture):
     """
     天体位置を計算（地球中心黄道座標系を使用）
@@ -558,11 +669,174 @@ def show_result():
             session['celestial_data'] = json.dumps(result['celestial_positions'])
             session['name'] = name
             
-            # 成功時は結果ページへ
-            return render_template('result.html', 
+            # 元素バランスを計算
+            elements = {'火': 0, '地': 0, '風': 0, '水': 0}
+            for planet_data in result['celestial_positions'].values():
+                element = planet_data.get('element', '')
+                if element in elements:
+                    elements[element] += 1
+            
+            # 最も多い元素を特定
+            dominant_element = max(elements, key=elements.get)
+            total_planets = sum(elements.values())
+            
+            # パーセンテージ計算
+            element_percents = {
+                'fire': int((elements['火'] / total_planets * 100)) if total_planets > 0 else 0,
+                'earth': int((elements['地'] / total_planets * 100)) if total_planets > 0 else 0,
+                'air': int((elements['風'] / total_planets * 100)) if total_planets > 0 else 0,
+                'water': int((elements['水'] / total_planets * 100)) if total_planets > 0 else 0,
+                'fire_count': elements['火'],
+                'earth_count': elements['地'],
+                'air_count': elements['風'],
+                'water_count': elements['水']
+            }
+            
+            # 元素の意味を設定
+            element_meanings = {
+                '火': '活動的でエネルギッシュな体質',
+                '地': '安定性と持続力のある体質',
+                '風': '柔軟性と適応力の高い体質',
+                '水': '感受性と直感力に優れた体質'
+            }
+            
+            # 体質原型の詳細情報を生成
+            archetype_info = result['calculation_info']['archetype']
+            
+            # 体質原型に基づく詳細な特徴を設定
+            archetype_details = _get_archetype_details(archetype_info.get('name', ''))
+            archetype_info.update(archetype_details)
+            
+            # calculation_infoに元素情報を追加
+            result['calculation_info']['elements'] = element_percents
+            result['calculation_info']['dominant_element'] = dominant_element
+            result['calculation_info']['element_meaning'] = element_meanings.get(dominant_element, '')
+            
+            # レポート用の追加情報を生成
+            info = result['calculation_info']
+            
+            # 太陽と月の性質を設定
+            sun_qualities = {
+                '牡羊座': '積極的で率直な', '牡牛座': '堅実で忍耐強い',
+                '双子座': '知的で社交的な', '蟹座': '感受性豊かで保護的な',
+                '獅子座': '創造的で自信のある', '乙女座': '分析的で実践的な',
+                '天秤座': '調和的でバランスの取れた', '蠍座': '深遠で変容力のある',
+                '射手座': '楽観的で冒険心のある', '山羊座': '責任感が強く野心的な',
+                '水瓶座': '革新的で独立心のある', '魚座': '直感的で共感性の高い'
+            }
+            
+            moon_qualities = {
+                '牡羊座': '即座の感情反応と独立心', '牡牛座': '安定した感情と持続性',
+                '双子座': '柔軟で適応力のある', '蟹座': '深い感情と養育的な本能',
+                '獅子座': '温かく寛大な感情表現', '乙女座': '慎重で分析的な感情処理',
+                '天秤座': '調和を求め客観的な視点を保持', '蠍座': '深い感情と強い直感',
+                '射手座': '楽観的で自由を求める感情', '山羊座': '抑制的で実践的な感情管理',
+                '水瓶座': '独立的で理性的な感情処理', '魚座': '共感的で境界の曖昧な感情'
+            }
+            
+            sun_identities = {
+                '牡羊座': '先駆者精神とリーダーシップに優れ', '牡牛座': '安定性と美的感覚に優れ',
+                '双子座': '知的でコミュニケーション能力に優れ', '蟹座': '育成力と感情的知性に優れ',
+                '獅子座': '創造性とカリスマ性に優れ', '乙女座': '実践力と分析力に優れ',
+                '天秤座': '協調性と美的センスに優れ', '蠍座': '洞察力と変容力に優れ',
+                '射手座': '探求心と楽観性に優れ', '山羊座': '組織力と達成力に優れ',
+                '水瓶座': '革新性と独創性に優れ', '魚座': '直感力と創造性に優れ'
+            }
+            
+            info['sun_quality'] = sun_qualities.get(result['celestial_positions']['太陽']['zodiac'], '独特な')
+            info['moon_quality'] = moon_qualities.get(result['celestial_positions']['月']['zodiac'], '独特な')
+            info['sun_identity'] = sun_identities.get(result['celestial_positions']['太陽']['zodiac'], '多面的な才能を持ち')
+            info['moon_emotion'] = moon_qualities.get(result['celestial_positions']['月']['zodiac'], '感情を独自の方法で処理')
+            
+            # 元素ごとの天体リストを作成
+            element_planets = {'火': [], '地': [], '風': [], '水': []}
+            planet_names = {
+                '太陽': 'sun', '月': 'moon', '水星': 'mercury',
+                '金星': 'venus', '火星': 'mars', '木星': 'jupiter', '土星': 'saturn'
+            }
+            
+            for planet_jp, planet_en in planet_names.items():
+                element = result['celestial_positions'][planet_jp]['element']
+                if element in element_planets:
+                    element_planets[element].append(planet_en)
+            
+            info['fire_planets'] = ', '.join(element_planets['火']) if element_planets['火'] else 'なし'
+            info['earth_planets'] = ', '.join(element_planets['地']) if element_planets['地'] else 'なし'
+            info['air_planets'] = ', '.join(element_planets['風']) if element_planets['風'] else 'なし'
+            info['water_planets'] = ', '.join(element_planets['水']) if element_planets['水'] else 'なし'
+            
+            # 最も多い元素の詳細情報
+            dominant = info['dominant_element']
+            info['dominant_count'] = max(elements.values())
+            info['dominant_planets'] = ', '.join(element_planets[dominant]) if element_planets[dominant] else ''
+            
+            # 人生のテーマと特別な才能
+            life_themes = {
+                '火のカリスマ': '情熱的なリーダーシップと創造',
+                'マグマ': '爆発的な創造力の発揮',
+                '聖火': '理想の実現と持続的な情熱',
+                '野火': '直感と冒険による成長',
+                '竈の火': '実践的な創造と安定',
+                '鉱床': '知識の蓄積と分析',
+                '山': '不動の信頼性と保護',
+                '流砂': '柔軟な適応と受容',
+                '山火事': '情熱的なコミュニケーション',
+                '砂岩の彫刻家': '論理と創造の統合',
+                'サイクロン': '多様な視点と知的な探求',
+                '霧': '想像力と共感の深化',
+                '温泉': '癒しと情熱の融合',
+                '粘土': '創造と実践の統合',
+                '霧雨': '繊細な感受性と芸術',
+                '海': '深い感情と包容力'
+            }
+            
+            special_talents = {
+                '火のカリスマ': '強力な影響力とリーダーシップ',
+                'マグマ': '変革を起こす創造力',
+                '聖火': '持続的な情熱と献身',
+                '野火': '瞬発的な適応力',
+                '竈の火': '実践的な問題解決力',
+                '鉱床': '深い分析力と計画性',
+                '山': '揺るぎない信頼性',
+                '流砂': '無限の適応力',
+                '山火事': '熱意あるコミュニケーション',
+                '砂岩の彫刻家': '知的な創造性',
+                'サイクロン': '知的な革新性',
+                '霧': '深い共感力と想像力',
+                '温泉': '癒しの力と行動力',
+                '粘土': '形を与える創造力',
+                '霧雨': '繊細な芸術性',
+                '海': '無限の包容力'
+            }
+            
+            archetype_name = info['archetype']['name']
+            info['life_theme'] = life_themes.get(archetype_name, '自己実現と成長')
+            info['special_talent'] = special_talents.get(archetype_name, '独自の才能')
+            
+            # 火星と土星のコンビネーション解釈
+            mars_sign = result['celestial_positions']['火星']['zodiac']
+            saturn_sign = result['celestial_positions']['土星']['zodiac']
+            info['mars_saturn_combo'] = f"{mars_sign}の行動力と{saturn_sign}の構造化"
+            
+            # 元素による洞察
+            if info['dominant_element'] == '火':
+                info['element_insight'] = '情熱的な創造と自己表現'
+            elif info['dominant_element'] == '地':
+                info['element_insight'] = '実践的な達成と安定'
+            elif info['dominant_element'] == '風':
+                info['element_insight'] = '知的な探求と交流'
+            else:
+                info['element_insight'] = '感情的な深まりと直感'
+            
+            # セッションに追加情報も保存
+            session['archetype_name'] = info['archetype']['name']
+            session['archetype_name_en'] = info['archetype'].get('name_en', '')
+            
+            # 成功時は詳細レポートページへ
+            return render_template('result_summary_enhanced.html', 
                                  name=name,
                                  data=result['celestial_positions'],
-                                 info=result['calculation_info'])
+                                 info=info)
         else:
             # エラー時は入力ページへ戻る
             return render_template('input.html', 
@@ -687,6 +961,11 @@ def detailed_report_page():
     """詳細レポートページ（12,000文字以上の包括的医学レポート）"""
     import json
     from datetime import datetime
+    from flask import redirect
+    
+    # セッションチェック - データがない場合はトップページへ
+    if 'celestial_data' not in session:
+        return redirect('/')
     
     # URLパラメータとセッションから情報を取得
     name = request.args.get('name', session.get('name', 'お客様'))
@@ -760,7 +1039,11 @@ def detailed_report_page():
     # レポート生成日時
     report_date = datetime.now().strftime('%Y年%m月%d日')
     
-    return render_template('detailed_report_enhanced.html',
+    # アーキタイプ名を取得
+    archetype_name = session.get('archetype_name', '未分類')
+    archetype_name_en = session.get('archetype_name_en', '')
+    
+    return render_template('detailed_report_complete.html',
                          name=name,
                          archetype=archetype,
                          celestial_data=celestial_data,

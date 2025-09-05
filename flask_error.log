@@ -544,3 +544,552 @@ NameError: name 'get_deficient_humor' is not defined. Did you mean: 'get_dominan
  * Restarting with watchdog (inotify)
  * Debugger is active!
  * Debugger PIN: 903-792-757
+Traceback (most recent call last):
+  File "/home/user/webapp/app.py", line 1, in <module>
+    from flask import Flask, render_template, request, jsonify, session
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/user/webapp/app.py", line 1, in <module>
+    from flask import Flask, render_template, request, jsonify, session
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/user/webapp/app.py", line 1, in <module>
+    from flask import Flask, render_template, request, jsonify, session
+ModuleNotFoundError: No module named 'flask'
+Traceback (most recent call last):
+  File "/home/user/webapp/app.py", line 1, in <module>
+    from flask import Flask, render_template, request, jsonify, session
+ModuleNotFoundError: No module named 'flask'
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.82.30 - - [04/Sep/2025 21:47:05] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 21:47:05] "GET /static/css/style_unified.css HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 21:47:05] "GET /static/js/main.js HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 21:47:05] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+10.12.82.30 - - [04/Sep/2025 21:47:34] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 21:47:34] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 21:47:34] "GET /static/css/result_unified.css HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 21:48:00] "GET /detailed_report HTTP/1.1" 200 -
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.82.30 - - [04/Sep/2025 23:41:53] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:41:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:41:53] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:42:18] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:42:18] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:42:18] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:42:25] "GET /detailed_report HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:43:00] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:43:00] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:43:00] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:43:30] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:43:30] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:43:31] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.82.30 - - [04/Sep/2025 23:48:50] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:48:50] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:48:50] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:49:17] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:49:17] "GET /static/css/result_unified.css HTTP/1.1" 200 -
+10.12.82.30 - - [04/Sep/2025 23:49:17] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [04/Sep/2025 23:49:30] "GET /detailed_report HTTP/1.1" 200 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.82.30 - - [05/Sep/2025 00:09:17] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:09:17] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:09:17] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:09:43] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:09:43] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:09:43] "GET /static/css/result_unified.css HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:10:24] "GET /detailed_report HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:12:08] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:12:08] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:12:08] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:12:29] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:12:30] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:12:30] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.82.30 - - [05/Sep/2025 00:27:03] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:27:03] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:27:03] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:27:25] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:27:25] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:27:25] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.82.30 - - [05/Sep/2025 00:28:52] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:28:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:28:53] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:29:42] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:29:42] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:29:42] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:29:52] "GET /detailed_report HTTP/1.1" 200 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.82.30 - - [05/Sep/2025 00:58:49] "GET / HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:58:49] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:58:49] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:59:15] "POST /result HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:59:15] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:59:15] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.82.30 - - [05/Sep/2025 00:59:18] "GET /detailed_report HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:59:18] "GET /static/css/detailed_report_unified.css HTTP/1.1" 200 -
+10.12.82.30 - - [05/Sep/2025 00:59:18] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.89.38 - - [05/Sep/2025 01:10:02] "GET / HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:10:02] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:10:02] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:10:27] "POST /result HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:10:27] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:10:27] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:10:30] "GET /detailed_report HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:10:31] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:10:31] "[36mGET /static/css/detailed_report_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:11:24] "GET / HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:11:24] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:11:24] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:11:53] "POST /result HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:11:53] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:11:53] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:12:00] "GET /detailed_report HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:12:00] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:12:00] "[36mGET /static/css/detailed_report_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/home/user/webapp/app.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.89.38 - - [05/Sep/2025 01:21:30] "GET / HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:21:30] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:21:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:21:51] "POST /result HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:21:52] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:21:52] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:21:55] "GET /detailed_report HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:21:55] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:21:55] "[36mGET /static/css/detailed_report_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.89.38 - - [05/Sep/2025 01:26:14] "GET / HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:26:14] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:26:14] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:26:38] "POST /result HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:26:38] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:26:38] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:26:42] "GET /detailed_report HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:26:42] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:26:42] "GET /static/css/detailed_report_unified.css HTTP/1.1" 200 -
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.89.38 - - [05/Sep/2025 01:41:05] "GET / HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:41:05] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:41:05] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:41:29] "POST /result HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:41:29] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:41:29] "[36mGET /static/css/result_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:41:32] "GET /detailed_report HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:41:32] "[36mGET /static/css/detailed_report_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:41:32] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+ * Detected change in '/usr/local/lib/python3.12/site-packages/fuse.py', reloading
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://169.254.0.21:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with watchdog (inotify)
+ * Debugger is active!
+ * Debugger PIN: 903-792-757
+10.12.89.38 - - [05/Sep/2025 01:45:57] "GET / HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:45:57] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:45:57] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:46:20] "POST /result HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:46:20] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -
+10.12.89.38 - - [05/Sep/2025 01:46:20] "GET /static/css/result_unified.css HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:46:35] "GET /detailed_report HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:46:35] "GET /static/css/detailed_report_unified.css HTTP/1.1" 200 -
+10.12.89.38 - - [05/Sep/2025 01:46:36] "[36mGET /static/css/style_unified.css HTTP/1.1[0m" 304 -

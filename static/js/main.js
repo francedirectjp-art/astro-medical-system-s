@@ -6,14 +6,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const loadingMessage = document.getElementById('loadingMessage');
     const progressBar = document.getElementById('progressBar');
 
-    // ローディングメッセージのバリエーション
+    // ローディングメッセージのバリエーション（よりプロフェッショナルに）
     const loadingMessages = [
-        'あなたの宇宙的な体質を分析しています...',
-        '天体の配置を計算中...',
-        '太陽と月の位置を確認しています...',
-        '惑星のアスペクトを解析中...',
-        '四元素のバランスを調べています...',
-        '16原型との共鳴を確認中...',
+        '天体位置を計算しています...',
+        '出生図を作成中...',
+        '体質原型を分析しています...',
+        '元素バランスを計算中...',
+        'レポートを生成しています...',
         'まもなく完了します...'
     ];
 

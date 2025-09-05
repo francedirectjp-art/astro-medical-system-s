@@ -1,0 +1,561 @@
+/* ========================================
+   ASTRO BODY TYPE システム
+   統一デザインシステム - Classic & Gorgeous
+   ======================================== */
+
+/* ----------------------------------------
+   1. CSS変数定義 - Design Tokens
+   ---------------------------------------- */
+:root {
+    /* カラーパレット - Classic Gold */
+    --primary-gold: #c9a961;        /* 落ち着いたゴールド */
+    --secondary-gold: #e4d4a8;      /* 明るいゴールド */
+    --accent-gold: #b8985f;         /* アクセントゴールド */
+    --gold-light: rgba(201, 169, 97, 0.1);
+    --gold-lighter: rgba(201, 169, 97, 0.05);
+    
+    /* ベースカラー - Deep & Elegant */
+    --dark-bg: #0f0f14;              /* 深い紺色 */
+    --darker-bg: #0a0a0f;            /* より深い紺 */
+    --card-bg: rgba(18, 18, 28, 0.95);
+    --card-border: rgba(201, 169, 97, 0.2);
+    
+    /* テキストカラー */
+    --text-primary: #f4f4f2;         /* メインテキスト */
+    --text-secondary: #d4d4d0;       /* サブテキスト */
+    --text-muted: #a8a8a4;           /* 補助テキスト */
+    
+    /* 機能色 */
+    --success-color: #7aa874;        /* 落ち着いた緑 */
+    --error-color: #c67171;          /* 落ち着いた赤 */
+    --info-color: #6b8fc9;           /* 落ち着いた青 */
+    
+    /* スペーシングシステム（8px基準） */
+    --space-xs: 0.5rem;      /* 8px */
+    --space-sm: 1rem;        /* 16px */
+    --space-md: 1.5rem;      /* 24px */
+    --space-lg: 2rem;        /* 32px */
+    --space-xl: 3rem;        /* 48px */
+    --space-xxl: 4rem;       /* 64px */
+    
+    /* タイポグラフィ - Modular Scale 1.25 */
+    --text-xs: 0.8rem;       /* 12.8px */
+    --text-sm: 0.9rem;       /* 14.4px */
+    --text-base: 1rem;       /* 16px */
+    --text-lg: 1.25rem;      /* 20px */
+    --text-xl: 1.563rem;     /* 25px */
+    --text-2xl: 1.953rem;    /* 31.25px */
+    --text-3xl: 2.441rem;    /* 39px */
+    --text-4xl: 3.052rem;    /* 48.8px */
+    
+    /* ボーダー半径 */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-full: 50px;
+    
+    /* 影の深さ（3段階） */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+    --shadow-gold: 0 4px 20px rgba(201, 169, 97, 0.2);
+    
+    /* アニメーション速度 */
+    --transition-fast: 200ms ease;
+    --transition-base: 300ms ease;
+    --transition-slow: 500ms ease;
+    
+    /* フォントファミリー */
+    --font-serif: 'Noto Serif JP', 'Georgia', serif;
+    --font-sans: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ----------------------------------------
+   2. リセット & ベース設定
+   ---------------------------------------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-sans);
+    background: linear-gradient(180deg, var(--darker-bg) 0%, var(--dark-bg) 50%, #141420 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----------------------------------------
+   3. タイポグラフィ
+   ---------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text-primary);
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+h5 { font-size: var(--text-base); }
+h6 { font-size: var(--text-sm); }
+
+p {
+    margin-bottom: var(--space-sm);
+    color: var(--text-secondary);
+}
+
+a {
+    color: var(--primary-gold);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--secondary-gold);
+}
+
+/* ----------------------------------------
+   4. レイアウトコンポーネント
+   ---------------------------------------- */
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: var(--space-lg);
+}
+
+.section {
+    margin-bottom: var(--space-xl);
+}
+
+/* エレガントな背景パターン（控えめ） */
+.elegant-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: 
+        radial-gradient(circle at 25% 25%, var(--primary-gold) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, var(--primary-gold) 0%, transparent 50%);
+    background-size: 100% 100%;
+}
+
+/* ----------------------------------------
+   5. カードコンポーネント
+   ---------------------------------------- */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    backdrop-filter: blur(10px);
+    transition: all var(--transition-base);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+    border-color: var(--primary-gold);
+}
+
+.card-header {
+    border-bottom: 2px solid var(--card-border);
+    padding-bottom: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.card-title {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    color: var(--primary-gold);
+    letter-spacing: 0.02em;
+}
+
+/* ----------------------------------------
+   6. フォームコンポーネント
+   ---------------------------------------- */
+.form-group {
+    margin-bottom: var(--space-md);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: var(--text-sm);
+    letter-spacing: 0.02em;
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--space-sm);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+}
+
+.form-input:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary-gold);
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 3px var(--gold-light);
+}
+
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* セレクトボックスのカスタマイズ */
+select.form-input {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23c9a961' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right var(--space-sm) center;
+    background-size: 1rem;
+    padding-right: calc(var(--space-lg) + var(--space-xs));
+}
+
+/* ----------------------------------------
+   7. ボタンコンポーネント
+   ---------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    padding: var(--space-sm) var(--space-lg);
+    font-size: var(--text-base);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-gold), var(--accent-gold));
+    color: var(--darker-bg);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--primary-gold);
+    border: 2px solid var(--primary-gold);
+}
+
+.btn-secondary:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ----------------------------------------
+   8. ヘッダーコンポーネント
+   ---------------------------------------- */
+.header-elegant {
+    text-align: center;
+    padding: var(--space-xl) var(--space-lg);
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--card-border);
+    margin-bottom: var(--space-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.header-elegant::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+}
+
+.main-title {
+    font-family: var(--font-serif);
+    font-size: var(--text-3xl);
+    background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--space-sm);
+    letter-spacing: 0.05em;
+}
+
+.subtitle {
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+}
+
+/* ----------------------------------------
+   9. 装飾要素（控えめ）
+   ---------------------------------------- */
+.divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--card-border), transparent);
+    margin: var(--space-lg) 0;
+}
+
+.accent-line {
+    width: 60px;
+    height: 3px;
+    background: var(--primary-gold);
+    margin: var(--space-sm) auto;
+}
+
+/* ----------------------------------------
+   10. ユーティリティクラス
+   ---------------------------------------- */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-gold { color: var(--primary-gold); }
+
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+
+.required {
+    color: var(--accent-gold);
+    font-weight: 700;
+}
+
+/* ----------------------------------------
+   11. レスポンシブデザイン
+   ---------------------------------------- */
+@media (max-width: 768px) {
+    :root {
+        --text-3xl: 2rem;
+        --text-2xl: 1.5rem;
+        --text-xl: 1.25rem;
+    }
+    
+    .container {
+        padding: var(--space-sm);
+    }
+    
+    .card {
+        padding: var(--space-md);
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --text-3xl: 1.75rem;
+        --text-2xl: 1.375rem;
+    }
+}
+
+/* ----------------------------------------
+   12. アニメーション（控えめ）
+   ---------------------------------------- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn var(--transition-slow) ease-out;
+}
+
+/* アクセシビリティ */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* フォーカス表示 */
+*:focus-visible {
+    outline: 2px solid var(--primary-gold);
+    outline-offset: 2px;
+}
+
+/* 印刷用スタイル */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .no-print {
+        display: none;
+    }
+}
+
+/* ----------------------------------------
+   13. フォームレイアウト
+   ---------------------------------------- */
+.form-section {
+    border: none;
+    margin-bottom: var(--space-lg);
+    padding: 0;
+}
+
+.form-section legend {
+    display: none; /* legendを非表示にしてcard-headerを使用 */
+}
+
+.date-time-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-sm);
+}
+
+@media (max-width: 768px) {
+    .date-time-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----------------------------------------
+   14. ローディング画面
+   ---------------------------------------- */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 15, 20, 0.98);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(10px);
+}
+
+.loading-content {
+    text-align: center;
+    padding: var(--space-lg);
+}
+
+.spinner-elegant {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--space-lg);
+    position: relative;
+}
+
+.spinner-ring {
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(201, 169, 97, 0.2);
+    border-top-color: var(--primary-gold);
+    border-radius: 50%;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-title {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-xs);
+}
+
+.loading-message {
+    margin-bottom: var(--space-lg);
+}
+
+.loading-progress {
+    width: 200px;
+    height: 3px;
+    background: rgba(201, 169, 97, 0.2);
+    border-radius: var(--radius-sm);
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-gold), var(--secondary-gold));
+    width: 0%;
+    animation: progress 2.5s ease-in-out forwards;
+}
+
+@keyframes progress {
+    to { width: 85%; }
+}
+
+/* ----------------------------------------
+   15. エラーメッセージ
+   ---------------------------------------- */
+.error-message {
+    background: rgba(198, 113, 113, 0.1);
+    border: 1px solid var(--error-color);
+    color: var(--error-color);
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.help-text {
+    display: block;
+    margin-top: var(--space-xs);
+    font-size: var(--text-sm);
+}
