@@ -17,7 +17,6 @@
             <h1 class="report-title">{{ name }}様の体質診断レポート</h1>
             <div class="accent-line"></div>
             <p class="report-subtitle text-secondary">伝統的占星術による基礎分析</p>
-            <button onclick="window.print()" class="print-btn-summary">印刷する</button>
             
             <div class="birth-info-elegant">
                 <div class="birth-item">
@@ -289,6 +288,13 @@
                     <a href="/" class="btn btn-secondary">
                         新規診断
                     </a>
+                </div>
+                
+                <!-- 印刷ボタン（下部配置） -->
+                <div class="action-container text-center">
+                    <button onclick="window.print()" class="print-btn-bottom">
+                        レポートを印刷する
+                    </button>
                 </div>
             </div>
         </section>

@@ -38,38 +38,43 @@
     margin-top: var(--space-sm);
 }
 
-/* 印刷ボタン - サマリーページ */
-.print-btn-summary {
-    position: absolute;
-    top: var(--space-lg);
-    right: var(--space-lg);
+/* 印刷ボタン - 下部配置 */
+.action-container {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--card-border);
+}
+
+.print-btn-bottom {
     background: var(--primary-gold);
     color: var(--darker-bg);
     border: none;
-    padding: var(--space-xs) var(--space-md);
+    padding: var(--space-sm) var(--space-xl);
     border-radius: var(--radius-md);
     font-family: var(--font-sans);
-    font-size: var(--text-sm);
+    font-size: var(--text-base);
     font-weight: 600;
     cursor: pointer;
     transition: all var(--transition-base);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.05em;
+    display: inline-block;
+    margin: 0 auto;
 }
 
-.print-btn-summary:hover {
+.print-btn-bottom:hover {
     background: #ddb870;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(201, 169, 97, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(201, 169, 97, 0.4);
 }
 
-.print-btn-summary:active {
+.print-btn-bottom:active {
     transform: translateY(0);
 }
 
 /* 印刷時は印刷ボタンを非表示 */
 @media print {
-    .print-btn-summary,
-    .print-button {
+    .print-btn-bottom,
+    .action-container {
         display: none !important;
     }
 }
